@@ -3,6 +3,8 @@ import { Button, IconButton, MD3Colors } from 'react-native-paper';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
+import { RadialSlider } from 'react-native-radial-slider';
+
 
 
 
@@ -20,6 +22,10 @@ export default function Tab() {
   const [bitcoinAddress, setBitcoinAddress] = useState('');
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+
+
+  // Message Data
+  const [speed, setSpeed] = useState(0);
 
   useEffect(() =>{
 
@@ -71,8 +77,21 @@ export default function Tab() {
               </View> :''}
       {eyeFingerprint ? <View> 
                 </View> :''}
-      {eyeMessage ? <View> 
-                  </View> :''}
+      {eyeMessage ? <View> <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'pulse'} >
+          <View>
+            <Text style={{color: 'white', fontSize: 20, position: 'relative', top: -50, textAlign: 'center'}}> Your Message Record </Text>
+            <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: -80, left: 900}} onPress={() => {setEyeMessage(!eyeMessage)}}></IconButton>
+            <View style={{flex: 1}}>
+              <RadialSlider variant={'speedometer'} value={speed}  min={0} max={200} onChange={setSpeed} style={{position: 'relative', left: 500, top: -70}}/>
+              <IconButton icon={'chat'} iconColor={MD3Colors.primary100} style={{position: 'relative', left: 50, top: -120}}></IconButton>
+              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -155, left: 120}}> 0% </Text>
+              <IconButton icon={'image'} iconColor={MD3Colors.primary100} style={{position: 'relative', left: 50, top: -120}}></IconButton>
+              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -155, left: 120}}> 0% </Text>
+              <IconButton icon={'phone'} iconColor={MD3Colors.secondary95} style={{position: 'relative', top: -80, left: 300}}></IconButton>
+              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -115, left: 350}}> 0% </Text>
+            </View>
+          </View>
+        </Modal> </View> :''}
     </View>
   );
 }
