@@ -27,16 +27,18 @@ export default function Tab() {
 
 
   // popover for security key
-  const [showKeyPopover, setKeyShowPopover] = useState(false);
+  const [ showKeyPopover, setKeyShowPopover] = useState(false);
 
 
   // popover for faceID
 
-  const [showFacePopover, setFaceShowPopover] = useState(false);
+  const [ showFacePopover, setFaceShowPopover] = useState(false);
+  const [ isFaceDetect, setFaceDetect] = useState(false);
 
   //  popover for TouchID
 
   const [showTouchPopover, setTouchShowPopover] = useState(false);
+  const [ isTouchDetect, setTouchDetect] = useState(false);
 
 
   useEffect(() => {
@@ -45,10 +47,32 @@ export default function Tab() {
 
   useEffect(() => {
     setTimeout(() => setFaceShowPopover(false), 1000);
+    const FaceAuth = async() => {
+        try {
+          const hasHardware = await LocalAuth.hasHardwareAsync();
+          setFaceDetect(hasHardware);
+        } catch (error) {
+          console.error("Error checking hardware support:", error);
+          setFaceDetect(false); // Fallback in case of error
+        }
+    }
+
+    FaceAuth();
   }, []);
 
   useEffect(() => {
     setTimeout(() => setTouchShowPopover(false), 1000);
+    const TouchAuth = async() => {
+      try {
+        const hasHardware = await LocalAuth.hasHardwareAsync();
+        setTouchDetect(hasHardware);
+      } catch (error) {
+        console.error("Error checking hardware support:", error);
+        setTouchDetect(false); // Fallback in case of error
+      }
+    }
+
+    TouchAuth();
   }, []);
 
 
@@ -72,6 +96,8 @@ export default function Tab() {
   }
 
   const handleForm = () => { isFormValid ? alert('Congrats , Your bitcoin address added in our record') : alert('Poor! , Check your credentials before submission ') }
+
+  
 
 
   return (
@@ -110,27 +136,28 @@ export default function Tab() {
               </View> :''}
       {eyeFingerprint ? <View> <Modal isVisible={eyeFingerprint} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
          <View style={{flex: 1}}>
-         <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: -50, left: 900}} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>
+         <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: 50, left: 400}} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>
             <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Level </Text>
             <View>
               <Popover isVisible={showKeyPopover} onRequestClose={() => setKeyShowPopover(false)} from={(
                 <TouchableOpacity onPress={() => setKeyShowPopover(false)}>
                   <IconButton icon={'key'} iconColor={MD3Colors.secondary60} style={{position: 'relative', top: 35, left: 300}}></IconButton>
-                  {LocalAuth.SecurityLevel.SECRET ? <Text style={styles.text}> No Pin or pattern detected </Text> : <Text style={styles.text}> Pin or pattern detected </Text> }
+                  {LocalAuth.SecurityLevel.SECRET ? <Text style={{color: 'green'}}> Pin or pattern detected </Text> : <Text style={{color: 'red'}}> No Pin or pattern detected </Text> }
                 </TouchableOpacity>
               )}></Popover>
               <Popover isVisible={showFacePopover} onRequestClose={() => setFaceShowPopover(false)} from={(
                 <TouchableOpacity onPress={() => setFaceShowPopover(false)}>
-                  <IconButton icon={'eye'} iconColor={MD3Colors.neutral50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
-                  {LocalAuth.AuthenticationType.FACIAL_RECOGNITION ? <Text style={styles.text}> Excellent Your FaceID detected  </Text> : <Text style={styles.text}> Unbelievable ! NO FaceID detected </Text> }
+                  <IconButton icon={'eye'} iconColor={isFaceDetect ? MD3Colors.neutral50: MD3Colors.error50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
+                  {LocalAuth.AuthenticationType.FACIAL_RECOGNITION && isFaceDetect ? <Text style={{color: 'green'}}> Excellent Face Sensor detected  </Text> : <Text style={{color: 'red'}}> Unbelievable ! NO Face Sensor detected </Text> }
                 </TouchableOpacity>
               )}></Popover>
               <Popover isVisible={showTouchPopover} onRequestClose={() => setTouchShowPopover(false)} from={(
                 <TouchableOpacity onPress={() => setTouchShowPopover(false)}>
-                  <IconButton icon={'fingerprint'} iconColor={MD3Colors.neutralVariant50} style={{position: 'relative', top: 40, left: 300}}></IconButton>
-                  {LocalAuth.AuthenticationType.FINGERPRINT ? <Text style={styles.text}> Excellent Your TouchID detected  </Text> : <Text style={styles.text}> Unbelievable ! NO TouchID detected </Text> }
+                  <IconButton icon={'fingerprint'} iconColor={isTouchDetect? MD3Colors.neutralVariant50: MD3Colors.error50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
+                  {LocalAuth.AuthenticationType.FINGERPRINT  && isTouchDetect ? <Text style={{color: 'green'}}> Excellent Touch Sensor detected  </Text> : <Text style={{color: 'red'}}> Unbelievable ! NO Touch Sensor detected </Text> }
                 </TouchableOpacity>
               )}></Popover>
+              {isFaceDetect || isTouchDetect ? <Text style={{color: 'green',position: 'relative', top: 100,left: 100}}> Strong Authentication </Text> : <Text style={{color: 'red', position: 'relative', top: 100,left: 100}}> Weak Authentication </Text>}
             </View>
           </View>  
         </Modal> </View> :''}
