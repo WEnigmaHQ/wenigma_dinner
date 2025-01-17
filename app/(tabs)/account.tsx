@@ -1,11 +1,13 @@
 import { Link, Redirect } from 'expo-router';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import { RadialSlider } from 'react-native-radial-slider';
 import Popover from 'react-native-popover-view';
 import * as LocalAuth from 'expo-local-authentication';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+
 
 
 
@@ -41,9 +43,25 @@ export default function Tab() {
   const [ isTouchDetect, setTouchDetect] = useState(false);
 
 
+  // device have signature or not
+
+  const [ deviceAuth , setDeviceAuth] =  useState(false);
+  const [ deviceAuthPromise, setDeviceAuthPromise] = useState(false);
+  const [ deviceAuthTPromise, setDeviceAuthTPromise] = useState(false);
+  
+  
+  
+  const [ deviceFaceRec, setDeviceFaceRec] = useState(false);
+
+
+  // Security or pin
+
   useEffect(() => {
     setTimeout(() => setKeyShowPopover(false), 2000);
   }, []);
+
+
+  //  Face scanner
 
   useEffect(() => {
     setTimeout(() => setFaceShowPopover(false), 1000);
@@ -60,6 +78,9 @@ export default function Tab() {
     FaceAuth();
   }, []);
 
+
+  //  Fingerprints scanner
+
   useEffect(() => {
     setTimeout(() => setTouchShowPopover(false), 1000);
     const TouchAuth = async() => {
@@ -75,6 +96,51 @@ export default function Tab() {
     TouchAuth();
   }, []);
 
+
+  // device Authenicate by user through face
+  useEffect(() => {
+    setTimeout(() => setDeviceAuth(false), 2000);
+
+    const isFaceID = async() => {
+      
+      try {
+        const device = await LocalAuth.supportedAuthenticationTypesAsync();
+        console.log('device:', device);
+
+
+        const RNBiometrics = new ReactNativeBiometrics();
+
+        const { available, biometryType } = await RNBiometrics.isSensorAvailable();
+        
+        if ((device.length > 0 && device.includes(1)) || (available && biometryType === BiometryTypes.FaceID) ) {
+
+          const deviceAuthLock = await LocalAuth.isEnrolledAsync();
+          setDeviceAuthPromise(deviceAuthLock);
+        }
+
+        if ((device.length > 0 && device.includes(2)) || (available && biometryType === BiometryTypes.TouchID) ) {
+
+          const deviceAuthLock = await LocalAuth.isEnrolledAsync();
+          setDeviceAuthTPromise(deviceAuthLock);
+        }
+        
+      } catch (error) {
+        console.error("Error checking hardware support:", error);
+        setDeviceAuthPromise(false); // Fallback in case of error
+        setDeviceAuthTPromise(false);
+      }
+    }
+
+    isFaceID();
+
+  }, []);
+
+
+  useEffect(() => {
+    setTimeout(() => setDeviceFaceRec(false), 2000);
+
+  }, []);
+  
 
   // Message Data
   const [speed, setSpeed] = useState(0);
@@ -102,12 +168,12 @@ export default function Tab() {
 
   return (
     <View style={styles.container}>
-      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={styles.button}></IconButton>
-      <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.button}></IconButton>
-      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={styles.button}></IconButton>
-      <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.button}></IconButton>
-      <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.button}></IconButton>
-      <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.button}></IconButton>
+      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={{position: 'relative', top: 150, left: -400}}></IconButton>
+      <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={{position: 'relative', top: 73, left:-200}}></IconButton>
+      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={{position: 'relative', top: 0, left: -25}}></IconButton>
+      <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={{position: 'relative', top: -8, left: -400}}></IconButton>
+      <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={{position: 'relative', top: -85, left: -200}}></IconButton>
+      <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={{position: 'relative', top: -160, left: -25}}></IconButton>
       {eyeFacebook ? 
           <View>
             
@@ -115,7 +181,27 @@ export default function Tab() {
       {eyeCamera ? <View> 
         <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
          <View style={{flex: 1}}>
+            <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: 50, left: 400}} onPress={() => {setEyeCamera(!eyeCamera)}}></IconButton>
             <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Yourself </Text>
+            <View>
+            <Popover isVisible={deviceAuth} onRequestClose={() => setDeviceAuth(false)} from={(
+                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
+                  <IconButton icon={deviceAuthPromise && deviceAuthTPromise? 'unlock' : 'lock'} iconColor={deviceAuthPromise && deviceAuthTPromise ? MD3Colors.secondary60: MD3Colors.error50} style={{position: 'relative', top: 100, left: -200}}></IconButton>
+                  {deviceAuthPromise && deviceAuthTPromise ? <Text style={{color: 'green', position: 'relative', top: 120, width: 150, left: -200}}> Excellent Your device authenticate you </Text>: <Text style={{color: 'red', position: 'relative', top: 120, width: 150, left: -200}}> Add your Face or Fingerprint to authenticate device </Text>}
+                </TouchableOpacity>
+              )}></Popover>
+              <Popover isVisible={deviceFaceRec} onRequestClose={() => setDeviceAuth(false)} from={(
+                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
+                  <IconButton icon={deviceAuthPromise ? 'cog': 'cogs'} iconColor={deviceAuthPromise ? MD3Colors.secondary60: MD3Colors.error50} style={{position: 'relative', top: 2, left: 300}}></IconButton>
+                  {deviceAuthPromise ? <Text style={{color: 'green', position: 'relative', top: 120, width: 150, left: 300}}> Unlock My Account </Text>: <Text style={{color: 'red', position: 'relative', top: 20, width: 150, left: 300}}> Sign in </Text>}
+                  {deviceAuthPromise ? <View>
+                    <TouchableOpacity onPress={ async() =>{
+                      Alert.alert('FaceID', 'Would you like to unlock app through your Face ?', [{text: 'Excellent', onPress: async() =>{},},{ text: 'Cancel', style: 'cancel' },],)
+                    } }></TouchableOpacity>
+                  </View>: ''}
+                </TouchableOpacity>
+              )}></Popover>
+            </View>
           </View>  
         </Modal> </View> :''}
       {eyeBitcoin ? <View> 
