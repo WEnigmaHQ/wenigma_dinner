@@ -1,9 +1,11 @@
 import { Link, Redirect } from 'expo-router';
-import { Button, IconButton, MD3Colors } from 'react-native-paper';
+import { IconButton, MD3Colors } from 'react-native-paper';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import { RadialSlider } from 'react-native-radial-slider';
+import Popover from 'react-native-popover-view';
+import * as LocalAuth from 'expo-local-authentication';
 
 
 
@@ -22,6 +24,32 @@ export default function Tab() {
   const [bitcoinAddress, setBitcoinAddress] = useState('');
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+
+
+  // popover for security key
+  const [showKeyPopover, setKeyShowPopover] = useState(false);
+
+
+  // popover for faceID
+
+  const [showFacePopover, setFaceShowPopover] = useState(false);
+
+  //  popover for TouchID
+
+  const [showTouchPopover, setTouchShowPopover] = useState(false);
+
+
+  useEffect(() => {
+    setTimeout(() => setKeyShowPopover(false), 2000);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => setFaceShowPopover(false), 1000);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => setTouchShowPopover(false), 1000);
+  }, []);
 
 
   // Message Data
@@ -45,6 +73,7 @@ export default function Tab() {
 
   const handleForm = () => { isFormValid ? alert('Congrats , Your bitcoin address added in our record') : alert('Poor! , Check your credentials before submission ') }
 
+
   return (
     <View style={styles.container}>
       <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={styles.button}></IconButton>
@@ -58,7 +87,11 @@ export default function Tab() {
             
           </View> :''}
       {eyeCamera ? <View> 
-          </View> :''}
+        <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
+         <View style={{flex: 1}}>
+            <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Yourself </Text>
+          </View>  
+        </Modal> </View> :''}
       {eyeBitcoin ? <View> 
         <Modal isVisible={eyeBitcoin} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
           <View style={{flex: 1}}>
@@ -75,8 +108,32 @@ export default function Tab() {
         </Modal></View> :''}
       {eyeBell ? <View> 
               </View> :''}
-      {eyeFingerprint ? <View> 
-                </View> :''}
+      {eyeFingerprint ? <View> <Modal isVisible={eyeFingerprint} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
+         <View style={{flex: 1}}>
+         <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: -50, left: 900}} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>
+            <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Level </Text>
+            <View>
+              <Popover isVisible={showKeyPopover} onRequestClose={() => setKeyShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setKeyShowPopover(false)}>
+                  <IconButton icon={'key'} iconColor={MD3Colors.secondary60} style={{position: 'relative', top: 35, left: 300}}></IconButton>
+                  {LocalAuth.SecurityLevel.SECRET ? <Text style={styles.text}> No Pin or pattern detected </Text> : <Text style={styles.text}> Pin or pattern detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+              <Popover isVisible={showFacePopover} onRequestClose={() => setFaceShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setFaceShowPopover(false)}>
+                  <IconButton icon={'eye'} iconColor={MD3Colors.neutral50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
+                  {LocalAuth.AuthenticationType.FACIAL_RECOGNITION ? <Text style={styles.text}> Excellent Your FaceID detected  </Text> : <Text style={styles.text}> Unbelievable ! NO FaceID detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+              <Popover isVisible={showTouchPopover} onRequestClose={() => setTouchShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setTouchShowPopover(false)}>
+                  <IconButton icon={'fingerprint'} iconColor={MD3Colors.neutralVariant50} style={{position: 'relative', top: 40, left: 300}}></IconButton>
+                  {LocalAuth.AuthenticationType.FINGERPRINT ? <Text style={styles.text}> Excellent Your TouchID detected  </Text> : <Text style={styles.text}> Unbelievable ! NO TouchID detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+            </View>
+          </View>  
+        </Modal> </View> :''}
       {eyeMessage ? <View> <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'pulse'} >
           <View>
             <Text style={{color: 'white', fontSize: 20, position: 'relative', top: -50, textAlign: 'center'}}> Your Message Record </Text>
