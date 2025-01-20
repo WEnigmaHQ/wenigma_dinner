@@ -1,6 +1,6 @@
 import { Link, Redirect } from 'expo-router';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert, Platform} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import { RadialSlider } from 'react-native-radial-slider';
@@ -168,12 +168,13 @@ export default function Tab() {
 
   return (
     <View style={styles.container}>
-      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={{position: 'relative', top: 150, left: -400}}></IconButton>
-      <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={{position: 'relative', top: 73, left:-200}}></IconButton>
-      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={{position: 'relative', top: 0, left: -25}}></IconButton>
-      <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={{position: 'relative', top: -8, left: -400}}></IconButton>
-      <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={{position: 'relative', top: -85, left: -200}}></IconButton>
-      <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={{position: 'relative', top: -160, left: -25}}></IconButton>
+      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={styles.eyecamerabutton}></IconButton>
+      <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
+      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={styles.eyebitcoinbutton}></IconButton>
+      <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
+      <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
+      <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
+      {Platform.OS === 'android' || Platform.OS === 'ios' ? <Link href={'/home'} style={styles.linkhome}> Return Home 🏠 </Link>: ''}
       {eyeFacebook ? 
           <View>
             
@@ -248,7 +249,7 @@ export default function Tab() {
           </View>  
         </Modal> </View> :''}
       {eyeMessage ? <View> <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'pulse'} >
-          <View>
+          <View style={{flex: 1}}>
             <Text style={{color: 'white', fontSize: 20, position: 'relative', top: -50, textAlign: 'center'}}> Your Message Record </Text>
             <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: -80, left: 900}} onPress={() => {setEyeMessage(!eyeMessage)}}></IconButton>
             <View style={{flex: 1}}>
@@ -286,5 +287,53 @@ const styles = StyleSheet.create({
     position: 'relative',
     left: -600,
     top: -20
+  }, 
+  eyecamerabutton:{
+    position: Platform.OS === 'android' || Platform.OS === 'ios' ? 'relative' : 'relative',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 70 : Platform.OS === 'web' ? 150 : 150,
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -105: Platform.OS === 'web' ? -400: -400,
+  }, 
+  eyefacebookbutton:{
+    position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 240: Platform.OS === 'web'? 75 : 75, 
+    left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -150,
+  },
+  //position: 'relative', top: -80, left: -100
+  eyebellkbutton:{
+    position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 80: Platform.OS === 'web'? -80 : -80, 
+    left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
+  },
+  eyebitcoinbutton:{ // position: 'relative', top: 75, left: 100
+    position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 30: Platform.OS === 'web'? 100 : 100, 
+    left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -400: -400,
+  },
+
+  // position: 'relative', top: -245, left: 100
+  eyefingerprintbutton:{
+    position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -245: Platform.OS === 'web'? -52 : -52, 
+    left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -200,
+  },
+  // position: 'relative', top: -160, left: -100
+  eyemessagebutton:{
+    position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -200: Platform.OS === 'web'? -125 : -125, 
+    left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
+  },
+
+  linkhome:{
+    flex: 1,
+    top: 100,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    color: 'black',
+    backgroundColor: 'white',
+    width: 100,
+    borderRadius: 12,
+    textAlign: 'center',
+    fontSize: 20,
   }
+
 });

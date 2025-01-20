@@ -80,7 +80,7 @@ export default function Tab() {
   
   return (
     <View style={styles.container}>
-      <IconButton icon={'calendar-clock'} iconColor={MD2Colors.amber300} style={{position: 'relative', top: -100, left: -300}} onPress={() => {
+      <IconButton icon={'account-tie-voice'} iconColor={MD2Colors.amber300} style={{position: 'relative', top: -100, left: -300}} onPress={() => {
         setExclusiveDinnerInvitation(true);
       }}></IconButton>
       {exclusiveDinnerInvitation ? <View style={{flex: 1}}>
@@ -91,6 +91,7 @@ export default function Tab() {
               <IconButton icon={'plus'} iconColor={MD2Colors.green500} style={{position: 'relative', top: -150, left: 400}} onPress={() => {setPlusExclusiveDinner(true)}}></IconButton>
               <ReactNativeModal isVisible={plusExclusiveDinner}>
                 <View style={{position: 'relative', justifyContent: 'space-evenly'}}>
+                <IconButton icon={'close'} iconColor={MD3Colors.primary90} style={{position: 'relative', top: -100, left: 700}} onPress={() => {setPlusExclusiveDinner(false)}}></IconButton>
                   <Text style={{color: 'white', flex: 1, position: 'relative', top: -100, left: 100}}> Event Name: </Text>
                   <TextInput placeholder='event name' value={eventName} onChangeText={setEventName} inputMode={'text'} style={{width: 300, position: 'relative', top: -80, left: 200}}></TextInput>
                   <Text style={{color: 'white', flex: 1, position: 'relative', top: -70, left: 100}}> Event Date: </Text>
