@@ -1,5 +1,5 @@
-import { Link, Redirect } from 'expo-router';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import { Link, Stack,  } from 'expo-router';
+import { IconButton, MD2Colors, MD3Colors } from 'react-native-paper';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert, Platform} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
@@ -163,106 +163,22 @@ export default function Tab() {
 
   const handleForm = () => { isFormValid ? alert('Congrats , Your bitcoin address added in our record') : alert('Poor! , Check your credentials before submission ') }
 
-  
-
-
   return (
     <View style={styles.container}>
-      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera);}} style={styles.eyecamerabutton}></IconButton>
+      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
       <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
       <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={styles.eyebitcoinbutton}></IconButton>
       <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
       <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
       <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
-      {Platform.OS === 'android' || Platform.OS === 'ios' ? <Link href={'/home'} style={styles.linkhome}> Return Home 🏠 </Link>: ''}
-      {eyeFacebook ? 
-          <View>
-            
-          </View> :''}
-      {eyeCamera ? <View> 
-        <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
+      {Platform.OS === 'android' || Platform.OS === 'ios' ? <Link href={'/home'} style={styles.linkhome}> Return Home 🏠 </Link>: <Text></Text>}
+      {eyeCamera ? <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
          <View style={{flex: 1}}>
-            <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: 50, left: 400}} onPress={() => {setEyeCamera(!eyeCamera)}}></IconButton>
-            <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Yourself </Text>
-            <View>
-            <Popover isVisible={deviceAuth} onRequestClose={() => setDeviceAuth(false)} from={(
-                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
-                  <IconButton icon={deviceAuthPromise && deviceAuthTPromise? 'unlock' : 'lock'} iconColor={deviceAuthPromise && deviceAuthTPromise ? MD3Colors.secondary60: MD3Colors.error50} style={{position: 'relative', top: 100, left: -200}}></IconButton>
-                  {deviceAuthPromise && deviceAuthTPromise ? <Text style={{color: 'green', position: 'relative', top: 120, width: 150, left: -200}}> Excellent Your device authenticate you </Text>: <Text style={{color: 'red', position: 'relative', top: 120, width: 150, left: -200}}> Add your Face or Fingerprint to authenticate device </Text>}
-                </TouchableOpacity>
-              )}></Popover>
-              <Popover isVisible={deviceFaceRec} onRequestClose={() => setDeviceAuth(false)} from={(
-                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
-                  <IconButton icon={deviceAuthPromise ? 'cog': 'cogs'} iconColor={deviceAuthPromise ? MD3Colors.secondary60: MD3Colors.error50} style={{position: 'relative', top: 2, left: 300}}></IconButton>
-                  {deviceAuthPromise ? <Text style={{color: 'green', position: 'relative', top: 120, width: 150, left: 300}}> Unlock My Account </Text>: <Text style={{color: 'red', position: 'relative', top: 20, width: 150, left: 300}}> Sign in </Text>}
-                  {deviceAuthPromise ? <View>
-                    <TouchableOpacity onPress={ async() =>{
-                      Alert.alert('FaceID', 'Would you like to unlock app through your Face ?', [{text: 'Excellent', onPress: async() =>{},},{ text: 'Cancel', style: 'cancel' },],)
-                    } }></TouchableOpacity>
-                  </View>: ''}
-                </TouchableOpacity>
-              )}></Popover>
-            </View>
+            {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD2Colors.amber400} style={{position: 'relative', top: 50, left: 400 }} onPress={() => {setEyeCamera(!eyeCamera)}}></IconButton>: ''}
+            {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 550, left: -200}}> Return Home * </Link>: ''}
+            <Text style={{color: 'white', position: 'absolute',top: Platform.OS === 'android' || Platform.OS === 'ios' ? 60: 20, left: Platform.OS === 'android' || Platform.OS === 'ios' ? -200: 200, fontSize: Platform.OS === 'web'? 24 : 14}}> Authenicate Yourself </Text>
           </View>  
-        </Modal> </View> :''}
-      {eyeBitcoin ? <View> 
-        <Modal isVisible={eyeBitcoin} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
-          <View style={{flex: 1}}>
-            <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Register your Bitcoin Address </Text>
-            <View>
-            <Text style={{color: 'gold', marginTop: 100}}> Bitcoin Address </Text>
-              <TextInput placeholder='Your bitcoin Address' value={bitcoinAddress} onChangeText={setBitcoinAddress} style={{position: 'relative', top: 20, color: 'gold', backgroundColor: 'darkslategrey', height: 40, borderRadius: 12}}></TextInput>
-              <IconButton icon={'close'} iconColor={MD3Colors.primary100} style={{position: 'relative', left: 500, top: -190}} onPress={() => {setEyeBitcoin(!eyeBitcoin)}}></IconButton>
-              <TouchableOpacity style={{position: 'relative', top: -76, left: 250, opacity: isFormValid ? 1: 0.5}} disabled={!isFormValid} onPress={handleForm}>
-                <IconButton icon={'bitcoin'} iconColor={MD3Colors.primary70}></IconButton>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal></View> :''}
-      {eyeBell ? <View> 
-              </View> :''}
-      {eyeFingerprint ? <View> <Modal isVisible={eyeFingerprint} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
-         <View style={{flex: 1}}>
-         <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: 50, left: 400}} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>
-            <Text style={{color: 'gold', fontSize: 20, textAlign: 'center', marginTop: 12}}> Authenicate Level </Text>
-            <View>
-              <Popover isVisible={showKeyPopover} onRequestClose={() => setKeyShowPopover(false)} from={(
-                <TouchableOpacity onPress={() => setKeyShowPopover(false)}>
-                  <IconButton icon={'key'} iconColor={MD3Colors.secondary60} style={{position: 'relative', top: 35, left: 300}}></IconButton>
-                  {LocalAuth.SecurityLevel.SECRET ? <Text style={{color: 'green'}}> Pin or pattern detected </Text> : <Text style={{color: 'red'}}> No Pin or pattern detected </Text> }
-                </TouchableOpacity>
-              )}></Popover>
-              <Popover isVisible={showFacePopover} onRequestClose={() => setFaceShowPopover(false)} from={(
-                <TouchableOpacity onPress={() => setFaceShowPopover(false)}>
-                  <IconButton icon={'eye'} iconColor={isFaceDetect ? MD3Colors.neutral50: MD3Colors.error50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
-                  {LocalAuth.AuthenticationType.FACIAL_RECOGNITION && isFaceDetect ? <Text style={{color: 'green'}}> Excellent Face Sensor detected  </Text> : <Text style={{color: 'red'}}> Unbelievable ! NO Face Sensor detected </Text> }
-                </TouchableOpacity>
-              )}></Popover>
-              <Popover isVisible={showTouchPopover} onRequestClose={() => setTouchShowPopover(false)} from={(
-                <TouchableOpacity onPress={() => setTouchShowPopover(false)}>
-                  <IconButton icon={'fingerprint'} iconColor={isTouchDetect? MD3Colors.neutralVariant50: MD3Colors.error50} style={{position: 'relative', top: 35, left: 300}}></IconButton>
-                  {LocalAuth.AuthenticationType.FINGERPRINT  && isTouchDetect ? <Text style={{color: 'green'}}> Excellent Touch Sensor detected  </Text> : <Text style={{color: 'red'}}> Unbelievable ! NO Touch Sensor detected </Text> }
-                </TouchableOpacity>
-              )}></Popover>
-              {isFaceDetect || isTouchDetect ? <Text style={{color: 'green',position: 'relative', top: 100,left: 100}}> Strong Authentication </Text> : <Text style={{color: 'red', position: 'relative', top: 100,left: 100}}> Weak Authentication </Text>}
-            </View>
-          </View>  
-        </Modal> </View> :''}
-      {eyeMessage ? <View> <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'pulse'} >
-          <View style={{flex: 1}}>
-            <Text style={{color: 'white', fontSize: 20, position: 'relative', top: -50, textAlign: 'center'}}> Your Message Record </Text>
-            <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={{position: 'relative', top: -80, left: 900}} onPress={() => {setEyeMessage(!eyeMessage)}}></IconButton>
-            <View style={{flex: 1}}>
-              <RadialSlider variant={'speedometer'} value={speed}  min={0} max={200} onChange={setSpeed} style={{position: 'relative', left: 500, top: -70}}/>
-              <IconButton icon={'chat'} iconColor={MD3Colors.primary100} style={{position: 'relative', left: 50, top: -120}}></IconButton>
-              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -155, left: 120}}> 0% </Text>
-              <IconButton icon={'image'} iconColor={MD3Colors.primary100} style={{position: 'relative', left: 50, top: -120}}></IconButton>
-              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -155, left: 120}}> 0% </Text>
-              <IconButton icon={'phone'} iconColor={MD3Colors.secondary95} style={{position: 'relative', top: -80, left: 300}}></IconButton>
-              <Text style={{color: speed >= 0 ? 'white' : 'blue', position: 'relative', top: -115, left: 350}}> 0% </Text>
-            </View>
-          </View>
-        </Modal> </View> :''}
+        </Modal>: ''}
     </View>
   );
 }
@@ -298,25 +214,21 @@ const styles = StyleSheet.create({
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? 240: Platform.OS === 'web'? 75 : 75, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -150,
   },
-  //position: 'relative', top: -80, left: -100
   eyebellkbutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? 80: Platform.OS === 'web'? -80 : -80, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
   },
-  eyebitcoinbutton:{ // position: 'relative', top: 75, left: 100
+  eyebitcoinbutton:{ 
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? 30: Platform.OS === 'web'? 100 : 100, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -400: -400,
   },
-
-  // position: 'relative', top: -245, left: 100
   eyefingerprintbutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? -245: Platform.OS === 'web'? -52 : -52, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -200,
   },
-  // position: 'relative', top: -160, left: -100
   eyemessagebutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? -200: Platform.OS === 'web'? -125 : -125, 
@@ -334,6 +246,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     textAlign: 'center',
     fontSize: 20,
+  },
+ 
+  cameramodaltext: {
+    color: 'white' ,
+    fontSize : 20,
+    textAlign:  'center',
+    position: 'relative',
+    top: 50   
   }
 
 });
