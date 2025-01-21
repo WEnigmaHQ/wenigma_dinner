@@ -207,7 +207,35 @@ export default function Tab() {
               </TouchableOpacity>
           </View>
         </BottomDrawer> : ''}
-    </View>
+        {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
+            animationOutTiming={1000} animationIn={'lightSpeedIn'} 
+            style={styles.modalfingerprint}>
+          <View>
+              {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={styles.modalfingerprintclosebtn} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>:''}
+              <Text style={styles.modalfingerprintheader}> Authenicate Level </Text>
+              <Popover isVisible={showKeyPopover} onRequestClose={() => setKeyShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setKeyShowPopover(false)}>
+                  <IconButton icon={'key'} iconColor={MD2Colors.green500} style={styles.modalfingerprintsecurekey}></IconButton>
+                  {LocalAuth.SecurityLevel.SECRET ? <Text style={styles.modalfingerprintsecurekeymessage}> Pin or pattern detected </Text> : <Text style={styles.modalfingerprintsecurekeymessage}> No Pin or pattern detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+               <Popover isVisible={showFacePopover} onRequestClose={() => setFaceShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setFaceShowPopover(false)}>
+                  <IconButton icon={'face-recognition'} iconColor={isFaceDetect ? MD3Colors.neutral50: MD3Colors.error50} style={styles.modalfingerprintfaceicon}></IconButton>
+                  {LocalAuth.AuthenticationType.FACIAL_RECOGNITION && isFaceDetect ? <Text style={styles.modalfingerprintfacemessage}> Excellent Face Sensor detected  </Text> : <Text style={styles.modalfingerprintfaceerror}> Unbelievable ! NO Face Sensor detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+              <Popover isVisible={showTouchPopover} onRequestClose={() => setTouchShowPopover(false)} from={(
+                <TouchableOpacity onPress={() => setTouchShowPopover(false)}>
+                  <IconButton icon={'fingerprint'} iconColor={isTouchDetect? MD3Colors.neutralVariant50: MD3Colors.error50} style={styles.modalfingerprinttouchicon}></IconButton>
+                  {LocalAuth.AuthenticationType.FINGERPRINT  && isTouchDetect ? <Text style={styles.modalfingerprinttouchmessage}> Excellent Touch Sensor detected  </Text> : <Text style={styles.modalfingerprinttouchmessage}> Unbelievable ! NO Touch Sensor detected </Text> }
+                </TouchableOpacity>
+              )}></Popover>
+              {isFaceDetect || isTouchDetect ? <Text style={styles.modalstatus}> Strong Authentication </Text> : <Text style={styles.modalstatuserror}> Weak Authentication </Text>}
+              {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'gold', position: 'absolute', top: 350, left: -100}}> Return </Link>: ''}
+          </View>
+        </Modal>:''}
+        </View>
   );
 }
 
@@ -339,7 +367,69 @@ const styles = StyleSheet.create({
   drawerbitcoinbtn:{
     position: 'relative', 
     top: Platform.OS === 'android' || Platform.OS === 'ios'?  15 : 15, 
-    left: Platform.OS === 'android' || Platform.OS === 'ios'?  270: 370, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios'?  270: 370,
+  },
+  modalfingerprint: {
+    position: 'relative', 
+    left: 300
+  },
+  modalfingerprintclosebtn: {
+    position: 'relative', 
+    top: -120, 
+    left: 400,
+  },
+  modalfingerprintheader:{
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -150 : -150,
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -210: 100,
+    fontSize: 20
+  },
+  modalfingerprintsecurekey: {
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -70: -100, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -150: -50, 
+  },
+  modalfingerprintsecurekeymessage: {
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -50: -100, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -200: -100, 
+  },
+  modalfingerprintfaceicon:{
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -20 : -170, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -150: 300, 
+  },
+  modalfingerprintfacemessage:{
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -20 : -170, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -200: 200, 
+  },
+  modalfingerprintfaceerror:{
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -20 : -170, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -200: 200, 
+  },
+  modalfingerprinttouchicon:{
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 20 : -240, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -150: 700, 
+  },
+  modalfingerprinttouchmessage:{
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 20 : -240, 
+    left:Platform.OS === 'android' || Platform.OS === 'ios' ? -200: 600, 
+  },
+  modalstatus:{
+    color: 'green',
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -310 : -100,
+    left: Platform.OS === 'android' || Platform.OS === 'ios' ? -200 : 100
+  },
+  modalstatuserror:{
+    color: 'red',
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -270 : -100,
+    left: Platform.OS === 'android' || Platform.OS === 'ios' ? -270 : 300
   }
 
 });
