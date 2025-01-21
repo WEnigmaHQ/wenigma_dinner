@@ -2,11 +2,12 @@ import { Link, Stack,  } from 'expo-router';
 import { IconButton, MD2Colors, MD3Colors } from 'react-native-paper';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert, Platform} from 'react-native';
 import Modal  from 'react-native-modal';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { RadialSlider } from 'react-native-radial-slider';
 import Popover from 'react-native-popover-view';
 import * as LocalAuth from 'expo-local-authentication';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 
 
 
@@ -14,6 +15,9 @@ import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 
 export default function Tab() {
   
+  const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
+
+
   // Modal Events triggers
   const [eyeFacebook, setEyeFacebook] = useState(false);
   const [eyeCamera, setEyeCamera] = useState(false);
@@ -167,7 +171,7 @@ export default function Tab() {
     <View style={styles.container}>
       <IconButton icon={'movie-cog'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
       <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
-      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={styles.eyebitcoinbutton}></IconButton>
+      <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
       <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
       <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
       <IconButton icon={'message-cog'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
@@ -187,14 +191,22 @@ export default function Tab() {
                 <TouchableOpacity onPress={() => setDeviceAuth(false)}>
                   <IconButton icon={deviceAuthPromise ? 'face-recognition': 'incognito-circle'} iconColor={deviceAuthPromise ? MD3Colors.secondary60: MD3Colors.error50} style={styles.cogsicon}></IconButton>
                   {deviceAuthPromise ? <Text style={styles.cogiconmessage}> FaceID </Text>: <Text style={styles.cogiconerrormessage}> Sign in </Text>}
-                  {deviceAuthPromise ?
-                    <TouchableOpacity onPress={ async() =>{
-                      Alert.alert('FaceID', 'Would you like to unlock app through your Face ?', [{text: 'Excellent', onPress: async() =>{},},{ text: 'Cancel', style: 'cancel' },],)
-                    } }></TouchableOpacity> : ''}
+                  {deviceAuthPromise ? '' : ''}
                 </TouchableOpacity>
               )}></Popover>
           </View>  
         </Modal>: ''}
+        {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
+          <View>
+            <Text style={styles.drawerbitcoinhandler}> Register your Bitcoin Address </Text>
+            <Text style={styles.drawertextfield1}> Bitcoin Address * </Text>
+            <TextInput placeholder='Your bitcoin Address' value={bitcoinAddress} 
+            onChangeText={setBitcoinAddress} style={styles.drawertextinput1}></TextInput>
+            <TouchableOpacity style={styles.drawerbitcoinbtn} disabled={!isFormValid} onPress={handleForm}>
+                <IconButton icon={'bitcoin'} iconColor={MD2Colors.amber500}></IconButton>
+              </TouchableOpacity>
+          </View>
+        </BottomDrawer> : ''}
     </View>
   );
 }
@@ -302,6 +314,32 @@ const styles = StyleSheet.create({
     position: 'relative', 
     top: Platform.OS === 'android' || Platform.OS === 'ios' ? 300 : 50, 
     left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : 300
+  },
+  drawerbitcoinhandler: {
+    color: 'black', 
+    fontSize: 20, 
+    textAlign: 'center'
+  },
+  drawertextfield1:{
+    color: 'darkslategrey',
+    position: 'relative',
+    top: Platform.OS === 'android' || Platform.OS === 'ios'? 50: 50,
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? 50: 50,
+  }, 
+  drawertextinput1:{
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 60: 60, 
+    color: 'gold', 
+    backgroundColor: 'grey', 
+    height: 40, 
+    borderRadius: 12,
+    width: Platform.OS === 'android' || Platform.OS === 'ios'? 250 :350,
+    left: Platform.OS === 'android' || Platform.OS === 'ios' ? 70: 70,
+  },
+  drawerbitcoinbtn:{
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios'?  15 : 15, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios'?  270: 370, 
   }
 
 });
