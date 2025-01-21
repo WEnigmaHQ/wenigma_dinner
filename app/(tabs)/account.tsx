@@ -165,18 +165,34 @@ export default function Tab() {
 
   return (
     <View style={styles.container}>
-      <IconButton icon={'camera'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
-      <IconButton icon={'facebook'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
+      <IconButton icon={'movie-cog'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
+      <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
       <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{setEyeBitcoin(!eyeBitcoin);}} style={styles.eyebitcoinbutton}></IconButton>
       <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
       <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
-      <IconButton icon={'message'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
+      <IconButton icon={'message-cog'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
       {Platform.OS === 'android' || Platform.OS === 'ios' ? <Link href={'/home'} style={styles.linkhome}> Return Home 🏠 </Link>: <Text></Text>}
       {eyeCamera ? <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
          <View style={{flex: 1}}>
-            {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD2Colors.amber400} style={{position: 'relative', top: 50, left: 400 }} onPress={() => {setEyeCamera(!eyeCamera)}}></IconButton>: ''}
+            {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.primary90} style={{position: 'relative', top: 50, left: 400 }} onPress={() => {setEyeCamera(!eyeCamera)}}></IconButton>: ''}
             {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 550, left: -200}}> Return Home * </Link>: ''}
             <Text style={{color: 'white', position: 'absolute',top: Platform.OS === 'android' || Platform.OS === 'ios' ? 60: 20, left: Platform.OS === 'android' || Platform.OS === 'ios' ? -200: 200, fontSize: Platform.OS === 'web'? 24 : 14}}> Authenicate Yourself </Text>
+            <Popover isVisible={deviceAuth} onRequestClose={() => setDeviceAuth(false)} from={(
+                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
+                  <IconButton icon={deviceAuthPromise && deviceAuthTPromise? 'account-lock-open': 'account-lock'} iconColor={deviceAuthPromise && deviceAuthTPromise ? MD3Colors.secondary60: MD3Colors.error50} style={styles.accountlock}></IconButton>
+                  {deviceAuthPromise && deviceAuthTPromise ? <Text style={styles.textmessage1}> Excellent </Text>: <Text style={styles.textmesage2}> Icognitio Mode </Text>}
+                </TouchableOpacity>
+              )}></Popover>
+             <Popover isVisible={deviceFaceRec} onRequestClose={() => setDeviceAuth(false)} from={(
+                <TouchableOpacity onPress={() => setDeviceAuth(false)}>
+                  <IconButton icon={deviceAuthPromise ? 'face-recognition': 'incognito-circle'} iconColor={deviceAuthPromise ? MD3Colors.secondary60: MD3Colors.error50} style={styles.cogsicon}></IconButton>
+                  {deviceAuthPromise ? <Text style={styles.cogiconmessage}> FaceID </Text>: <Text style={styles.cogiconerrormessage}> Sign in </Text>}
+                  {deviceAuthPromise ?
+                    <TouchableOpacity onPress={ async() =>{
+                      Alert.alert('FaceID', 'Would you like to unlock app through your Face ?', [{text: 'Excellent', onPress: async() =>{},},{ text: 'Cancel', style: 'cancel' },],)
+                    } }></TouchableOpacity> : ''}
+                </TouchableOpacity>
+              )}></Popover>
           </View>  
         </Modal>: ''}
     </View>
@@ -234,7 +250,6 @@ const styles = StyleSheet.create({
     top: Platform.OS === 'ios' || Platform.OS === 'android' ? -200: Platform.OS === 'web'? -125 : -125, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
   },
-
   linkhome:{
     flex: 1,
     top: 100,
@@ -247,13 +262,46 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
   },
- 
   cameramodaltext: {
     color: 'white' ,
     fontSize : 20,
     textAlign:  'center',
     position: 'relative',
     top: 50   
+  },
+  accountlock: {
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios'? 200 : 120, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : -180
+  },
+  textmessage1:{
+    color: 'green', 
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 200 : 120,  
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : -200
+  }, 
+  textmesage2: {
+    color: 'white', 
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 200 : 120,  
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : -200,
+  },
+  cogsicon:{
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 300 : 50, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios' ? -180: 300
+  },
+  cogiconmessage:{
+    color: 'green', 
+    position: 'relative', 
+    top: Platform.OS === 'android'|| Platform.OS === 'ios' ? 300 :120, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : 300   
+  },
+  cogiconerrormessage:{
+    color: 'white', 
+    position: 'relative', 
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? 300 : 50, 
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? -180 : 300
   }
 
 });
