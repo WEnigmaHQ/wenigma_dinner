@@ -8,6 +8,8 @@ import Popover from 'react-native-popover-view';
 import * as LocalAuth from 'expo-local-authentication';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
+import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
+
 
 
 
@@ -196,7 +198,7 @@ export default function Tab() {
               )}></Popover>
           </View>  
         </Modal>: ''}
-        {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
+      {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
           <View>
             <Text style={styles.drawerbitcoinhandler}> Register your Bitcoin Address </Text>
             <Text style={styles.drawertextfield1}> Bitcoin Address * </Text>
@@ -207,7 +209,7 @@ export default function Tab() {
               </TouchableOpacity>
           </View>
         </BottomDrawer> : ''}
-        {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
+      {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
             animationOutTiming={1000} animationIn={'lightSpeedIn'} 
             style={styles.modalfingerprint}>
           <View>
@@ -235,6 +237,27 @@ export default function Tab() {
               {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'gold', position: 'absolute', top: 350, left: -100}}> Return </Link>: ''}
           </View>
         </Modal>:''}
+      {eyeBell ? <Modal isVisible={eyeBell} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                  <View style={{position: 'relative', left: -290}}>
+                    <Text style={styles.modalnotifyheader}> Divulgence  </Text>
+                    {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={styles.modalnotifyclosebtn} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>:''}
+                    <Text style={styles.modalnotifytext1}> Grant Divulgence consent </Text>
+                    {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                          <AccordionItem
+                              leftIcon="account-circle"
+                              title="Exclusive Dinners"
+                              subTitle="Private Dinners invite exclusive members to promote business & other public affairs ">
+                                <IconButton icon={'fingerprint'} style={styles.modalnotifyhandshake}></IconButton>
+                          </AccordionItem>
+                          <AccordionItem leftIcon="handshake" title="Private Capital Clubs" subTitle='Private Capital Clubs negioatte on business deals & transactions'>
+                          <IconButton icon={'face-recognition'} style={styles.modalnotifyhandshake}></IconButton>
+                          </AccordionItem>
+                          <AccordionItem leftIcon="compass" title="News" subTitle='News are prime source of decision paticularly if deals between Moguls'>
+                          </AccordionItem>
+                      </Accordion>: ''}
+                      {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'gold', position: 'absolute', top: 450, left: 150}}> Return </Link>: ''}
+                  </View>
+              </Modal> :''}
         </View>
   );
 }
@@ -430,6 +453,44 @@ const styles = StyleSheet.create({
     position: 'relative', 
     top: Platform.OS === 'android' || Platform.OS === 'ios' ? -270 : -100,
     left: Platform.OS === 'android' || Platform.OS === 'ios' ? -270 : 300
+  },
+  modalnotifyheader:{
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -130 : -200,
+    left: Platform.OS === 'android' || Platform.OS === 'ios'? 80: 200,
+    fontSize: 20
+  },
+
+  modalnotifyclosebtn: {
+    position: 'relative', 
+    top: -240, 
+    left: 400,
+  },
+
+  modalnotifytext1:{
+    position: 'relative',
+    color: 'white',
+    top: Platform.OS === 'android' || Platform.OS === 'ios' ? -50 : -150,
+    left: Platform.OS === 'android' || Platform.OS === 'ios' ? 50 : -150, 
+    fontWeight: 'bold'
+  },
+  contentContainerStyle: {
+        paddingTop: 15,
+        paddingBottom: 20,
+        
+  },
+  titleStyle: {
+        fontSize: 16,
+        fontWeight: 700,
+  },
+  itemcontainer:{
+    padding: 20,
+  },
+  modalnotifyhandshake:{
+
+    position: 'absolute',
+    left: 100,
+    top: 20
   }
 
 });
