@@ -3,7 +3,6 @@ import { IconButton, MD2Colors, MD3Colors } from 'react-native-paper';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert, Platform} from 'react-native';
 import Modal  from 'react-native-modal';
 import { useEffect, useState, useRef } from 'react';
-import { RadialSlider } from 'react-native-radial-slider';
 import Popover from 'react-native-popover-view';
 import * as LocalAuth from 'expo-local-authentication';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
@@ -307,10 +306,10 @@ export default function Tab() {
                               <IconButton icon={'home'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
                               <IconButton icon={'account'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
                               <IconButton icon={'bitcoin'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
-                              <IconButton icon={'food'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
-                              <IconButton icon={'drone'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
-                              <IconButton icon={'cricket'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
-                              <IconButton icon={'gavel'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
+                              <IconButton icon={'food'} style={styles.messageuse} iconColor={MD2Colors.amber500}></IconButton>
+                              <IconButton icon={'purse'} style={styles.messageuse} iconColor={MD2Colors.cyan500}></IconButton>
+                              <IconButton icon={'cricket'} style={styles.messageuse} iconColor={MD2Colors.blueGrey500}></IconButton>
+                              <IconButton icon={'gavel'} style={styles.messageuse} iconColor={MD2Colors.brown500}></IconButton>
                           </AccordionItem>
                       </Accordion>: ''}
                       {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 400, left: 150, fontWeight: 'bold'}}> Return </Link>: ''}

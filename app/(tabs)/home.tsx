@@ -6,6 +6,8 @@ import { useEffect, useCallback } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {DrawerNavigation} from 'rn-inkpad';
+
 
 
 export default function Tab() {
@@ -77,41 +79,65 @@ export default function Tab() {
             console.warn(`Error report", ${error}`);
         });
   }, [eventName]);  
+
+
   
   return (
-    <View style={styles.container}>
-      <IconButton icon={'account-tie-voice'} iconColor={MD2Colors.amber300} style={{position: 'relative', top: -100, left: -300}} onPress={() => {
-        setExclusiveDinnerInvitation(true);
-      }}></IconButton>
-      {exclusiveDinnerInvitation ? <View style={{flex: 1}}>
-          <ReactNativeModal isVisible={exclusiveDinnerInvitation} animationInTiming={1000} animationIn={'lightSpeedIn'} animationOut={'lightSpeedIn'}>
-            <View>
-              <IconButton icon={'close'} iconColor={MD3Colors.primary90} style={{position: 'relative', top: -100, left: 700}} onPress={() => {setExclusiveDinnerInvitation(false)}}></IconButton>
-              <Text style={{position: 'relative', top: -150, fontSize: 25, color: 'gold', left: 200}}> Exclusive Events </Text>
-              <IconButton icon={'plus'} iconColor={MD2Colors.green500} style={{position: 'relative', top: -150, left: 400}} onPress={() => {setPlusExclusiveDinner(true)}}></IconButton>
-              <ReactNativeModal isVisible={plusExclusiveDinner}>
-                <View style={{position: 'relative', justifyContent: 'space-evenly'}}>
-                <IconButton icon={'close'} iconColor={MD3Colors.primary90} style={{position: 'relative', top: -100, left: 700}} onPress={() => {setPlusExclusiveDinner(false)}}></IconButton>
-                  <Text style={{color: 'white', flex: 1, position: 'relative', top: -100, left: 100}}> Event Name: </Text>
-                  <TextInput placeholder='event name' value={eventName} onChangeText={setEventName} inputMode={'text'} style={{width: 300, position: 'relative', top: -80, left: 200}}></TextInput>
-                  <Text style={{color: 'white', flex: 1, position: 'relative', top: -70, left: 100}}> Event Date: </Text>
-                  { Platform.OS === 'android' || Platform.OS === 'ios'? <View>
-                    <IconButton icon={'calendar-clock'} iconColor={MD2Colors.blue400} onPress={showDatePicker} style={{position: 'relative', top: -50, left: 200}}></IconButton>
-                    <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={hideDatePicker}/>
-                  </View>: <TextInput placeholder='date add here' value={eventDate} onChangeText={setEventDate} inputMode={'text'} style={{width: 300, position: 'relative', left: 200}}></TextInput>}
-                  {Platform.OS === 'android' || Platform.OS === 'ios' ? <View>
-                      <IconButton icon={'calendar-lock'} style={{position: 'relative', top: -40, left: 100}} iconColor={MD2Colors.yellow500} onPress={addToCalendar}></IconButton>
-                  </View>: ''}
-                </View>
-              </ReactNativeModal>
-              
-              {/* 
-              <IconButton icon={'delete'} iconColor={MD2Colors.red500} style={{position: 'relative', top: -200, left: 500}} onPress={() => {}}></IconButton>
-              <IconButton icon={'database-search'} iconColor={MD2Colors.yellow500} style={{position: 'relative', top: -250, left: 600}} onPress={() => {}}></IconButton> */}
 
-            </View>
-          </ReactNativeModal>
-        </View> : ''}
+    <View style={{flex: 1}}>
+      <DrawerNavigation backgroundColor='white' items={[
+        {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
+        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{}},
+        {
+          text: 'News',
+          icon: 'compass',
+          items: [
+            {
+              icon: 'earth',
+              text: 'Politics',
+              onPress:() =>{},
+            },
+            {
+              icon: 'construct',
+              text: 'Real Estate',
+              onPress:() =>{},
+            },
+            {
+              icon: 'man',
+              text: 'Aura',
+              onPress:() =>{}
+            },
+            {
+              icon: 'business',
+              text: 'Business & Legal',
+              onPress:() =>{}
+            },
+            {
+              icon: 'bag-handle',
+              text: 'Fashion',
+              onPress:() =>{}
+            },
+            {
+              icon: 'fast-food',
+              text: 'Food',
+              onPress:() =>{}
+            },
+            {
+              icon: 'airplane',
+              text: 'Travel',
+              onPress:() =>{}
+            },
+            {
+              icon: 'golf',
+              text: 'Sports & Fitness',
+              onPress:() =>{}
+            },
+          ]
+        },
+        {icon: 'diamond', text: 'Partners', onPress:() =>{}},
+        {icon: 'medal', text: 'Rewards', onPress:() =>{}},
+        {icon: 'call', text: 'Customer Service', onPress:() =>{}},
+      ]}></DrawerNavigation>
     </View>
   );
 }
