@@ -284,6 +284,38 @@ export default function Tab() {
                       {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 400, left: 150, fontWeight: 'bold'}}> Return </Link>: ''}
                       </View> 
                   </Modal> : ''}
+                {eyeMessage ? <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                      <View style={styles.viewstyle}>
+                      {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                          <AccordionItem
+                              leftIcon="pen"
+                              rightIcon="cogs"
+                              title=" Message Usage "
+                              subTitle="Communication with mindlike people are most enjoyable">
+                                 <IconButton icon={'comment'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
+                                 <IconButton icon={'chat'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
+                          </AccordionItem>
+                          <AccordionItem leftIcon="satellite" rightIcon="message" title="Boardcast Message Usage" subTitle=' Boardcast public message '>
+                                      <IconButton icon={'message'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
+                                      <IconButton icon={'phone'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
+                                      <IconButton icon={'video'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
+                                      <IconButton icon={'link'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
+                                      <IconButton icon={'image'} style={styles.messageuse} iconColor={MD2Colors.brown500}></IconButton>
+                          </AccordionItem>
+                          <AccordionItem leftIcon="compass" rightIcon="radar" title="News Usage" subTitle='Information is not regarding domain or events around you but your preference of knowledge'>
+                              <IconButton icon={'chess-queen'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
+                              <IconButton icon={'home'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
+                              <IconButton icon={'account'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
+                              <IconButton icon={'bitcoin'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
+                              <IconButton icon={'food'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
+                              <IconButton icon={'drone'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
+                              <IconButton icon={'cricket'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
+                              <IconButton icon={'gavel'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
+                          </AccordionItem>
+                      </Accordion>: ''}
+                      {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 400, left: 150, fontWeight: 'bold'}}> Return </Link>: ''}
+                      </View> 
+                  </Modal>: '' }
         </View>
   );
 }
@@ -576,5 +608,8 @@ const styles = StyleSheet.create({
     top: 32, 
     borderRadius: 20
   },
-  
+  messageuse:{
+    position: 'relative',
+    left: 50
+  }
 });
