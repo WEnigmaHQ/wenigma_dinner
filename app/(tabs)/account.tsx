@@ -21,7 +21,7 @@ export default function Tab() {
 
 
   // Modal Events triggers
-  const [eyeFacebook, setEyeFacebook] = useState(false);
+  const [eyeAccount, setEyeAccount] = useState(false);
   const [eyeCamera, setEyeCamera] = useState(false);
   const [eyeBitcoin, setEyeBitcoin] = useState(false);
   const [eyeBell, setEyeBell] = useState(false);
@@ -172,7 +172,7 @@ export default function Tab() {
   return (
     <View style={styles.container}>
       <IconButton icon={'movie-cog'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
-      <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeFacebook(!eyeFacebook)}} style={styles.eyefacebookbutton}></IconButton>
+      <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeAccount(!eyeAccount)}} style={styles.eyefacebookbutton}></IconButton>
       <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
       <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
       <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
@@ -238,7 +238,7 @@ export default function Tab() {
           </View>
         </Modal>:''}
       {eyeBell ? <Modal isVisible={eyeBell} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
-                  <View style={{position: 'relative', left: -290}}>
+                  <View style={styles.viewstyle}>
                     <Text style={styles.modalnotifyheader}> Divulgence  </Text>
                     {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={styles.modalnotifyclosebtn} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>:''}
                     <Text style={styles.modalnotifytext1}> Grant Divulgence consent </Text>
@@ -249,15 +249,41 @@ export default function Tab() {
                               subTitle="Private Dinners invite exclusive members to promote business & other public affairs ">
                                 <IconButton icon={'fingerprint'} style={styles.modalnotifyhandshake}></IconButton>
                           </AccordionItem>
-                          <AccordionItem leftIcon="handshake" title="Private Capital Clubs" subTitle='Private Capital Clubs negioatte on business deals & transactions'>
+                          <AccordionItem leftIcon="handshake" title="Private Capital Clubs" subTitle='Private Capital Clubs make hand to negioatte on business deals & transactions'>
                           <IconButton icon={'face-recognition'} style={styles.modalnotifyhandshake}></IconButton>
                           </AccordionItem>
-                          <AccordionItem leftIcon="compass" title="News" subTitle='News are prime source of decision paticularly if deals between Moguls'>
+                          <AccordionItem leftIcon="compass"  title="News" subTitle='Authenticate news are prime source of decision making paticularly if deals between Moguls.'>
                           </AccordionItem>
                       </Accordion>: ''}
-                      {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'gold', position: 'absolute', top: 450, left: 150}}> Return </Link>: ''}
+                      {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 478, left: 150}}> Return </Link>: ''}
                   </View>
               </Modal> :''}
+      {eyeAccount ? <Modal isVisible={eyeAccount} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                      <View style={styles.viewstyle}>
+                      {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                          <AccordionItem
+                              leftIcon="account-circle"
+                              rightIcon="pencil"
+                              title="My Profile"
+                              subTitle="Inspire people, with your actions">
+                                <Text style={styles.editnamelabel}> Edit Name * </Text>
+                                <TextInput style={styles.editnamefield} inputMode='text' placeholder='Edit name' value=''></TextInput>
+                                <Text style={styles.editbiolabel}> Edit Persona * </Text>
+                                <TextInput style={styles.editbiofield} inputMode='text' placeholder='Bio' value=''></TextInput>
+                                <Text style={styles.editwebsitelabel}> Business Name * </Text>
+                                <TextInput style={styles.editwebsitefield} inputMode='text' placeholder='Edit business' value=''></TextInput>
+                                <Text style={styles.editwebsiteurllabel}> Business Website * </Text>
+                                <TextInput style={styles.editwebsiteurlfield} inputMode='url' placeholder='url' value=''></TextInput>
+                          </AccordionItem>
+                          <AccordionItem leftIcon="facebook" rightIcon="instagram" title="Social Connect" subTitle='Connect your social account'>
+                          
+                          </AccordionItem>
+                          <AccordionItem leftIcon="radar" rightIcon="link" title="Invite Partners" subTitle='Community embrose success'>
+                          </AccordionItem>
+                      </Accordion>: ''}
+                      {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 400, left: 150, fontWeight: 'bold'}}> Return </Link>: ''}
+                      </View> 
+                  </Modal> : ''}
         </View>
   );
 }
@@ -491,6 +517,64 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 100,
     top: 20
-  }
+  },
 
+  viewstyle:{
+    position: 'relative', left: -290
+  },
+
+  editnamelabel:{
+    position: 'relative', 
+    left: 10
+  },
+  editnamefield:{
+    position: 'relative', 
+    left: 20, 
+    backgroundColor: 'silver', 
+    width: 200, 
+    top: 10, 
+    borderRadius: 20
+  },
+
+  editbiolabel:{
+    position: 'relative', 
+    left: 10,
+    top: 12
+  },
+  editbiofield:{
+    position: 'relative', 
+    left: 20, 
+    backgroundColor: 'silver', 
+    width: 200, 
+    top: 18, 
+    borderRadius: 20
+  },
+  editwebsitelabel:{
+    position: 'relative', 
+    left: 10,
+    top: 20
+  },
+  editwebsitefield:{
+    position: 'relative', 
+    left: 20, 
+    backgroundColor: 'silver', 
+    width: 200, 
+    top: 27, 
+    borderRadius: 20
+  },
+
+  editwebsiteurllabel:{
+    position: 'relative', 
+    left: 10,
+    top: 28
+  },
+  editwebsiteurlfield:{
+    position: 'relative', 
+    left: 20, 
+    backgroundColor: 'silver', 
+    width: 200, 
+    top: 32, 
+    borderRadius: 20
+  },
+  
 });
