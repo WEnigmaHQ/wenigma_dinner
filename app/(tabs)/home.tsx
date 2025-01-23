@@ -2,11 +2,16 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import { IconButton, MD2Colors, MD3Colors, TextInput } from 'react-native-paper';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {DrawerNavigation} from 'rn-inkpad';
+import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
+import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
+import { Link } from 'expo-router';
+
+
 
 
 
@@ -14,6 +19,8 @@ export default function Tab() {
   
   const [exclusiveDinnerInvitation, setExclusiveDinnerInvitation] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const [customerService, setCustomerService] = useState(false);
 
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -80,6 +87,7 @@ export default function Tab() {
         });
   }, [eventName]);  
 
+  const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
 
   
   return (
@@ -136,8 +144,34 @@ export default function Tab() {
         },
         {icon: 'diamond', text: 'Partners', onPress:() =>{}},
         {icon: 'medal', text: 'Rewards', onPress:() =>{}},
-        {icon: 'call', text: 'Customer Service', onPress:() =>{}},
+        {icon: 'wallet', text: 'Payment Method', onPress:() =>{}},
+        {icon: 'call', text: 'Customer Service', onPress:() =>{
+          bottomDrawerRef.current?.open;
+          setCustomerService(!customerService);
+        }},
       ]}></DrawerNavigation>
+      {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount>
+            <View style={{flex: 1}}>
+              {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                        <AccordionItem
+                                            leftIcon="phone"
+                                            title="Contact Us"
+                                            subTitle="Send me a quote" rightIcon="whatsapp">
+                                              <Text style={styles.contactbusinessname}> WISDOMENIGMA INC </Text>
+                                              <Text style={styles.contactnumber}> (+92) 317 4287 461 </Text>
+                                        </AccordionItem>
+                                        <AccordionItem leftIcon="link" title="Social Connect" subTitle='Social Connect & store is more exclusive option for quote' rightIcon="instagram">
+                                            <Link style={styles.contactnumber} href={'https://www.instagram.com/wisdomenigma/'}> instagram@wisdomenigma </Link>
+                                            <Link style={styles.contactnumber} href={'https://www.facebook.com/wisdomenigma'}> facebook@wisdomenigma </Link>
+                                            <Link style={styles.contactnumber} href={'https://www.linkedin.com/company/wisdom-enigma/'}> linkedin@wisdomenigma </Link>
+                                            <Link style={styles.contactnumber} href={'https://wemerchandise-61a94.web.app/'}> url@wisdomenigma </Link>
+                                        </AccordionItem>
+                                        <AccordionItem leftIcon="chat"  title="Interview Request" subTitle='Interview / Discussions are good to learn about ' rightIcon='at'>
+                                              <Text style={styles.contactnumber}> wizdwarfs@gmail.com </Text>
+                                        </AccordionItem>
+                                    </Accordion>: ''}
+            </View>
+          </BottomDrawer>: ''}
     </View>
   );
 }
@@ -149,4 +183,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'black'
   },
+  contentContainerStyle: {
+    paddingTop: 15,
+    paddingBottom: 20,
+    
+},
+titleStyle: {
+    fontSize: 16,
+    fontWeight: 700,
+},
+itemcontainer:{
+  padding: 20,
+},
+contactbusinessname: {
+  position: 'relative',
+  left: 20
+},
+contactnumber: {
+  position: 'relative',
+  left: 20,
+  top: 10
+
+},
 });
