@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'reac
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {DrawerNavigation, Card, SegmentedControl, CardImage} from 'rn-inkpad';
+import {DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
@@ -34,6 +34,7 @@ export default function Tab() {
   const [ SportsNews, setSportslNews ] = useState(false);
   const [ partners, setPartners ] = useState(false);
   const [ value, setValue ] = useState('active');
+  const [ clubs, setClubs ] = useState(false);
 
 
 
@@ -116,19 +117,13 @@ export default function Tab() {
 
   const bottomBDrawerRef = useRef<BottomDrawerMethods>(null);
 
-  // handle political news
-
-  const bottomPoliticsDrawerRef = useRef<BottomDrawerMethods>(null);
-
   const [politicalArticles, setPoliticalArticles] = useState([]);
 
     // handle estate news
-  const bottomEstateDrawerRef = useRef<BottomDrawerMethods>(null);
 
   const [EstateArticles, setEsatteArticles] = useState([]);
 
    // handle aura news
-   const bottomAuraDrawerRef = useRef<BottomDrawerMethods>(null);
 
    const [AuraArticles, setAuraArticles] = useState([]);
    
@@ -139,22 +134,18 @@ export default function Tab() {
    const [businessArticles, setBusinessArticles] = useState([]);
 
    // handle fashion news
-   const bottomFashionDrawerRef = useRef<BottomDrawerMethods>(null);
 
    const [fashionArticles, setFashionArticles] = useState([]);
 
-   // handle fashion news
-   const bottomFoodDrawerRef = useRef<BottomDrawerMethods>(null);
+   // handle food news
 
    const [foodArticles, setFoodArticles] = useState([]);
 
    // handle travel news
-   const bottomTravelDrawerRef = useRef<BottomDrawerMethods>(null);
 
    const [travelArticles, setTravelArticles] = useState([]);
 
    // handle travel news
-   const bottomSportsDrawerRef = useRef<BottomDrawerMethods>(null);
 
    const [SportsArticles, setSportsArticles] = useState([]);
 
@@ -285,13 +276,17 @@ export default function Tab() {
     {key: 'Open', value: 'tab2'},
   ];
 
+    // handle clubs
+    const bottomClubsDrawerRef = useRef<BottomDrawerMethods>(null);
+  
+
   
   return (
 
     <View style={{flex: 1}}>
       <DrawerNavigation backgroundColor='white' items={[
         {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
-        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{}},
+        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{ bottomClubsDrawerRef.current?.open; setClubs(!clubs)}},
         {
           text: 'News',
           icon: 'compass',
@@ -370,7 +365,7 @@ export default function Tab() {
                                     </Accordion>: ''}
             </View>
           </BottomDrawer>: ''}
-      {paymentMethod? <BottomDrawer ref={bottomDrawerRef} openOnMount>
+      {paymentMethod? <BottomDrawer ref={bottomBDrawerRef} openOnMount>
             <View style={{position: 'absolute', width: 300, top: 30}}>
                <Text style={styles.paymentheader}> Active Payment Method </Text>
                <Card
@@ -589,7 +584,7 @@ export default function Tab() {
                              </PageScrollView>
                             </View> 
                      </Modal>: ''}
-      {partners? <BottomDrawer ref={bottomDrawerRef} openOnMount>
+      {partners? <BottomDrawer ref={bottomPartnersDrawerRef} openOnMount>
             <View style={{position: 'absolute', width: 300, top: 30}}>
                <SegmentedControl label="" values={values} onChange={value => setValue(value)} style={{position: 'relative', left: 30}}
                 />
@@ -607,6 +602,20 @@ export default function Tab() {
                   <Text style={styles.gbrand}> GRANT CARDONE </Text>
                   </View>)}
             </View>
+          </BottomDrawer>: '' }
+      {clubs? <BottomDrawer ref={bottomClubsDrawerRef} openOnMount>
+              <View style={{flex: 1}}>
+                    <DrawerNavigation backgroundColor='#FFFFF' closeIcon='people-circle' iconColor='darkslategrey' items={[
+                      {icon: 'rocket', text: 'Virtual Club'},
+                      {icon: 'search-circle', text: 'Club search'},
+                      {icon: 'person-circle', text: 'Membership'},
+                      {icon: 'book', text: 'Rules'},
+                      {icon: 'business-outline', text: 'History'},
+                      {icon: 'rose', text: 'Events'},
+                    ]}>
+
+                    </DrawerNavigation>
+              </View>
           </BottomDrawer>: '' }
       
     </View>
