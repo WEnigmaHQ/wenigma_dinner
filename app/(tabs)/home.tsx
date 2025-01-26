@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, FlatList, Linking, Share, BackHandler } from 'react-native';
-import ReactNativeModal from 'react-native-modal';
-import { IconButton, MD2Colors, MD3Colors, TextInput } from 'react-native-paper';
+import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {DrawerNavigation, Card, CardImage} from 'rn-inkpad';
+import {DrawerNavigation, Card, SegmentedControl, CardImage} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
+
 
 
 
@@ -34,6 +32,10 @@ export default function Tab() {
   const [ FoodNews, setFoodNews ] = useState(false);
   const [ TravelNews, setTravelNews ] = useState(false);
   const [ SportsNews, setSportslNews ] = useState(false);
+  const [ partners, setPartners ] = useState(false);
+  const [ value, setValue ] = useState('active');
+
+
 
 
 
@@ -264,7 +266,7 @@ export default function Tab() {
 
   }, []);
 
-  const shareArticle = async (title, url) => {
+  const shareArticle = async (title: string, url:any) => {
     try {
       await Share.share({
         message: `${title}\n${url}`,
@@ -274,6 +276,14 @@ export default function Tab() {
     }
   };
 
+  // handle partners 
+   const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);
+  
+  //  [active or open]
+  const values = [
+    {key: 'Active', value: 'tab1'},
+    {key: 'Open', value: 'tab2'},
+  ];
 
   
   return (
@@ -328,7 +338,7 @@ export default function Tab() {
             },
           ]
         },
-        {icon: 'diamond', text: 'Partners', onPress:() =>{}},
+        {icon: 'diamond', text: 'Partners', onPress:() =>{bottomPartnersDrawerRef.current?.open; setPartners(!partners);}},
         {icon: 'wallet', text: 'Payment Method', onPress:() =>{
             bottomBDrawerRef.current?.open;
             setPaymentMethod(!paymentMethod);
@@ -380,7 +390,7 @@ export default function Tab() {
           </BottomDrawer>: '' }
       {politicsNews? <Modal isVisible={politicsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                            <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                            <Link href={'/'} style={styles.backlink}> &#10226; </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                     <FlatList data={politicalArticles} renderItem={({item}) =>
                                         <Card
@@ -406,7 +416,7 @@ export default function Tab() {
                      </Modal>: ''}
       {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={EstateArticles} renderItem={({item}) =>
                                         <Card
@@ -431,7 +441,7 @@ export default function Tab() {
                      </Modal>: ''}
       {PersonalityNews? <Modal isVisible={PersonalityNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={AuraArticles} renderItem={({item}) =>
                                         <Card
@@ -456,7 +466,7 @@ export default function Tab() {
                      </Modal>: ''}
       {BusinessNews? <Modal isVisible={BusinessNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={businessArticles} renderItem={({item}) =>
                                         <Card
@@ -481,7 +491,7 @@ export default function Tab() {
                      </Modal>: ''}
       {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={fashionArticles} renderItem={({item}) =>
                                         <Card
@@ -506,7 +516,7 @@ export default function Tab() {
                      </Modal>: ''}
       {FoodNews? <Modal isVisible={FoodNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={foodArticles} renderItem={({item}) =>
                                         <Card
@@ -531,7 +541,7 @@ export default function Tab() {
                      </Modal>: ''}
       {TravelNews? <Modal isVisible={TravelNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={travelArticles} renderItem={({item}) =>
                                         <Card
@@ -556,7 +566,7 @@ export default function Tab() {
                      </Modal>: ''}
       {SportsNews? <Modal isVisible={SportsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                             <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={{color: 'white', position: 'relative', left: 80, fontSize: 25}}> &#10226; Return </Link>
+                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
                              <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                               <FlatList data={SportsArticles} renderItem={({item}) =>
                                         <Card
@@ -579,6 +589,25 @@ export default function Tab() {
                              </PageScrollView>
                             </View> 
                      </Modal>: ''}
+      {partners? <BottomDrawer ref={bottomDrawerRef} openOnMount>
+            <View style={{position: 'absolute', width: 300, top: 30}}>
+               <SegmentedControl label="" values={values} onChange={value => setValue(value)} style={{position: 'relative', left: 30}}
+                />
+                 {value !== 'tab2' && (<View style={{flex: 1}}>
+                  <Text style={styles.damacbrand}> DAMAC </Text>
+                  <Text style={styles.oceanhousebrand}> Ocean House </Text>
+                  <Text style={styles.imibrand}> IMI-LUXURY-EXCELSIOR </Text>
+                  <Text style={styles.rbrand}> RAS-AL-KHAMAH </Text>
+                  </View>)}
+                  {value !== 'tab1' && (<View style={{flex: 1}}>
+                  <Text style={styles.damacbrand}> Nine Elm Versace </Text>
+                  <Text style={styles.oceanhousebrand}> JACBO & CO Inc </Text>
+                  <Text style={styles.imibrand}> Trump International  </Text>
+                  <Text style={styles.rbrand}> BINGATTI </Text>
+                  <Text style={styles.gbrand}> GRANT CARDONE </Text>
+                  </View>)}
+            </View>
+          </BottomDrawer>: '' }
       
     </View>
   );
@@ -630,5 +659,46 @@ itemText: {
   textAlign: 'center',
   fontSize: 20,
   fontWeight: 'bold'
+},
+backlink: {
+  color: 'white', 
+  position: 'relative', 
+  left: 300, 
+  fontSize: 25
+},
+damacbrand:{
+  position: 'relative', 
+  left: 20,
+  fontSize: 50,
+  color: 'darkslategrey',
+  top: 20
+}, 
+oceanhousebrand:{
+  position: 'relative', 
+  left: 160,
+  fontSize: 20,
+  color: 'orange',
+  top: 20
+},
+imibrand:{
+  position: 'relative', 
+  left: 60,
+  fontSize: 20,
+  color: 'green',
+  top: 40
+},
+gbrand:{
+  position: 'relative', 
+  left: 100,
+  fontSize: 20,
+  color: 'red',
+  top: 70
+},
+rbrand:{
+  position: 'relative', 
+  left: 30,
+  fontSize: 20,
+  color: 'purple',
+  top: 60
 }
 });
