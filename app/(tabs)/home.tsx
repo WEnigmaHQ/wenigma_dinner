@@ -3,13 +3,14 @@ import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'reac
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation} from 'rn-inkpad';
+import {DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
+import { TextInput } from 'react-native-paper';
 
 
 
@@ -35,6 +36,7 @@ export default function Tab() {
   const [ partners, setPartners ] = useState(false);
   const [ value, setValue ] = useState('active');
   const [ clubs, setClubs ] = useState(false);
+  const [ virtualClub, setVirtualClub] = useState(false);
 
 
 
@@ -276,8 +278,18 @@ export default function Tab() {
     {key: 'Open', value: 'tab2'},
   ];
 
+
     // handle clubs
     const bottomClubsDrawerRef = useRef<BottomDrawerMethods>(null);
+    const [tab, setTab ] = useState('tab1');
+
+    const tabs = [
+      {key: 'Create Club', value: 'tab1'},
+      {key: 'Join Club', value: 'tab2'},
+      {key: 'About Club', value: 'tab3'},
+    ];
+
+    const [ isJoined, setIsJoined ] = useState(false);
   
 
   
@@ -603,21 +615,42 @@ export default function Tab() {
                   </View>)}
             </View>
           </BottomDrawer>: '' }
-      {clubs? <BottomDrawer ref={bottomClubsDrawerRef} openOnMount>
-              <View style={{flex: 1}}>
-                    <DrawerNavigation backgroundColor='#FFFFF' closeIcon='people-circle' iconColor='darkslategrey' items={[
-                      {icon: 'rocket', text: 'Virtual Club'},
-                      {icon: 'search-circle', text: 'Club search'},
-                      {icon: 'person-circle', text: 'Membership'},
-                      {icon: 'book', text: 'Rules'},
-                      {icon: 'business-outline', text: 'History'},
-                      {icon: 'rose', text: 'Events'},
-                    ]}>
-
-                    </DrawerNavigation>
-              </View>
-          </BottomDrawer>: '' }
-      
+      {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
+                <View style={styles.backnav}>
+                      <BottomTabNavigation selectedIndex={0} highlightedIconColor='#FFF' values={[
+                        {icon: 'ribbon', text: 'Join', onPress:() => { setIsJoined(true);
+                        },}, 
+                        {icon: 'search-circle', text: 'Search'},
+                        {icon: 'rose', text: 'Events'},
+                        {icon: 'layers', text: 'Extras'}
+                        ]}></BottomTabNavigation>
+                </View>
+                {isJoined ? <View style={styles.clubtabcontrol}>
+                                  <SegmentedControl label='' values={tabs} onChange={(value) => setTab(value)}/>
+                                  {tab === 'tab1'? <View style={styles.clubtabview}>
+                                    <Text style={styles.clubformtextname}> Club name * </Text>
+                                    <TextInput placeholder='club name' style={{top: 2}}></TextInput>
+                                    <Text style={styles.clubformtextcity}> Club city * </Text>
+                                    <TextInput placeholder='club city' style={{top: 5}}></TextInput>
+                                    <Text style={styles.clubformtextcity}> Club country * </Text>
+                                    <TextInput placeholder='club country' style={{top: 6}}></TextInput>
+                                    <View style={{top: 10}}>
+                                      <Switch text='Club contact number' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                    </View>
+                                    <Text style={styles.clubformtextnumber}> Phone number * </Text>
+                                    <TextInput placeholder='club number' style={{top: 18}}></TextInput>
+                                    <View style={{top: 25}}>
+                                      <Switch text='Club bitcoin address' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                    </View>
+                                    <View style={{top: 50}}>
+                                      <Switch text='Club Declaration signed' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                    </View>
+                                    
+                                  </View>: ''}
+                                  {tab === 'tab2'? <View style={styles.clubtabview}> </View>: ''}
+                                  {tab === 'tab3'? <View style={styles.clubtabcontrol}> </View>: ''}
+                            </View> : ''}
+              </Modal>: ''}
     </View>
   );
 }
@@ -709,5 +742,36 @@ rbrand:{
   fontSize: 20,
   color: 'purple',
   top: 60
+}, 
+
+backnav:{
+  flex: 1, 
+  position: 'relative', 
+  top: 30
+},
+clubtabcontrol:{
+  position: 'relative', 
+  top: -600
+},
+clubtabview:{
+  position: 'absolute', 
+  width: 320, 
+  top: 100
+},
+clubformtextname: {
+  color: 'white', 
+  top: -5
+},
+clubformtextcity: {
+  color: 'white', 
+  top: 3
+},
+clubformtextnumber: {
+  color: 'white', 
+  top: 13
+},
+clubswitchtextfield:{
+  top: 3,
+  color: 'white'
 }
 });
