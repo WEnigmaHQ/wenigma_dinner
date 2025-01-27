@@ -37,6 +37,14 @@ export default function Tab() {
   const [ value, setValue ] = useState('active');
   const [ clubs, setClubs ] = useState(false);
   const [ virtualClub, setVirtualClub] = useState(false);
+  const [ clubName, setClubName] = useState('');
+  const [ clubCity, setClubCity] = useState('');
+  const [ clubCountry, setClubCountry] = useState('');
+  const [ clubPhone, setClubPhone] = useState('');
+  const [ confirmedNumber, setConfirmedNumber] = useState(false);
+  const [ confirmedBitcoin, setConfirmedBitcoin] = useState(false);
+  const [ confirmedDelgation, setConfirmedDelgation] = useState(false);
+
 
 
 
@@ -629,21 +637,38 @@ export default function Tab() {
                                   <SegmentedControl label='' values={tabs} onChange={(value) => setTab(value)}/>
                                   {tab === 'tab1'? <View style={styles.clubtabview}>
                                     <Text style={styles.clubformtextname}> Club name * </Text>
-                                    <TextInput placeholder='club name' style={{top: 2}}></TextInput>
+                                    <TextInput placeholder='club name' inputMode={'text'} value={clubName} onChangeText={setClubName} style={{top: 2}}></TextInput>
                                     <Text style={styles.clubformtextcity}> Club city * </Text>
-                                    <TextInput placeholder='club city' style={{top: 5}}></TextInput>
+                                    <TextInput placeholder='club city' inputMode={'text'} value={clubCity} onChangeText={setClubCity} style={{top: 5}}></TextInput>
                                     <Text style={styles.clubformtextcity}> Club country * </Text>
-                                    <TextInput placeholder='club country' style={{top: 6}}></TextInput>
+                                    <TextInput placeholder='club country' inputMode={'text'} value={clubCountry} onChangeText={setClubCountry} style={{top: 6}}></TextInput>
                                     <View style={{top: 10}}>
-                                      <Switch text='Club contact number' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      <Switch text='Club contact number' isOn={confirmedNumber} onChange={setConfirmedNumber} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
                                     </View>
-                                    <Text style={styles.clubformtextnumber}> Phone number * </Text>
-                                    <TextInput placeholder='club number' style={{top: 18}}></TextInput>
+                                    {confirmedNumber ? <View>
+                                      <Text style={styles.clubformtextnumber}> Phone number * </Text>
+                                      <TextInput placeholder='club number' style={{top: 18}} inputMode={'tel'} value={clubPhone} onChangeText={setClubPhone}></TextInput>
+                                    </View>: ''}
                                     <View style={{top: 25}}>
-                                      <Switch text='Club bitcoin address' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      <Switch text='Club bitcoin address' isOn={confirmedBitcoin} onChange={setConfirmedBitcoin} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
                                     </View>
                                     <View style={{top: 50}}>
-                                      <Switch text='Club Declaration signed' backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      <Switch text='Club Declaration signed' backgrounColor='red' isOn={confirmedDelgation} onChange={setConfirmedDelgation} fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                    {confirmedDelgation? <View style={{top: -280}}>
+                                      <Card
+                                              buttons={[
+                                                
+                                              ]}
+                                              description={
+                                                'Following Delegation should be applied :- \n1. Club members should attend prenium clubs events & dinners.\n 2. Each members should have membership.\n 3. Each members should use club conversation.\n 4. Club members should pay for service according to their role.\n 5. In case member will not pay his/her member fees account will be disable for 6-90 days. '
+                                              }
+                                              icon={'mail-unread'}
+                                              title={'Delegation Letter'}
+                                              theme={{
+                                                themeColor: '#DB504A',
+                                              }}
+                                            />
+                                    </View> : ''}
                                     </View>
                                     
                                   </View>: ''}
