@@ -302,7 +302,6 @@ export default function Tab() {
 
   
   return (
-
     <View style={{flex: 1}}>
       <DrawerNavigation backgroundColor='white' items={[
         {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
@@ -654,10 +653,11 @@ export default function Tab() {
                                     </View>
                                     <View style={{top: 50}}>
                                       <Switch text='Club Declaration signed' backgrounColor='red' isOn={confirmedDelgation} onChange={setConfirmedDelgation} fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                    {confirmedDelgation? <View style={{top: -280}}>
+                                    {confirmedDelgation && confirmedBitcoin? <View style={{top: -300}}>
                                       <Card
                                               buttons={[
-                                                
+                                                {text: 'Submit'},
+                                                {text: 'Cancel'}
                                               ]}
                                               description={
                                                 'Following Delegation should be applied :- \n1. Club members should attend prenium clubs events & dinners.\n 2. Each members should have membership.\n 3. Each members should use club conversation.\n 4. Club members should pay for service according to their role.\n 5. In case member will not pay his/her member fees account will be disable for 6-90 days. '
