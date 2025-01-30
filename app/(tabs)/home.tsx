@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
-import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import {DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch} from 'rn-inkpad';
+import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import { DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
@@ -11,6 +11,8 @@ import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { TextInput } from 'react-native-paper';
+import { supabase } from './supabase';
+
 
 
 
@@ -36,7 +38,21 @@ export default function Tab() {
   const [ partners, setPartners ] = useState(false);
   const [ value, setValue ] = useState('active');
   const [ clubs, setClubs ] = useState(false);
-  const [ virtualClub, setVirtualClub] = useState(false);
+  const [ membership, setMembership] = useState(false);
+
+
+  // Register account
+
+  const [ email, setEmail ] = useState('');
+  const [ phone, setPhone ] = useState('');
+  const [ isBitcoin, setIsBitcoin ] = useState(false);
+  const [ isDelegation, setIsDelegation] = useState(false);
+  const [ isMagicLink, setIsMagicLink ] = useState(false);
+  const [ isPhoneAccount, setIsPhoneAccount] = useState(false);
+
+
+
+  //  Club openning
   const [ clubName, setClubName] = useState('');
   const [ clubCity, setClubCity] = useState('');
   const [ clubCountry, setClubCountry] = useState('');
@@ -172,7 +188,6 @@ export default function Tab() {
   const API_SPORTS_URL = `https://newsapi.org/v2/everything?q=sports+match+fitness&apiKey=${API_KEY}`;
 
 
-
   useEffect(() => {
     
     const fetchPolticalNews = async () => {
@@ -288,7 +303,6 @@ export default function Tab() {
 
 
     // handle clubs
-    const bottomClubsDrawerRef = useRef<BottomDrawerMethods>(null);
     const [tab, setTab ] = useState('tab1');
 
     const tabs = [
@@ -297,15 +311,41 @@ export default function Tab() {
       {key: 'About Club', value: 'tab3'},
     ];
 
-    const [ isJoined, setIsJoined ] = useState(false);
-  
+    const [register, setRegister] = useState('tab1');
+    const account = [
+      {key: 'Register Account', value: 'tab1'},
+      {key: 'Sigin Account', value: 'tab2'},
+    ];
 
+    const [ isJoined, setIsJoined ] = useState(false);
+    const [ errorStatus, setErrorStatus ] = useState(false);
+    const [ count, setCount ] = useState(0);
+
+
+    const onHandle_create_club = async() => {
+
+      const {data, error} = await supabase.from("Club").select('id, Club_name, Role');
+      error?.message !== 'undefined' ? setErrorStatus(true) : setErrorStatus(false);
+      data?.entries && data?.entries.length === 0 ? setCount(count+1): setCount((data?.entries?.length || 0) + 1);
+      
+      if (clubPhone.length >= 1 && clubPhone.length < 16 && clubName.length >=1 && clubName.length <= 32 && clubCity.length >=1 && clubCity.length <= 32 && clubCountry.length >=1 && clubCountry.length <= 32) {
+        
+        const {error} = await supabase.from("Club").insert({id: count, 
+                      Club_name: clubName, City: clubCity, 
+                      Country: clubCountry, Contact: clubPhone, 
+                      Declaration: confirmedDelgation, Isbitcoin: confirmedBitcoin, Role: 'ADMIN' }).select(); 
+         console.log("Error:", error); }
+    }
+    
+    
   
   return (
     <View style={{flex: 1}}>
       <DrawerNavigation backgroundColor='white' items={[
         {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
-        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{ bottomClubsDrawerRef.current?.open; setClubs(!clubs)}},
+        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{ 
+          // bottomClubsDrawerRef.current?.open; 
+          setClubs(!clubs)}},
         {
           text: 'News',
           icon: 'compass',
@@ -361,6 +401,9 @@ export default function Tab() {
           bottomDrawerRef.current?.open;
           setCustomerService(!customerService);
         }},
+        {icon: 'person-circle', text: 'Register your Membership', onPress:() => {
+          setMembership(!membership);
+        },}
       ]}></DrawerNavigation>
       {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount>
             <View style={{flex: 1}}>
@@ -622,6 +665,52 @@ export default function Tab() {
                   </View>)}
             </View>
           </BottomDrawer>: '' }
+      {membership ? <Modal isVisible={membership} style={{backgroundColor: 'darkslategrey'}}>
+                        <View style={styles.backnav}>
+                          <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
+                          {register === 'tab1'? <View style={styles.clubtabview}>
+                            <View style={{top: -25}}>
+                                      <Switch text='Magic Link' isOn={isMagicLink} onChange={setIsMagicLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                            </View>
+                            { isMagicLink ? (<View>
+                              <Text style={styles.clubformtextname} > Email Address * </Text>
+                              <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 2}}></TextInput>
+                            </View>
+                            ) :''}
+                            <View style={{top: 10}}>
+                                      <Switch text='Phone Link' isOn={isPhoneAccount} onChange={setIsPhoneAccount} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      { isPhoneAccount ? <View>
+                                                              <Text style={styles.clubformtextcity}> Phone Number * </Text>
+                                                              <TextInput placeholder='+ 000-111-222-333' mode='flat' value={phone} onChangeText={setPhone} right={<TextInput.Icon icon={'phone'}/>} style={{top: 13}}></TextInput>
+                                      </View> : ''}
+                            </View>
+                            <View style={{top: 50}}>
+                                      <Switch text='Bitcoin wallet' isOn={isBitcoin} onChange={setIsBitcoin} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                            </View>
+                            <View style={{top: 70}}>
+                                <Switch text='Account Declaration signed' isOn={isDelegation} onChange={setIsDelegation} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                {isDelegation && isBitcoin && isMagicLink || isPhoneAccount ? <View style={{top: -300}}>
+                                      <Card
+                                              buttons={[
+                                                {text: 'Submit', onPress: () => {
+                                                  
+                                                },},
+                                                {text: 'Cancel'}
+                                              ]}
+                                              description={
+                                                'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
+                                              }
+                                              icon={'mail-open'}
+                                              title={'Delegation Letter'}
+                                              theme={{
+                                                themeColor: '#DB504A',
+                                              }}
+                                            />
+                                    </View> : ''}
+                            </View>
+                          </View> : ''}
+                        </View>    
+                    </Modal>: ''}
       {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
                 <View style={styles.backnav}>
                       <BottomTabNavigation selectedIndex={0} highlightedIconColor='#FFF' values={[
@@ -656,7 +745,9 @@ export default function Tab() {
                                     {confirmedDelgation && confirmedBitcoin? <View style={{top: -300}}>
                                       <Card
                                               buttons={[
-                                                {text: 'Submit'},
+                                                {text: 'Submit', onPress: () => {
+                                                  onHandle_create_club();
+                                                },},
                                                 {text: 'Cancel'}
                                               ]}
                                               description={
