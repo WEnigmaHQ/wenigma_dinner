@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'react-native';
+import { View, Text, StyleSheet, Platform, FlatList, Linking, Share,TouchableOpacity } from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch} from 'rn-inkpad';
+import { DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch, Alert, Toast} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
-import { TextInput } from 'react-native-paper';
+import { Icon, TextInput } from 'react-native-paper';
 import { supabase } from './supabase';
 
 
@@ -49,6 +49,8 @@ export default function Tab() {
   const [ isDelegation, setIsDelegation] = useState(false);
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isPhoneAccount, setIsPhoneAccount] = useState(false);
+  const [ otp, setOTP ] = useState(false);
+  const  [ toastVisible, setToastVisible] = useState(false);
 
 
 
@@ -317,6 +319,21 @@ export default function Tab() {
       {key: 'Sigin Account', value: 'tab2'},
     ];
 
+    const onHandle_EmailOTP = async() =>{
+
+       const {data, error} = await supabase.auth.signInWithOtp({
+          email: email,
+          options: {
+            shouldCreateUser: true,
+          },
+       });
+
+       console.log("Data = ", data, error);
+       setToastVisible(true);
+       error !== null ? setOTP(true): setOTP(false);
+
+    };
+
     const [ isJoined, setIsJoined ] = useState(false);
     const [ errorStatus, setErrorStatus ] = useState(false);
     const [ count, setCount ] = useState(0);
@@ -336,8 +353,16 @@ export default function Tab() {
                       Declaration: confirmedDelgation, Isbitcoin: confirmedBitcoin, Role: 'ADMIN' }).select(); 
          console.log("Error:", error); }
     }
-    
-    
+
+    const handlePress = async () => {
+      const alert = await Alert.alert({
+        title: 'Alert',
+        description: 'Sorry verification through email failed make sure device connected',
+        showCancelButton: true,
+      });
+
+      console.log("Alert Response ", alert);
+  };
   
   return (
     <View style={{flex: 1}}>
@@ -693,7 +718,7 @@ export default function Tab() {
                                       <Card
                                               buttons={[
                                                 {text: 'Submit', onPress: () => {
-                                                  
+                                                    onHandle_EmailOTP();
                                                 },},
                                                 {text: 'Cancel'}
                                               ]}
@@ -706,6 +731,13 @@ export default function Tab() {
                                                 themeColor: '#DB504A',
                                               }}
                                             />
+                                            {otp ? <View>
+                                                      <TouchableOpacity onPress={handlePress} >
+                                                          <Text style={styles.clubformtextcity}> Check your Device </Text>
+                                                        </TouchableOpacity>
+                                                     </View>: <View>
+                                                        <Toast visible={toastVisible} text='Account created, Check your inbox' setVisible={setToastVisible}></Toast>
+                                                     </View>}
                                     </View> : ''}
                             </View>
                           </View> : ''}
