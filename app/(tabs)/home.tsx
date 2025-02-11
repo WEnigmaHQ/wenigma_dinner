@@ -3,14 +3,14 @@ import { View, Text, StyleSheet, Platform, FlatList, Linking, Share,TouchableOpa
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, CardImage, BottomTabNavigation, Switch, Alert, Toast} from 'rn-inkpad';
+import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Alert, Toast} from 'rn-inkpad';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
-import { Icon, TextInput } from 'react-native-paper';
+import { IconButton, MD2Colors, TextInput } from 'react-native-paper';
 import { supabase } from './supabase';
 
 
@@ -48,7 +48,7 @@ export default function Tab() {
   const [ isBitcoin, setIsBitcoin ] = useState(false);
   const [ isDelegation, setIsDelegation] = useState(false);
   const [ isMagicLink, setIsMagicLink ] = useState(false);
-  const [ isPhoneAccount, setIsPhoneAccount] = useState(false);
+  const [ isSocialLink, setIsSocialLink ] = useState(false);
   const [ otp, setOTP ] = useState(false);
   const  [ toastVisible, setToastVisible] = useState(false);
 
@@ -362,7 +362,13 @@ export default function Tab() {
       });
 
       console.log("Alert Response ", alert);
-  };
+    };
+
+    const onHandle_sceret = async () => {
+      
+      const {data, error} =  await supabase.auth.getUser();
+      console.log('Data: ', data)
+    }
   
   return (
     <View style={{flex: 1}}>
@@ -703,10 +709,11 @@ export default function Tab() {
                             </View>
                             ) :''}
                             <View style={{top: 10}}>
-                                      <Switch text='Phone Link' isOn={isPhoneAccount} onChange={setIsPhoneAccount} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                      { isPhoneAccount ? <View>
-                                                              <Text style={styles.clubformtextcity}> Phone Number * </Text>
-                                                              <TextInput placeholder='+ 000-111-222-333' mode='flat' value={phone} onChangeText={setPhone} right={<TextInput.Icon icon={'phone'}/>} style={{top: 13}}></TextInput>
+                                      <Switch text='Incognito mode' isOn={isSocialLink} onChange={setIsSocialLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      { isSocialLink ? <View>
+                                        <Text style={styles.annymoustextlabel} > Email Address * </Text>
+                                        <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 60}}></TextInput>
+                                        <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>   
                                       </View> : ''}
                             </View>
                             <View style={{top: 50}}>
@@ -714,13 +721,17 @@ export default function Tab() {
                             </View>
                             <View style={{top: 70}}>
                                 <Switch text='Account Declaration signed' isOn={isDelegation} onChange={setIsDelegation} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                {isDelegation && isBitcoin && isMagicLink || isPhoneAccount ? <View style={{top: -300}}>
+                                {isDelegation && isBitcoin && isMagicLink? <View style={{top: -300}}>
                                       <Card
                                               buttons={[
                                                 {text: 'Submit', onPress: () => {
                                                     onHandle_EmailOTP();
                                                 },},
-                                                {text: 'Cancel'}
+                                                {text: 'Cancel', onPress:() => {
+                                                  setIsDelegation(false);
+                                                  setIsBitcoin(false);
+                                                  
+                                                },}
                                               ]}
                                               description={
                                                 'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
@@ -921,5 +932,16 @@ clubformtextnumber: {
 clubswitchtextfield:{
   top: 3,
   color: 'white'
+},
+annymoustextlabel:{
+  position: 'relative', 
+  top: 50, 
+  color: 'yellow', 
+  left: 60
+},
+annymoustextbutton:{
+  position: 'relative', 
+  top: 5, 
+  left: 270
 }
 });
