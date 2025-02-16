@@ -44,7 +44,8 @@ export default function Tab() {
   // Register account
 
   const [ email, setEmail ] = useState('');
-  const [ phone, setPhone ] = useState('');
+  const [ appError, setAppError ] = useState('');
+  const [ incogEmail, setIncogEmail ] = useState('');
   const [ isBitcoin, setIsBitcoin ] = useState(false);
   const [ isDelegation, setIsDelegation] = useState(false);
   const [ isMagicLink, setIsMagicLink ] = useState(false);
@@ -296,6 +297,11 @@ export default function Tab() {
 
   // handle partners 
    const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);
+
+
+  // bottom drawer for incogito mode.
+
+  const bottomIncogsDrawerRef = useRef<BottomDrawerMethods>(null);
   
   //  [active or open]
   const values = [
@@ -367,7 +373,21 @@ export default function Tab() {
     const onHandle_sceret = async () => {
       
       const {data, error} =  await supabase.auth.getUser();
-      console.log('Data: ', data)
+      
+      if ( error === null && data.user?.email === incogEmail && !data.user?.is_anonymous){
+          setAppError('Your email already register!');
+       }
+      
+      else if (data.user?.email !== incogEmail){
+
+          const {data, error} = await supabase.auth.signInAnonymously();
+          const cred = data.session?.user.id;
+
+          if (data.session?.user.id !== ''){ const {data, error } = await supabase.auth.updateUser({email: incogEmail}); setAppError('Email Linked'); }
+          else{ setAppError('Private user email already register'); }
+          
+      }
+
     }
   
   return (
@@ -712,8 +732,20 @@ export default function Tab() {
                                       <Switch text='Incognito mode' isOn={isSocialLink} onChange={setIsSocialLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
                                       { isSocialLink ? <View>
                                         <Text style={styles.annymoustextlabel} > Email Address * </Text>
-                                        <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 60}}></TextInput>
-                                        <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>   
+                                        <TextInput placeholder='Email' mode='flat' value={incogEmail} onChangeText={setIncogEmail} inputMode={'email'} style={{top: 60}}></TextInput>
+                                      <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>  
+                                      { isBitcoin ? <BottomDrawer ref={bottomIncogsDrawerRef} openOnMount>
+                                        <View>
+                                            {appError.includes('Email Linked') ? <View>
+                                              <IconButton icon={'incognito-circle'} iconColor={MD2Colors.green500} size={80} style={styles.incogmodestatusicon}></IconButton>
+                                              <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
+                                              <Text style={styles.incogmodestatustext2}> Incognito Shopping Mode  </Text>
+                                              <Text style={styles.incogmodestatustext2}> Secure & Borderless transacton  </Text>
+                                              <Text style={styles.incogmodestatustext2}> Private Identity  </Text>
+                                              <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
+                                            </View> : <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>}
+                                        </View>
+                                      </BottomDrawer> : ''}
                                       </View> : ''}
                             </View>
                             <View style={{top: 50}}>
@@ -943,5 +975,19 @@ annymoustextbutton:{
   position: 'relative', 
   top: 5, 
   left: 270
+}, 
+incogmodestatusicon:{
+  top: 20,
+  left: 120
+},
+incogmodestatustext:{
+  top: 20,
+  left: 100,
+  color: 'green'
+},
+incogmodestatustext2:{
+  top: 40,
+  left: 80,
+  color: 'black'
 }
 });
