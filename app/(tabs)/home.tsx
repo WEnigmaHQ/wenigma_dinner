@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, Platform, FlatList, Linking, Share,TouchableOpa
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Alert, Toast} from 'rn-inkpad';
-import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
-import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
+import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast} from 'rn-inkpad';
+import BottomDrawer, { BottomDrawerMethods } from 'react-native-animated-bottom-drawer';
+import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
@@ -774,6 +774,31 @@ export default function Tab() {
                                     </View> : ''}
                             </View>
                           </View> : ''}
+                          {register === 'tab2'? <View style={styles.clubtabview}>
+                          <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                        <AccordionItem
+                                            leftIcon="phone-plus"
+                                            title="Membership Authentication"
+                                            subTitle="Verify your phone number " rightIcon="account-circle">
+                                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  <AccordionItem
+                                                      leftIcon="phone"
+                                                      title="Authentication via phone"
+                                                      subTitle="connect with number" rightIcon="cellphone">
+                                                        <Text> Phone Number * </Text>
+                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
+                                                  </AccordionItem></Accordion>
+                                                  <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  <AccordionItem
+                                                      leftIcon="whatsapp"
+                                                      title="Authentication via Whatsapp"
+                                                      subTitle="connect with whatsapp" rightIcon="cellphone">
+                                                        <Text> Whatsapp Number * </Text>
+                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
+                                                  </AccordionItem></Accordion>
+                                        </AccordionItem>
+                              </Accordion>
+                          </View>: ''}
                         </View>    
                     </Modal>: ''}
       {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
@@ -826,7 +851,6 @@ export default function Tab() {
                                             />
                                     </View> : ''}
                                     </View>
-                                    
                                   </View>: ''}
                                   {tab === 'tab2'? <View style={styles.clubtabview}> </View>: ''}
                                   {tab === 'tab3'? <View style={styles.clubtabcontrol}> </View>: ''}
