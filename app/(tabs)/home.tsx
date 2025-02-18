@@ -12,6 +12,8 @@ import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { IconButton, MD2Colors, TextInput } from 'react-native-paper';
 import { supabase } from './supabase';
+import { sha256, sha256Bytes } from 'react-native-sha256';
+
 
 
 
@@ -327,16 +329,11 @@ export default function Tab() {
 
     const onHandle_EmailOTP = async() =>{
 
-       const {data, error} = await supabase.auth.signInWithOtp({
-          email: email,
-          options: {
-            shouldCreateUser: true,
-          },
-       });
+      const {data, error} = await supabase.auth.getUser();
 
-       console.log("Data = ", data, error);
+      if (data.user?.email === null){  const {data, error} = await supabase.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true,},}); console.log("Data = ", data); }
        setToastVisible(true);
-       error !== null ? setOTP(true): setOTP(false);
+      //  error !== null ? setOTP(true): setOTP(false);
 
     };
 
@@ -372,21 +369,25 @@ export default function Tab() {
 
     const onHandle_sceret = async () => {
       
-      const {data, error} =  await supabase.auth.getUser();
-      
-      if ( error === null && data.user?.email === incogEmail && !data.user?.is_anonymous){
-          setAppError('Your email already register!');
-       }
-      
-      else if (data.user?.email !== incogEmail){
+      const [encryptedPassword, setEncryptedPassword] = useState('');
 
-          const {data, error} = await supabase.auth.signInAnonymously();
-          const cred = data.session?.user.id;
+      const {data, error} = await supabase.auth.signInAnonymously();
 
-          if (data.session?.user.id !== ''){ const {data, error } = await supabase.auth.updateUser({email: incogEmail}); setAppError('Email Linked'); }
-          else{ setAppError('Private user email already register'); }
-          
-      }
+      console.log("session: ", data.session?.user.id);
+
+      const bytes = Array.from(incogEmail);
+
+      sha256Bytes(bytes).then( hash => {
+              console.log(hash);
+       })
+
+      console.log("password:", encryptedPassword)
+
+
+      if (data.session?.user.id !== ''){ const {data, error} = await supabase.auth.admin.generateLink({
+        type: 'signup', email: incogEmail, password: encryptedPassword
+      }); console.log(" Email = ", data.user?.email); setAppError('Email Linked'); }
+      else{ setAppError('Email already register'); }
 
     }
   
@@ -743,7 +744,10 @@ export default function Tab() {
                                               <Text style={styles.incogmodestatustext2}> Secure & Borderless transacton  </Text>
                                               <Text style={styles.incogmodestatustext2}> Private Identity  </Text>
                                               <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
-                                            </View> : <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>}
+                                            </View> : <View>
+                                                      <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>
+                                                      <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
+                                              </View>}
                                         </View>
                                       </BottomDrawer> : ''}
                                       </View> : ''}
