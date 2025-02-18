@@ -53,6 +53,7 @@ export default function Tab() {
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isSocialLink, setIsSocialLink ] = useState(false);
   const  [ toastVisible, setToastVisible] = useState(false);
+  const [encryptedPassword, setEncryptedPassword] = useState('');
 
 
 
@@ -320,20 +321,6 @@ export default function Tab() {
       {key: 'About Club', value: 'tab3'},
     ];
 
-    const [register, setRegister] = useState('tab1');
-    const account = [
-      {key: 'Register Membership', value: 'tab1'},
-      {key: 'Authentication', value: 'tab2'},
-      {key: 'My Antiquity', value: 'tab3'}
-    ];
-
-    const onHandle_EmailOTP = async() =>{
-
-      const {data, error} = await supabase.auth.signInWithOtp(
-        { email: email, options: { shouldCreateUser: true, },}); 
-        console.log("Data = ", data); setToastVisible(true); 
-
-    };
 
     const [ isJoined, setIsJoined ] = useState(false);
     const [ errorStatus, setErrorStatus ] = useState(false);
@@ -355,19 +342,24 @@ export default function Tab() {
          console.log("Error:", error); }
     }
 
-    const handlePress = async () => {
-      const alert = await Alert.alert({
-        title: 'Alert',
-        description: 'You have not verified your email address.. Check your inbox/Spam Folder',
-        showCancelButton: true,
-      });
+    const [register, setRegister] = useState('tab1');
+    const account = [
+      {key: 'Register Membership', value: 'tab1'},
+      {key: 'Authentication', value: 'tab2'},
+      {key: 'My Antiquity', value: 'tab3'}
+    ];
 
-      console.log("Alert Response ", alert);
+    const onHandle_EmailOTP = async() =>{
+
+      const {data, error} = await supabase.auth.signInWithOtp(
+        { email: email, options: { shouldCreateUser: true, },}); 
+        console.log("Data = ", data); setToastVisible(true); 
+
     };
 
+    
+
     const onHandle_sceret = async () => {
-      
-      const [encryptedPassword, setEncryptedPassword] = useState('');
 
       const {data, error} = await supabase.auth.signInAnonymously();
 
