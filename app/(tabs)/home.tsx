@@ -52,7 +52,6 @@ export default function Tab() {
   const [ isDelegation, setIsDelegation] = useState(false);
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isSocialLink, setIsSocialLink ] = useState(false);
-  const [ otp, setOTP ] = useState(false);
   const  [ toastVisible, setToastVisible] = useState(false);
 
 
@@ -323,17 +322,16 @@ export default function Tab() {
 
     const [register, setRegister] = useState('tab1');
     const account = [
-      {key: 'Register Account', value: 'tab1'},
-      {key: 'Sigin Account', value: 'tab2'},
+      {key: 'Register Membership', value: 'tab1'},
+      {key: 'Authentication', value: 'tab2'},
+      {key: 'My Antiquity', value: 'tab3'}
     ];
 
     const onHandle_EmailOTP = async() =>{
 
-      const {data, error} = await supabase.auth.getUser();
-
-      if (data.user?.email === null){  const {data, error} = await supabase.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true,},}); console.log("Data = ", data); }
-       setToastVisible(true);
-      //  error !== null ? setOTP(true): setOTP(false);
+      const {data, error} = await supabase.auth.signInWithOtp(
+        { email: email, options: { shouldCreateUser: true, },}); 
+        console.log("Data = ", data); setToastVisible(true); 
 
     };
 
@@ -360,7 +358,7 @@ export default function Tab() {
     const handlePress = async () => {
       const alert = await Alert.alert({
         title: 'Alert',
-        description: 'Sorry verification through email failed make sure device connected',
+        description: 'You have not verified your email address.. Check your inbox/Spam Folder',
         showCancelButton: true,
       });
 
@@ -778,13 +776,9 @@ export default function Tab() {
                                                 themeColor: '#DB504A',
                                               }}
                                             />
-                                            {otp ? <View>
-                                                      <TouchableOpacity onPress={handlePress} >
-                                                          <Text style={styles.clubformtextcity}> Check your Device </Text>
-                                                        </TouchableOpacity>
-                                                     </View>: <View>
-                                                        <Toast visible={toastVisible} text='Account created, Check your inbox' setVisible={setToastVisible}></Toast>
-                                                     </View>}
+                                            {toastVisible ? <View>
+                                                        <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={20} text='Account created, Check your inbox' setVisible={setToastVisible}></Toast>
+                                                     </View> : <Toast visible={!toastVisible} backgroundColor='#FF7F50' icon='information' position='bottom' fontSize={12} text='Check your inbox/spam Folder either your membership had active or network issue' setVisible={setToastVisible}></Toast> }
                                     </View> : ''}
                             </View>
                           </View> : ''}
