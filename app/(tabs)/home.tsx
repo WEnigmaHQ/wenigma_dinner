@@ -46,7 +46,7 @@ export default function Tab() {
   // Register account
 
   const [ email, setEmail ] = useState('');
-  const [ appError, setAppError ] = useState('');
+  const [ appError, setAppError ] = useState('Connection refused');
   const [ incogEmail, setIncogEmail ] = useState('');
   const [ isBitcoin, setIsBitcoin ] = useState(false);
   const [ isDelegation, setIsDelegation] = useState(false);
@@ -746,7 +746,7 @@ export default function Tab() {
                                               <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
                                             </View> : <View>
                                                       <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>
-                                                      <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
+                                                      <Text style={styles.incogmodestatustext}> `{appError} 100` </Text>
                                               </View>}
                                         </View>
                                       </BottomDrawer> : ''}
