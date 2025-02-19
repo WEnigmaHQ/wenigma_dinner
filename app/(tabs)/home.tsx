@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Platform, FlatList, Linking, Share,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
@@ -12,8 +12,7 @@ import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { IconButton, MD2Colors, TextInput } from 'react-native-paper';
 import { supabase } from './supabase';
-import { sha256, sha256Bytes } from 'react-native-sha256';
-
+import * as Crypto from 'expo-crypto';
 
 
 
@@ -53,7 +52,10 @@ export default function Tab() {
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isSocialLink, setIsSocialLink ] = useState(false);
   const  [ toastVisible, setToastVisible] = useState(false);
-  const [encryptedPassword, setEncryptedPassword] = useState('');
+  const [ encryptedPassword, setEncryptedPassword ] = useState('');
+  const [ phoneNum, setPhoneNum ] = useState('');
+  const [ isOTP, setIsOTP] = useState(false);
+
 
 
 
@@ -349,37 +351,123 @@ export default function Tab() {
       {key: 'My Antiquity', value: 'tab3'}
     ];
 
+
+    const create_session = async () =>{
+
+      const sessionData = await supabase.auth.getSession();
+      return sessionData.data.session;
+    }
+
+    
+
     const onHandle_EmailOTP = async() =>{
 
       const {data, error} = await supabase.auth.signInWithOtp(
-        { email: email, options: { shouldCreateUser: true, },}); 
-        console.log("Data = ", data); setToastVisible(true); 
+        { email: email, options: { shouldCreateUser: true, },});
+        
+      console.log('sign in with OTP:', data);
+        
+      if (error !== null){
+        console.error('Error signing in with OTP:', error.message);
+        setIsOTP(false);
+        return;
+      }
+
+      setIsOTP(true);
+
+      const token = (Math.floor(Math.random()*100000) + 100000).toString();
+      console.log('Token:', token);
+
+      if (isOTP){ 
+          
+          const {data, error} = await supabase.auth.verifyOtp({email, token, type: 'email'});
+          console.log('verification in with OTP:', data);
+
+          if (error !== null){
+            console.error('Error verification in with OTP:', error.message);
+            setIsOTP(false);
+            return;
+          }
+
+        setToastVisible(true);
+
+        const session = create_session();
+
+        if (session) {
+            console.log('Session created successfully:', session); 
+        } else {
+            console.error('No session found after OTP verification.');
+            setIsOTP(false);
+            return;
+        }
+      }
 
     };
-
-    
 
     const onHandle_sceret = async () => {
 
       const {data, error} = await supabase.auth.signInAnonymously();
-
-      console.log("session: ", data.session?.user.id);
-
-      const bytes = Array.from(incogEmail);
-
-      sha256Bytes(bytes).then( hash => {
-              console.log(hash);
-       })
-
-      console.log("password:", encryptedPassword)
+      console.log("user ID : ", data.session?.user.id);
 
 
-      if (data.session?.user.id !== ''){ const {data, error} = await supabase.auth.admin.generateLink({
-        type: 'signup', email: incogEmail, password: encryptedPassword
-      }); console.log(" Email = ", data.user?.email); setAppError('Email Linked'); }
+      if (error){
+        console.error('Error in sign as anonymous user', error.message);
+        return;
+      }
+
+
+      if (data.session?.user.id !== ''){ 
+
+        if (!incogEmail){
+            console.error('Error email is null ', incogEmail);
+            return;
+        }
+
+
+        try{
+        
+                const {data:{user: userCheck}, error} = (await supabase.auth.getUser());
+
+                if (!userCheck && error){
+                    console.error('Error user cannot exist', error.message);
+                    setAppError(error.message);
+                    return;
+                }
+
+                const {data: {user}} = await supabase.auth.updateUser ({email: incogEmail});
+
+                if (error){
+                  console.error('Error email cannot linked', error.message);
+                  setAppError(error.message);
+                  return;
+              }
+
+                console.log('Wonderful user email linked', user);
+                const session = create_session();
+            setAppError('Email Linked'); 
+
+            if (session) {
+              console.log('Session created successfully:', session); 
+            } else {
+                  console.error('No session found for anonymous user.. ');
+                  setAppError('No session ');
+                  return;
+            }
+
+          }catch(error){
+             console.log('error', error);
+          }
+    }
       else{ setAppError('Email already register'); }
 
-    }
+    };
+
+    const onHandle_phone_authentication = async() => {
+
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        console.log("Session:", session?.user)
+    };
   
   return (
     <View style={{flex: 1}}>
@@ -768,9 +856,9 @@ export default function Tab() {
                                                 themeColor: '#DB504A',
                                               }}
                                             />
-                                            {toastVisible ? <View>
+                                            {isOTP ? <View>
                                                         <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={20} text='Account created, Check your inbox' setVisible={setToastVisible}></Toast>
-                                                     </View> : <Toast visible={!toastVisible} backgroundColor='#FF7F50' icon='information' position='bottom' fontSize={12} text='Check your inbox/spam Folder either your membership had active or network issue' setVisible={setToastVisible}></Toast> }
+                                                     </View> : <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information' position='bottom' fontSize={12} text='Check your inbox/spam Folder either your membership had active or network issue' setVisible={setToastVisible}></Toast> }
                                     </View> : ''}
                             </View>
                           </View> : ''}
@@ -786,7 +874,8 @@ export default function Tab() {
                                                       title="Authentication via phone"
                                                       subTitle="connect with number" rightIcon="cellphone">
                                                         <Text> Phone Number * </Text>
-                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
+                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phoneNum} onChangeText={setPhoneNum}></TextInput>
+                                                        <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.orange500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
                                                   </AccordionItem></Accordion>
                                                   <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
@@ -795,6 +884,7 @@ export default function Tab() {
                                                       subTitle="connect with whatsapp" rightIcon="cellphone">
                                                         <Text> Whatsapp Number * </Text>
                                                         <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
+                                                        <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
                                                   </AccordionItem></Accordion>
                                         </AccordionItem>
                               </Accordion>
@@ -1003,5 +1093,9 @@ incogmodestatustext2:{
   top: 40,
   left: 80,
   color: 'black'
+},
+accountauth:{
+  top: 30, 
+  left: 60
 }
 });
