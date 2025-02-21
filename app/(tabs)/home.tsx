@@ -52,9 +52,10 @@ export default function Tab() {
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isSocialLink, setIsSocialLink ] = useState(false);
   const  [ toastVisible, setToastVisible] = useState(false);
-  const [ encryptedPassword, setEncryptedPassword ] = useState('');
   const [ phoneNum, setPhoneNum ] = useState('');
+  const [ token, setToken ] = useState('');
   const [ isOTP, setIsOTP] = useState(false);
+   const [ userSession, setUserSession ] = useState([]);
 
 
 
@@ -355,10 +356,46 @@ export default function Tab() {
     const create_session = async () =>{
 
       const sessionData = await supabase.auth.getSession();
+      console.log('Session: ', sessionData);
       return sessionData.data.session;
     }
 
-    
+    const verification = async () =>{
+          
+      if (!email ||email.length <= 0){
+            console.error('Error email should be null or empty ');
+            return;
+      }
+
+      console.log("Your Email :", email);
+
+      console.log('Token:', token);
+
+      const {data, error} = await supabase.auth.verifyOtp({email, token, type: 'email'})
+          
+          if (error){
+            
+                console.error('Error verification in with OTP:',error.message);
+            return;
+          }
+              
+          const {data: {user}} = await supabase.auth.getUser();
+
+          if (error){
+                  console.error('Error user is not authenicate ', error);
+                  return;
+          }
+
+          console.log('User successfully', user?.id)
+          const session = await create_session();
+
+              if (session) {
+                      console.log('Session created successfully:', session.user.email); 
+              } else {
+                      console.error('No session found after OTP verification.',session);
+                      return;
+              }
+        }
 
     const onHandle_EmailOTP = async() =>{
 
@@ -375,32 +412,7 @@ export default function Tab() {
 
       setIsOTP(true);
 
-      const token = (Math.floor(Math.random()*100000) + 100000).toString();
-      console.log('Token:', token);
-
-      if (isOTP){ 
-          
-          const {data, error} = await supabase.auth.verifyOtp({email, token, type: 'email'});
-          console.log('verification in with OTP:', data);
-
-          if (error !== null){
-            console.error('Error verification in with OTP:', error.message);
-            setIsOTP(false);
-            return;
-          }
-
-        setToastVisible(true);
-
-        const session = create_session();
-
-        if (session) {
-            console.log('Session created successfully:', session); 
-        } else {
-            console.error('No session found after OTP verification.');
-            setIsOTP(false);
-            return;
-        }
-      }
+      setToastVisible(true);
 
     };
 
@@ -464,9 +476,16 @@ export default function Tab() {
 
     const onHandle_phone_authentication = async() => {
 
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      const {data: {user}, error} = await supabase.auth.getUser();
 
-        console.log("Session:", session?.user)
+      if (error){
+        console.error('Error while retrieve ', error.message);
+        return;
+      }
+
+      console.log('User successfully', user)
+
+      
     };
   
   return (
@@ -841,10 +860,8 @@ export default function Tab() {
                                                 {text: 'Submit', onPress: () => {
                                                     onHandle_EmailOTP();
                                                 },},
-                                                {text: 'Cancel', onPress:() => {
-                                                  setIsDelegation(false);
-                                                  setIsBitcoin(false);
-                                                  
+                                                {text: 'Refresh', onPress:() => {
+                                                    
                                                 },}
                                               ]}
                                               description={
@@ -865,9 +882,9 @@ export default function Tab() {
                           {register === 'tab2'? <View style={styles.clubtabview}>
                           <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                         <AccordionItem
-                                            leftIcon="phone-plus"
+                                            leftIcon="account"
                                             title="Membership Authentication"
-                                            subTitle="Verify your phone number " rightIcon="account-circle">
+                                            subTitle="Authenticate your credentials" rightIcon="account-circle">
                                               <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
                                                       leftIcon="phone"
@@ -887,6 +904,17 @@ export default function Tab() {
                                                         <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
                                                   </AccordionItem></Accordion>
                                         </AccordionItem>
+                                                  <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  <AccordionItem
+                                                      leftIcon="email"
+                                                      title="Member Verification"
+                                                      subTitle="connect through email" rightIcon="cellphone">
+                                                        <Text> Email Address * </Text>
+                                                        <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
+                                                        <Text> Token * </Text>
+                                                        <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
+                                                        <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}} onPress={verification}></IconButton>
+                                                  </AccordionItem></Accordion>
                               </Accordion>
                           </View>: ''}
                         </View>    
