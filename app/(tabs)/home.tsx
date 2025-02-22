@@ -12,7 +12,6 @@ import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { IconButton, MD2Colors, TextInput } from 'react-native-paper';
 import { supabase } from './supabase';
-import * as Crypto from 'expo-crypto';
 
 
 
@@ -942,7 +941,51 @@ export default function Tab() {
                                                   </AccordionItem></Accordion>
                               </Accordion>
                           </View>: ''}
-                        </View>    
+                          {register === 'tab3'? <View style={styles.clubtabview}>
+                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                      <AccordionItem
+                                            leftIcon="account-circle"
+                                            title="Decentralize Wallet"
+                                            subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  <AccordionItem
+                                                      leftIcon="pen"
+                                                      title="Bitcoin wallet"
+                                                      subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
+                                                         <Text> Bitcoin Address * </Text>
+                                                         <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' style={{ top: 5}}></TextInput>
+                                                         <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
+                                                      </AccordionItem>
+                                                   <AccordionItem
+                                                          leftIcon="fingerprint"
+                                                          title="Transactions"
+                                                          subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                                            <PageScrollView backgroundColor='#ebf3f3' style={styles.style}></PageScrollView>
+                                                          </AccordionItem>
+                                                    <AccordionItem
+                                                          leftIcon="atm"
+                                                          title="Bitcoin Digital Card"
+                                                          subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                                            <Card buttons={[
+                                                              {text: 'Request for Card '},
+                                                            ]} 
+                                                               description={'Register your Bitcoin Card'}
+                                                               title=''
+                                                               theme={{themeColor: '#DB504A'}}
+                                                               icon={'logo-bitcoin'}
+                                                            />
+                                                          </AccordionItem>
+                                            </Accordion>
+                                            </AccordionItem>
+                              </Accordion>
+                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                      <AccordionItem
+                                            leftIcon="send"
+                                            title="My Networth"
+                                            subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake"></AccordionItem>
+                              </Accordion>
+                          </View> : ''}
+                        </View> 
                     </Modal>: ''}
       {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
                 <View style={styles.backnav}>
