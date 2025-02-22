@@ -48,14 +48,15 @@ export default function Tab() {
   const [ appError, setAppError ] = useState('Connection refused');
   const [ incogEmail, setIncogEmail ] = useState('');
   const [ isBitcoin, setIsBitcoin ] = useState(false);
-  const [ isDelegation, setIsDelegation] = useState(false);
+  const [ isDelegation, setIsDelegation ] = useState(false);
   const [ isMagicLink, setIsMagicLink ] = useState(false);
   const [ isSocialLink, setIsSocialLink ] = useState(false);
-  const  [ toastVisible, setToastVisible] = useState(false);
-  const [ phoneNum, setPhoneNum ] = useState('');
+  const [ toastVisible, setToastVisible ] = useState(false);
+  const [ toastAuthVisible, setToastAuthVisible ] = useState(false);
+  const [ phone, setPhone ] = useState('');
   const [ token, setToken ] = useState('');
-  const [ isOTP, setIsOTP] = useState(false);
-   const [ userSession, setUserSession ] = useState([]);
+  const [ isOTP, setIsOTP ] = useState(false);
+  const [ isSession, setIsSession] = useState(false);
 
 
 
@@ -356,9 +357,8 @@ export default function Tab() {
     const create_session = async () =>{
 
       const sessionData = await supabase.auth.getSession();
-      console.log('Session: ', sessionData);
       return sessionData.data.session;
-    }
+    };
 
     const verification = async () =>{
           
@@ -386,16 +386,19 @@ export default function Tab() {
                   return;
           }
 
+          setToastAuthVisible(true);
+
           console.log('User successfully', user?.id)
           const session = await create_session();
 
               if (session) {
                       console.log('Session created successfully:', session.user.email); 
+                      setIsSession(true);
               } else {
-                      console.error('No session found after OTP verification.',session);
+                      console.error('No session found after OTP verification.');
                       return;
               }
-        }
+    };
 
     const onHandle_EmailOTP = async() =>{
 
@@ -452,11 +455,11 @@ export default function Tab() {
                   console.error('Error email cannot linked', error.message);
                   setAppError(error.message);
                   return;
-              }
+                }
 
                 console.log('Wonderful user email linked', user);
                 const session = create_session();
-            setAppError('Email Linked'); 
+                setAppError('Email Linked'); 
 
             if (session) {
               console.log('Session created successfully:', session); 
@@ -483,9 +486,29 @@ export default function Tab() {
         return;
       }
 
-      console.log('User successfully', user)
+      console.log('User successfully :', user?.id);
 
-      
+      if (phone.length <= 0){
+        console.error("Phone number should not be empty", phone)
+        return;
+      }
+
+      console.log('Your phone number : ', phone);
+
+      {
+          const {data: {user: userUpdate}, error} = await supabase.auth.updateUser({
+              phone:  phone
+          });
+
+          if (error){
+            console.error('Error while update user credentials', error.message);
+            return;
+          }
+
+          console.log(" Your phone = ", userUpdate); 
+    }
+
+
     };
   
   return (
@@ -857,12 +880,9 @@ export default function Tab() {
                                 {isDelegation && isBitcoin && isMagicLink? <View style={{top: -300}}>
                                       <Card
                                               buttons={[
-                                                {text: 'Submit', onPress: () => {
+                                                {text: 'Access', onPress: () => {
                                                     onHandle_EmailOTP();
                                                 },},
-                                                {text: 'Refresh', onPress:() => {
-                                                    
-                                                },}
                                               ]}
                                               description={
                                                 'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
@@ -874,8 +894,8 @@ export default function Tab() {
                                               }}
                                             />
                                             {isOTP ? <View>
-                                                        <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={20} text='Account created, Check your inbox' setVisible={setToastVisible}></Toast>
-                                                     </View> : <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information' position='bottom' fontSize={12} text='Check your inbox/spam Folder either your membership had active or network issue' setVisible={setToastVisible}></Toast> }
+                                                        <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Check your Email. Add your token for your authentication' setVisible={setToastVisible}></Toast>
+                                                     </View> : '' }
                                     </View> : ''}
                             </View>
                           </View> : ''}
@@ -891,10 +911,15 @@ export default function Tab() {
                                                       title="Authentication via phone"
                                                       subTitle="connect with number" rightIcon="cellphone">
                                                         <Text> Phone Number * </Text>
-                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phoneNum} onChangeText={setPhoneNum}></TextInput>
-                                                        <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.orange500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
+                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phone} onChangeText={setPhone}></TextInput>
+                                                        <Text> Token * </Text>
+                                                        <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
+                                                        <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.green500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
+                                                        {isSession? <View>
+                                                                        <Toast visible={toastAuthVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Excellent! Your account have login.' setVisible={setToastVisible}></Toast>
+                                                                    </View> : ''}
                                                   </AccordionItem></Accordion>
-                                                  <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  {/* <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
                                                       leftIcon="whatsapp"
                                                       title="Authentication via Whatsapp"
@@ -902,7 +927,7 @@ export default function Tab() {
                                                         <Text> Whatsapp Number * </Text>
                                                         <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
                                                         <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
-                                                  </AccordionItem></Accordion>
+                                                  </AccordionItem></Accordion> */}
                                         </AccordionItem>
                                                   <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
@@ -913,7 +938,7 @@ export default function Tab() {
                                                         <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
                                                         <Text> Token * </Text>
                                                         <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                        <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}} onPress={verification}></IconButton>
+                                                        <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 90}} onPress={verification}></IconButton>
                                                   </AccordionItem></Accordion>
                               </Accordion>
                           </View>: ''}
