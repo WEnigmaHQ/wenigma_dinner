@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Platform, FlatList, Linking, Share } from 'react-native';
+import { View, Text, StyleSheet, Platform, FlatList, Linking, Share} from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast} from 'rn-inkpad';
+import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast, SlideAction} from 'rn-inkpad';
 import BottomDrawer, { BottomDrawerMethods } from 'react-native-animated-bottom-drawer';
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
-import { IconButton, MD2Colors, TextInput } from 'react-native-paper';
+import { IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
 import { supabase } from './supabase';
+import AppleCard from 'react-native-apple-card-views';
 
 
 
@@ -39,6 +40,7 @@ export default function Tab() {
   const [ value, setValue ] = useState('active');
   const [ clubs, setClubs ] = useState(false);
   const [ membership, setMembership] = useState(false);
+  const [ segmentedState, setSegmentedState] = useState('');
 
 
   // Register account
@@ -56,6 +58,7 @@ export default function Tab() {
   const [ token, setToken ] = useState('');
   const [ isOTP, setIsOTP ] = useState(false);
   const [ isSession, setIsSession] = useState(false);
+  const [ confirmed, setConfirmed] = useState(false);
 
 
 
@@ -307,6 +310,14 @@ export default function Tab() {
   // bottom drawer for incogito mode.
 
   const bottomIncogsDrawerRef = useRef<BottomDrawerMethods>(null);
+
+  //  bottom drawer for bitcoin wallet
+
+  const bottomWalletDrawerRef = useRef<BottomDrawerMethods>(null);
+
+  //  bottom drawer for transactions
+
+  const bottomTXSDrawerRef = useRef<BottomDrawerMethods>(null);
   
   //  [active or open]
   const values = [
@@ -960,7 +971,36 @@ export default function Tab() {
                                                           leftIcon="fingerprint"
                                                           title="Transactions"
                                                           subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                            <PageScrollView backgroundColor='#ebf3f3' style={styles.style}></PageScrollView>
+                                                           <View style={{flex: 1}}>
+                                                              <SegmentedButtons value={segmentedState} onValueChange={setSegmentedState} style={{top: 5}} buttons={[
+                                                                {
+                                                                  value: 'fingerprint',
+                                                                  label: 'Wallet'
+                                                                },
+                                                                {
+
+                                                                  value: 'handshake',
+                                                                  label: 'Deal'
+                                                                }]}></SegmentedButtons>
+                                                              {segmentedState === 'fingerprint' ?
+                                                                <View>
+                                                                  bottomWalletDrawerRef.current?.open
+                                                                  <BottomDrawer ref={bottomWalletDrawerRef} openOnMount>
+                                                                      <View>
+                                                                        <Text style={{fontSize: 40, color: 'silver', top: 50, left: 80}}> 0.00000 </Text>
+                                                                        <Text style={{top: 25, left: 240}}> BTC </Text>
+                                                                        <View style={{flex: 1, top: 100, width: 300, left: 20}}>
+                                                                            <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
+                                                                                      textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>
+                                                                            
+                                                                        </View>
+                                                                      </View>
+                                                                    </BottomDrawer>
+                                                                </View> : <View>
+
+                                                                </View>
+                                                              }
+                                                           </View>
                                                           </AccordionItem>
                                                     <AccordionItem
                                                           leftIcon="atm"
