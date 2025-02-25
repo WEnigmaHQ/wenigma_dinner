@@ -1000,7 +1000,10 @@ export default function Tab() {
                                                                       </View>
                                                                     </BottomDrawer>
                                                                 </View> : <View>
-
+                                                                    bottomTXSDrawerRef.current?.open
+                                                                    <BottomDrawer ref={bottomTXSDrawerRef} openOnMount>
+                                                                      <View></View>
+                                                                    </BottomDrawer>
                                                                 </View>
                                                               }
                                                            </View>
