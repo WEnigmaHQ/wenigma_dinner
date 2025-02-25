@@ -3,14 +3,14 @@ import { View, Text, StyleSheet, Platform, FlatList, Linking, Share} from 'react
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast, SlideAction} from 'rn-inkpad';
+import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast, SlideAction, FloatingActionButton} from 'rn-inkpad';
 import BottomDrawer, { BottomDrawerMethods } from 'react-native-animated-bottom-drawer';
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
 import { Link } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
-import { IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
+import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
 import { supabase } from './supabase';
 import AppleCard from 'react-native-apple-card-views';
 
@@ -57,8 +57,8 @@ export default function Tab() {
   const [ phone, setPhone ] = useState('');
   const [ token, setToken ] = useState('');
   const [ isOTP, setIsOTP ] = useState(false);
-  const [ isSession, setIsSession] = useState(false);
-  const [ confirmed, setConfirmed] = useState(false);
+  const [ isSession, setIsSession ] = useState(false);
+  const [ confirmed, setConfirmed ] = useState(false);
 
 
 
@@ -990,9 +990,12 @@ export default function Tab() {
                                                                         <Text style={{fontSize: 40, color: 'silver', top: 50, left: 80}}> 0.00000 </Text>
                                                                         <Text style={{top: 25, left: 240}}> BTC </Text>
                                                                         <View style={{flex: 1, top: 100, width: 300, left: 20}}>
-                                                                            <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
-                                                                                      textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>
-                                                                            
+                                                                            {!confirmed ? <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
+                                                                                      textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>: ''}
+                                                                            {confirmed ? <View> <TextInput placeholder='sender bitcoin address' mode='outlined' inputMode={'text'}></TextInput> 
+                                                                                <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
+                                                                                <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
+                                                                                </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
                                                                         </View>
                                                                       </View>
                                                                     </BottomDrawer>
