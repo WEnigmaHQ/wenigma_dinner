@@ -16,11 +16,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@fowusu/calendar-kit": "^1.1.1",
     "@mustapha-ghlissi/react-native-accordion": "^1.1.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-navigation/drawer": "^7.1.1",
     "@react-navigation/native": "^7.0.14",
+    "@shopify/flash-list": "^1.7.3",
     "@supabase/supabase-js": "^2.48.1",
     "expo": "~52.0.25",
     "expo-auth-session": "~6.0.2",

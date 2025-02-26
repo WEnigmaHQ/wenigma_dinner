@@ -12,7 +12,8 @@ import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
 import { supabase } from './supabase';
-import AppleCard from 'react-native-apple-card-views';
+import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
+
 
 
 
@@ -59,6 +60,18 @@ export default function Tab() {
   const [ isOTP, setIsOTP ] = useState(false);
   const [ isSession, setIsSession ] = useState(false);
   const [ confirmed, setConfirmed ] = useState(false);
+
+
+
+  const today = new Date();
+
+  const todayDateString = toLocaleDateString(today);
+
+  const [selectedDay, setSelectedDay] = useState<string>();
+
+  const onDayPress = useCallback((dateString: string | undefined) => {
+    setSelectedDay(dateString);
+  }, []);
 
 
 
@@ -963,9 +976,11 @@ export default function Tab() {
                                                       leftIcon="pen"
                                                       title="Bitcoin wallet"
                                                       subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
+                                                         <View>
                                                          <Text> Bitcoin Address * </Text>
                                                          <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' style={{ top: 5}}></TextInput>
                                                          <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
+                                                         </View>
                                                       </AccordionItem>
                                                    <AccordionItem
                                                           leftIcon="fingerprint"
@@ -999,13 +1014,20 @@ export default function Tab() {
                                                                         </View>
                                                                       </View>
                                                                     </BottomDrawer>
-                                                                </View> : <View>
+                                                                </View> : ''}
+                                                                {segmentedState === 'handshake'? <View>
                                                                     bottomTXSDrawerRef.current?.open
                                                                     <BottomDrawer ref={bottomTXSDrawerRef} openOnMount>
-                                                                      <View></View>
+                                                                      <View>
+                                                                      <Calendar
+                                                                            date={todayDateString}
+                                                                            markedDates={[selectedDay]}
+                                                                            onDayPress={onDayPress}
+                                                                          />
+                                                                          
+                                                                      </View>
                                                                     </BottomDrawer>
-                                                                </View>
-                                                              }
+                                                                </View> : ''}
                                                            </View>
                                                           </AccordionItem>
                                                     <AccordionItem
