@@ -26,7 +26,6 @@ export default function Tab() {
   
   const [exclusiveDinnerInvitation, setExclusiveDinnerInvitation] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
   const [ customerService, setCustomerService ] = useState(false);
   const [ paymentMethod, setPaymentMethod ] = useState(false);
   const [ politicsNews, setPoliticsNews ] = useState(false);
@@ -1023,8 +1022,8 @@ export default function Tab() {
                                                                             date={todayDateString}
                                                                             markedDates={[selectedDay]}
                                                                             onDayPress={onDayPress}
+                                                                            firstDayOfWeek={1}
                                                                           />
-                                                                          
                                                                       </View>
                                                                     </BottomDrawer>
                                                                 </View> : ''}
