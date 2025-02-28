@@ -68,7 +68,7 @@ export default function Tab() {
 
   const [selectedDay, setSelectedDay] = useState<string>();
 
-  const onDayPress = useCallback((dateString: string | undefined) => {
+  const onDayPress = useCallback((dateString: string) => {
     setSelectedDay(dateString);
   }, []);
 
@@ -1020,7 +1020,7 @@ export default function Tab() {
                                                                       <View>
                                                                       <Calendar
                                                                             date={todayDateString}
-                                                                            markedDates={[selectedDay]}
+                                                                            markedDates={[selectedDay as string]}
                                                                             onDayPress={onDayPress}
                                                                             firstDayOfWeek={1}
                                                                           />
