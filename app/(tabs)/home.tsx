@@ -166,6 +166,8 @@ export default function Tab() {
 
   const bottomBDrawerRef = useRef<BottomDrawerMethods>(null);
 
+
+
   const [politicalArticles, setPoliticalArticles] = useState([]);
 
     // handle estate news
@@ -196,19 +198,22 @@ export default function Tab() {
 
    // handle travel news
 
-   const [SportsArticles, setSportsArticles] = useState([]);
+    const [SportsArticles, setSportsArticles] = useState([]);
 
 
+    const apiurl : string = 'a9b3560f6c9b4a648f622f03be8cc735';
 
-  const API_KEY = 'a9b3560f6c9b4a648f622f03be8cc735'; // Replace with your News API key
-  const API_POLITICAL_URL = `https://newsapi.org/v2/everything?q=politics&apiKey=${API_KEY}`;
-  const API_ESTATE_URL = `https://newsapi.org/v2/everything?q=realestate&apiKey=${API_KEY}`;
-  const API_AURA_URL = `https://newsapi.org/v2/everything?q=charismatic+leadership+billion&apiKey=${API_KEY}`;
-  const API_BUSINESS_URL = `https://newsapi.org/v2/everything?q=business&apiKey=${API_KEY}`;
-  const API_FASHION_URL = `https://newsapi.org/v2/everything?q=luxury+brand+fashion+million&apiKey=${API_KEY}`;
-  const API_FOOD_URL = `https://newsapi.org/v2/everything?q=best+international+foods+recipe&apiKey=${API_KEY}`;
-  const API_TRAVEL_URL = `https://newsapi.org/v2/everything?q=best+international+places+experience&apiKey=${API_KEY}`;
-  const API_SPORTS_URL = `https://newsapi.org/v2/everything?q=sports+match+fitness&apiKey=${API_KEY}`;
+
+    const API_POLITICAL_URL = `https://newsapi.org/v2/everything?q=politics&apiKey=${apiurl}`;
+    const API_ESTATE_URL = `https://newsapi.org/v2/everything?q=realestate&apiKey=${apiurl}`;
+    const API_AURA_URL = `https://newsapi.org/v2/everything?q=charismatic+leadership+billion&apiKey=${apiurl}`;
+    const API_BUSINESS_URL = `https://newsapi.org/v2/everything?q=business&apiKey=${apiurl}`;
+    const API_FASHION_URL = `https://newsapi.org/v2/everything?q=luxury+brand+fashion+million&apiKey=${apiurl}`;
+    const API_FOOD_URL = `https://newsapi.org/v2/everything?q=best+international+foods+recipe&apiKey=${apiurl}`;
+    const API_TRAVEL_URL = `https://newsapi.org/v2/everything?q=best+international+places+experience&apiKey=${apiurl}`;
+    const API_SPORTS_URL = `https://newsapi.org/v2/everything?q=sports+match+fitness&apiKey=${apiurl}`;
+
+  
 
 
   useEffect(() => {
@@ -219,7 +224,7 @@ export default function Tab() {
           const response = await axios.get(API_POLITICAL_URL);
           setPoliticalArticles(response.data.articles);
         } catch (error) {
-          console.error(error);
+          console.error("Error =", error);
         }
     };
 
@@ -547,17 +552,23 @@ export default function Tab() {
             {
               icon: 'earth',
               text: 'Politics',
-              onPress:() =>{bottomPoliticsDrawerRef.current?.open; setPoliticsNews(!politicsNews);},
+              onPress:() =>{
+                // bottomPoliticsDrawerRef.current?.open; 
+                setPoliticsNews(!politicsNews);},
             },
             {
               icon: 'construct',
               text: 'Real Estate',
-              onPress:() =>{bottomEstateDrawerRef.current?.open; setEstateNews(!EstateNews);},
+              onPress:() =>{
+                // bottomEstateDrawerRef.current?.open; 
+                setEstateNews(!EstateNews);},
             },
             {
               icon: 'man',
               text: 'Aura',
-              onPress:() =>{bottomAuraDrawerRef.current?.open; setPersonalityNews(!PersonalityNews)}
+              onPress:() =>{
+                // bottomAuraDrawerRef.current?.open; 
+                setPersonalityNews(!PersonalityNews)}
             },
             {
               icon: 'business',
@@ -567,22 +578,30 @@ export default function Tab() {
             {
               icon: 'bag-handle',
               text: 'Fashion',
-              onPress:() =>{bottomFashionDrawerRef.current?.open; setFashionNews(!FashionNews)}
+              onPress:() =>{
+                // bottomFashionDrawerRef.current?.open; 
+                setFashionNews(!FashionNews)}
             },
             {
               icon: 'fast-food',
               text: 'Food',
-              onPress:() =>{bottomFoodDrawerRef.current?.open; setFoodNews(!FoodNews)}
+              onPress:() =>{
+                // bottomFoodDrawerRef.current?.open; 
+                setFoodNews(!FoodNews)}
             },
             {
               icon: 'airplane',
               text: 'Travel',
-              onPress:() =>{bottomTravelDrawerRef.current?.open; setTravelNews(!TravelNews)}
+              onPress:() =>{
+                // bottomTravelDrawerRef.current?.open; 
+                setTravelNews(!TravelNews)}
             },
             {
               icon: 'golf',
               text: 'Sports & Fitness',
-              onPress:() =>{bottomSportsDrawerRef.current?.open; setSportslNews(!SportsNews)}
+              onPress:() =>{
+                // bottomSportsDrawerRef.current?.open; 
+                setSportslNews(!SportsNews)}
             },
           ]
         },
