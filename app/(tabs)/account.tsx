@@ -8,6 +8,7 @@ import * as LocalAuth from 'expo-local-authentication';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -169,7 +170,8 @@ export default function Tab() {
   const handleForm = () => { isFormValid ? alert('Congrats , Your bitcoin address added in our record') : alert('Poor! , Check your credentials before submission ') }
 
   return (
-    <View style={styles.container}>
+        <SafeAreaView>
+            <View style={styles.container}>
       <IconButton icon={'movie-cog'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
       <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeAccount(!eyeAccount)}} style={styles.eyefacebookbutton}></IconButton>
       <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
@@ -315,7 +317,8 @@ export default function Tab() {
                       {Platform.OS === 'ios' || Platform.OS === 'android'? <Link href={'/'} style={{color: 'white', position: 'absolute', top: 400, left: 150, fontWeight: 'bold'}}> Return </Link>: ''}
                       </View> 
                   </Modal>: '' }
-        </View>
+            </View>
+        </SafeAreaView>
   );
 }
 

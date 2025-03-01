@@ -13,6 +13,7 @@ import axios from 'react-native-axios';
 import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
 import { supabase } from './supabase';
 import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -539,596 +540,598 @@ export default function Tab() {
     };
   
   return (
-    <View style={{flex: 1}}>
-      <DrawerNavigation backgroundColor='white' items={[
-        {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
-        {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{ 
-          // bottomClubsDrawerRef.current?.open; 
-          setClubs(!clubs)}},
-        {
-          text: 'News',
-          icon: 'compass',
-          items: [
-            {
-              icon: 'earth',
-              text: 'Politics',
-              onPress:() =>{
-                // bottomPoliticsDrawerRef.current?.open; 
-                setPoliticsNews(!politicsNews);},
-            },
-            {
-              icon: 'construct',
-              text: 'Real Estate',
-              onPress:() =>{
-                // bottomEstateDrawerRef.current?.open; 
-                setEstateNews(!EstateNews);},
-            },
-            {
-              icon: 'man',
-              text: 'Aura',
-              onPress:() =>{
-                // bottomAuraDrawerRef.current?.open; 
-                setPersonalityNews(!PersonalityNews)}
-            },
-            {
-              icon: 'business',
-              text: 'Business & Legal',
-              onPress:() =>{bottomBusinessDrawerRef.current?.open; setBusinessNews(!BusinessNews)}
-            },
-            {
-              icon: 'bag-handle',
-              text: 'Fashion',
-              onPress:() =>{
-                // bottomFashionDrawerRef.current?.open; 
-                setFashionNews(!FashionNews)}
-            },
-            {
-              icon: 'fast-food',
-              text: 'Food',
-              onPress:() =>{
-                // bottomFoodDrawerRef.current?.open; 
-                setFoodNews(!FoodNews)}
-            },
-            {
-              icon: 'airplane',
-              text: 'Travel',
-              onPress:() =>{
-                // bottomTravelDrawerRef.current?.open; 
-                setTravelNews(!TravelNews)}
-            },
-            {
-              icon: 'golf',
-              text: 'Sports & Fitness',
-              onPress:() =>{
-                // bottomSportsDrawerRef.current?.open; 
-                setSportslNews(!SportsNews)}
-            },
-          ]
-        },
-        {icon: 'diamond', text: 'Partners', onPress:() =>{bottomPartnersDrawerRef.current?.open; setPartners(!partners);}},
-        {icon: 'wallet', text: 'Payment Method', onPress:() =>{
-            bottomBDrawerRef.current?.open;
-            setPaymentMethod(!paymentMethod);
-        }},
-        {icon: 'call', text: 'Customer Service', onPress:() =>{
-          bottomDrawerRef.current?.open;
-          setCustomerService(!customerService);
-        }},
-        {icon: 'person-circle', text: 'Register your Membership', onPress:() => {
-          setMembership(!membership);
-        },}
-      ]}></DrawerNavigation>
-      {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount>
-            <View style={{flex: 1}}>
-              {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                        <AccordionItem
-                                            leftIcon="phone"
-                                            title="Contact Us"
-                                            subTitle="Send me a quote" rightIcon="whatsapp">
-                                              <Text style={styles.contactbusinessname}> WISDOMENIGMA INC </Text>
-                                              <Text style={styles.contactnumber}> (+92) 317 4287 461 </Text>
-                                        </AccordionItem>
-                                        <AccordionItem leftIcon="link" title="Social Connect" subTitle='Social Connect & store is more exclusive option for quote' rightIcon="instagram">
-                                            <Link style={styles.contactnumber} href={'https://www.instagram.com/wisdomenigma/'}> instagram@wisdomenigma </Link>
-                                            <Link style={styles.contactnumber} href={'https://www.facebook.com/wisdomenigma'}> facebook@wisdomenigma </Link>
-                                            <Link style={styles.contactnumber} href={'https://www.linkedin.com/company/wisdom-enigma/'}> linkedin@wisdomenigma </Link>
-                                            <Link style={styles.contactnumber} href={'https://wemerchandise-61a94.web.app/'}> url@wisdomenigma </Link>
-                                        </AccordionItem>
-                                        <AccordionItem leftIcon="chat"  title="Interview Request" subTitle='Interview / Discussions are good to learn about ' rightIcon='at'>
-                                              <Text style={styles.contactnumber}> wizdwarfs@gmail.com </Text>
-                                        </AccordionItem>
-                                    </Accordion>: ''}
-            </View>
-          </BottomDrawer>: ''}
-      {paymentMethod? <BottomDrawer ref={bottomBDrawerRef} openOnMount>
-            <View style={{position: 'absolute', width: 300, top: 30}}>
-               <Text style={styles.paymentheader}> Active Payment Method </Text>
-               <Card
-                    buttons={[
-                      
-                    ]}
-                    description={
-                      'Bitcoin release by satoshi or satoshi group in a paper under [A peer to peer electronic cash system] in 2009. This paper revoulatize many tycoons business & small firms. Perhaps, people widely adopt bitcoin in late 2015. Today many tycoons add bitcoin holdings in their portfilio because of store in value feature. Bitcoin 24/7 open market, store in value against inflation, limited supply. Venture capitalist David Sacks, who Trump tapped as his crypto and artificial intelligence czar, joined Trump in the Oval Office for the signing of the order. "The digital asset industry plays a crucial role in innovation and economic development in the United States, as well as our Nation’s international leadership" the order states.'
-                    }
-                    icon={'information-circle'}
-                    title={'Bitcoin'}
-                    theme={{
-                      themeColor: '#DB504A',
-                    }}
-                  />
-            </View>
-          </BottomDrawer>: '' }
-      {politicsNews? <Modal isVisible={politicsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                            <Link href={'/'} style={styles.backlink}> &#10226; </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                    <FlatList data={politicalArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                        // {text: 'Thoughts', onPress: () => {}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#DB504A',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                       
-                                    </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={EstateArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#50C878',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {PersonalityNews? <Modal isVisible={PersonalityNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={AuraArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#7DF9FF',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {BusinessNews? <Modal isVisible={BusinessNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={businessArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#40826D',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={fashionArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#C4B454',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {FoodNews? <Modal isVisible={FoodNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={foodArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#009E60',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {TravelNews? <Modal isVisible={TravelNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={travelArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#880808',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {SportsNews? <Modal isVisible={SportsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                            <View style={{flex: 1, width: 300}}>
-                              <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                             <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                              <FlatList data={SportsArticles} renderItem={({item}) =>
-                                        <Card
-                                                      buttons={[
-                                                        {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                        {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                      ]}
-                                                      description={
-                                                        item.description
-                                                      }
-                                                      icon={'newspaper'}
-                                                      title={item.title}
-                                                      theme={{
-                                                        themeColor: '#630330',
-                                                      }}
-                              />                  
-                                  } keyExtractor={(item) => item.url}>
-                                    
-                                  </FlatList>
-                             </PageScrollView>
-                            </View> 
-                     </Modal>: ''}
-      {partners? <BottomDrawer ref={bottomPartnersDrawerRef} openOnMount>
-            <View style={{position: 'absolute', width: 300, top: 30}}>
-               <SegmentedControl label="" values={values} onChange={value => setValue(value)} style={{position: 'relative', left: 30}}
-                />
-                 {value !== 'tab2' && (<View style={{flex: 1}}>
-                  <Text style={styles.damacbrand}> DAMAC </Text>
-                  <Text style={styles.oceanhousebrand}> Ocean House </Text>
-                  <Text style={styles.imibrand}> IMI-LUXURY-EXCELSIOR </Text>
-                  <Text style={styles.rbrand}> RAS-AL-KHAMAH </Text>
-                  </View>)}
-                  {value !== 'tab1' && (<View style={{flex: 1}}>
-                  <Text style={styles.damacbrand}> Nine Elm Versace </Text>
-                  <Text style={styles.oceanhousebrand}> JACBO & CO Inc </Text>
-                  <Text style={styles.imibrand}> Trump International  </Text>
-                  <Text style={styles.rbrand}> BINGATTI </Text>
-                  <Text style={styles.gbrand}> GRANT CARDONE </Text>
-                  </View>)}
-            </View>
-          </BottomDrawer>: '' }
-      {membership ? <Modal isVisible={membership} style={{backgroundColor: 'darkslategrey'}}>
-                        <View style={styles.backnav}>
-                          <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
-                          {register === 'tab1'? <View style={styles.clubtabview}>
-                            <View style={{top: -25}}>
-                                      <Switch text='Magic Link' isOn={isMagicLink} onChange={setIsMagicLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                            </View>
-                            { isMagicLink ? (<View>
-                              <Text style={styles.clubformtextname} > Email Address * </Text>
-                              <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 2}}></TextInput>
-                            </View>
-                            ) :''}
-                            <View style={{top: 10}}>
-                                      <Switch text='Incognito mode' isOn={isSocialLink} onChange={setIsSocialLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                      { isSocialLink ? <View>
-                                        <Text style={styles.annymoustextlabel} > Email Address * </Text>
-                                        <TextInput placeholder='Email' mode='flat' value={incogEmail} onChangeText={setIncogEmail} inputMode={'email'} style={{top: 60}}></TextInput>
-                                      <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>  
-                                      { isBitcoin ? <BottomDrawer ref={bottomIncogsDrawerRef} openOnMount>
-                                        <View>
-                                            {appError.includes('Email Linked') ? <View>
-                                              <IconButton icon={'incognito-circle'} iconColor={MD2Colors.green500} size={80} style={styles.incogmodestatusicon}></IconButton>
-                                              <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
-                                              <Text style={styles.incogmodestatustext2}> Incognito Shopping Mode  </Text>
-                                              <Text style={styles.incogmodestatustext2}> Secure & Borderless transacton  </Text>
-                                              <Text style={styles.incogmodestatustext2}> Private Identity  </Text>
-                                              <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
-                                            </View> : <View>
-                                                      <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>
-                                                      <Text style={styles.incogmodestatustext}> `{appError} 100` </Text>
-                                              </View>}
-                                        </View>
-                                      </BottomDrawer> : ''}
-                                      </View> : ''}
-                            </View>
-                            <View style={{top: 50}}>
-                                      <Switch text='Bitcoin wallet' isOn={isBitcoin} onChange={setIsBitcoin} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                            </View>
-                            <View style={{top: 70}}>
-                                <Switch text='Account Declaration signed' isOn={isDelegation} onChange={setIsDelegation} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                {isDelegation && isBitcoin && isMagicLink? <View style={{top: -300}}>
-                                      <Card
-                                              buttons={[
-                                                {text: 'Access', onPress: () => {
-                                                    onHandle_EmailOTP();
-                                                },},
-                                              ]}
-                                              description={
-                                                'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
-                                              }
-                                              icon={'mail-open'}
-                                              title={'Delegation Letter'}
-                                              theme={{
-                                                themeColor: '#DB504A',
-                                              }}
-                                            />
-                                            {isOTP ? <View>
-                                                        <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Check your Email. Add your token for your authentication' setVisible={setToastVisible}></Toast>
-                                                     </View> : '' }
-                                    </View> : ''}
-                            </View>
-                          </View> : ''}
-                          {register === 'tab2'? <View style={styles.clubtabview}>
-                          <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                        <AccordionItem
-                                            leftIcon="account"
-                                            title="Membership Authentication"
-                                            subTitle="Authenticate your credentials" rightIcon="account-circle">
-                                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+    <SafeAreaView>
+      <View style={{flex: 1}}>
+                <DrawerNavigation backgroundColor='white' items={[
+                  {icon:'restaurant', text: 'Exclusive Dinners', onPress:() =>{} },
+                  {icon: 'logo-bitcoin', text: 'Capital Clubs', onPress:() =>{ 
+                    // bottomClubsDrawerRef.current?.open; 
+                    setClubs(!clubs)}},
+                  {
+                    text: 'News',
+                    icon: 'compass',
+                    items: [
+                      {
+                        icon: 'earth',
+                        text: 'Politics',
+                        onPress:() =>{
+                          // bottomPoliticsDrawerRef.current?.open; 
+                          setPoliticsNews(!politicsNews);},
+                      },
+                      {
+                        icon: 'construct',
+                        text: 'Real Estate',
+                        onPress:() =>{
+                          // bottomEstateDrawerRef.current?.open; 
+                          setEstateNews(!EstateNews);},
+                      },
+                      {
+                        icon: 'man',
+                        text: 'Aura',
+                        onPress:() =>{
+                          // bottomAuraDrawerRef.current?.open; 
+                          setPersonalityNews(!PersonalityNews)}
+                      },
+                      {
+                        icon: 'business',
+                        text: 'Business & Legal',
+                        onPress:() =>{bottomBusinessDrawerRef.current?.open; setBusinessNews(!BusinessNews)}
+                      },
+                      {
+                        icon: 'bag-handle',
+                        text: 'Fashion',
+                        onPress:() =>{
+                          // bottomFashionDrawerRef.current?.open; 
+                          setFashionNews(!FashionNews)}
+                      },
+                      {
+                        icon: 'fast-food',
+                        text: 'Food',
+                        onPress:() =>{
+                          // bottomFoodDrawerRef.current?.open; 
+                          setFoodNews(!FoodNews)}
+                      },
+                      {
+                        icon: 'airplane',
+                        text: 'Travel',
+                        onPress:() =>{
+                          // bottomTravelDrawerRef.current?.open; 
+                          setTravelNews(!TravelNews)}
+                      },
+                      {
+                        icon: 'golf',
+                        text: 'Sports & Fitness',
+                        onPress:() =>{
+                          // bottomSportsDrawerRef.current?.open; 
+                          setSportslNews(!SportsNews)}
+                      },
+                    ]
+                  },
+                  {icon: 'diamond', text: 'Partners', onPress:() =>{bottomPartnersDrawerRef.current?.open; setPartners(!partners);}},
+                  {icon: 'wallet', text: 'Payment Method', onPress:() =>{
+                      bottomBDrawerRef.current?.open;
+                      setPaymentMethod(!paymentMethod);
+                  }},
+                  {icon: 'call', text: 'Customer Service', onPress:() =>{
+                    bottomDrawerRef.current?.open;
+                    setCustomerService(!customerService);
+                  }},
+                  {icon: 'person-circle', text: 'Register your Membership', onPress:() => {
+                    setMembership(!membership);
+                  },}
+                ]}></DrawerNavigation>
+                {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount>
+                      <View style={{flex: 1}}>
+                        {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
                                                       leftIcon="phone"
-                                                      title="Authentication via phone"
-                                                      subTitle="connect with number" rightIcon="cellphone">
-                                                        <Text> Phone Number * </Text>
-                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phone} onChangeText={setPhone}></TextInput>
-                                                        <Text> Token * </Text>
-                                                        <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                        <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.green500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
-                                                        {isSession? <View>
-                                                                        <Toast visible={toastAuthVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Excellent! Your account have login.' setVisible={setToastVisible}></Toast>
-                                                                    </View> : ''}
-                                                  </AccordionItem></Accordion>
-                                                  {/* <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="whatsapp"
-                                                      title="Authentication via Whatsapp"
-                                                      subTitle="connect with whatsapp" rightIcon="cellphone">
-                                                        <Text> Whatsapp Number * </Text>
-                                                        <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
-                                                        <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
-                                                  </AccordionItem></Accordion> */}
-                                        </AccordionItem>
-                                                  <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="email"
-                                                      title="Member Verification"
-                                                      subTitle="connect through email" rightIcon="cellphone">
-                                                        <Text> Email Address * </Text>
-                                                        <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
-                                                        <Text> Token * </Text>
-                                                        <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                        <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 90}} onPress={verification}></IconButton>
-                                                  </AccordionItem></Accordion>
-                              </Accordion>
-                          </View>: ''}
-                          {register === 'tab3'? <View style={styles.clubtabview}>
-                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                      <AccordionItem
-                                            leftIcon="account-circle"
-                                            title="Decentralize Wallet"
-                                            subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="pen"
-                                                      title="Bitcoin wallet"
-                                                      subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
-                                                         <View>
-                                                         <Text> Bitcoin Address * </Text>
-                                                         <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' style={{ top: 5}}></TextInput>
-                                                         <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
-                                                         </View>
-                                                      </AccordionItem>
-                                                   <AccordionItem
-                                                          leftIcon="fingerprint"
-                                                          title="Transactions"
-                                                          subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                           <View style={{flex: 1}}>
-                                                              <SegmentedButtons value={segmentedState} onValueChange={setSegmentedState} style={{top: 5}} buttons={[
-                                                                {
-                                                                  value: 'fingerprint',
-                                                                  label: 'Wallet'
-                                                                },
-                                                                {
-
-                                                                  value: 'handshake',
-                                                                  label: 'Deal'
-                                                                }]}></SegmentedButtons>
-                                                              {segmentedState === 'fingerprint' ?
-                                                                <View>
-                                                                  bottomWalletDrawerRef.current?.open
-                                                                  <BottomDrawer ref={bottomWalletDrawerRef} openOnMount>
-                                                                      <View>
-                                                                        <Text style={{fontSize: 40, color: 'silver', top: 50, left: 80}}> 0.00000 </Text>
-                                                                        <Text style={{top: 25, left: 240}}> BTC </Text>
-                                                                        <View style={{flex: 1, top: 100, width: 300, left: 20}}>
-                                                                            {!confirmed ? <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
-                                                                                      textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>: ''}
-                                                                            {confirmed ? <View> <TextInput placeholder='sender bitcoin address' mode='outlined' inputMode={'text'}></TextInput> 
-                                                                                <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
-                                                                                <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
-                                                                                </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
-                                                                        </View>
-                                                                      </View>
-                                                                    </BottomDrawer>
-                                                                </View> : ''}
-                                                                {segmentedState === 'handshake'? <View>
-                                                                    bottomTXSDrawerRef.current?.open
-                                                                    <BottomDrawer ref={bottomTXSDrawerRef} openOnMount>
-                                                                      <View>
-                                                                      <Calendar
-                                                                            date={todayDateString}
-                                                                            markedDates={[selectedDay as string]}
-                                                                            onDayPress={onDayPress}
-                                                                            firstDayOfWeek={1}
-                                                                          />
-                                                                      </View>
-                                                                    </BottomDrawer>
-                                                                </View> : ''}
-                                                           </View>
-                                                          </AccordionItem>
-                                                    <AccordionItem
-                                                          leftIcon="atm"
-                                                          title="Bitcoin Digital Card"
-                                                          subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                            <Card buttons={[
-                                                              {text: 'Request for Card '},
-                                                            ]} 
-                                                               description={'Register your Bitcoin Card'}
-                                                               title=''
-                                                               theme={{themeColor: '#DB504A'}}
-                                                               icon={'logo-bitcoin'}
-                                                            />
-                                                          </AccordionItem>
-                                            </Accordion>
-                                            </AccordionItem>
-                              </Accordion>
-                              <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                      <AccordionItem
-                                            leftIcon="send"
-                                            title="My Networth"
-                                            subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake"></AccordionItem>
-                              </Accordion>
-                          </View> : ''}
-                        </View> 
-                    </Modal>: ''}
-      {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
-                <View style={styles.backnav}>
-                      <BottomTabNavigation selectedIndex={0} highlightedIconColor='#FFF' values={[
-                        {icon: 'ribbon', text: 'Join', onPress:() => { setIsJoined(true);
-                        },}, 
-                        {icon: 'search-circle', text: 'Search'},
-                        {icon: 'rose', text: 'Events'},
-                        {icon: 'layers', text: 'Extras'}
-                        ]}></BottomTabNavigation>
-                </View>
-                {isJoined ? <View style={styles.clubtabcontrol}>
-                                  <SegmentedControl label='' values={tabs} onChange={(value) => setTab(value)}/>
-                                  {tab === 'tab1'? <View style={styles.clubtabview}>
-                                    <Text style={styles.clubformtextname}> Club name * </Text>
-                                    <TextInput placeholder='club name' inputMode={'text'} value={clubName} onChangeText={setClubName} style={{top: 2}}></TextInput>
-                                    <Text style={styles.clubformtextcity}> Club city * </Text>
-                                    <TextInput placeholder='club city' inputMode={'text'} value={clubCity} onChangeText={setClubCity} style={{top: 5}}></TextInput>
-                                    <Text style={styles.clubformtextcity}> Club country * </Text>
-                                    <TextInput placeholder='club country' inputMode={'text'} value={clubCountry} onChangeText={setClubCountry} style={{top: 6}}></TextInput>
-                                    <View style={{top: 10}}>
-                                      <Switch text='Club contact number' isOn={confirmedNumber} onChange={setConfirmedNumber} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                    </View>
-                                    {confirmedNumber ? <View>
-                                      <Text style={styles.clubformtextnumber}> Phone number * </Text>
-                                      <TextInput placeholder='club number' style={{top: 18}} inputMode={'tel'} value={clubPhone} onChangeText={setClubPhone}></TextInput>
-                                    </View>: ''}
-                                    <View style={{top: 25}}>
-                                      <Switch text='Club bitcoin address' isOn={confirmedBitcoin} onChange={setConfirmedBitcoin} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                    </View>
-                                    <View style={{top: 50}}>
-                                      <Switch text='Club Declaration signed' backgrounColor='red' isOn={confirmedDelgation} onChange={setConfirmedDelgation} fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                    {confirmedDelgation && confirmedBitcoin? <View style={{top: -300}}>
-                                      <Card
-                                              buttons={[
-                                                {text: 'Submit', onPress: () => {
-                                                  onHandle_create_club();
-                                                },},
-                                                {text: 'Cancel'}
-                                              ]}
-                                              description={
-                                                'Following Delegation should be applied :- \n1. Club members should attend prenium clubs events & dinners.\n 2. Each members should have membership.\n 3. Each members should use club conversation.\n 4. Club members should pay for service according to their role.\n 5. In case member will not pay his/her member fees account will be disable for 6-90 days. '
-                                              }
-                                              icon={'mail-unread'}
-                                              title={'Delegation Letter'}
-                                              theme={{
-                                                themeColor: '#DB504A',
-                                              }}
-                                            />
+                                                      title="Contact Us"
+                                                      subTitle="Send me a quote" rightIcon="whatsapp">
+                                                        <Text style={styles.contactbusinessname}> WISDOMENIGMA INC </Text>
+                                                        <Text style={styles.contactnumber}> (+92) 317 4287 461 </Text>
+                                                  </AccordionItem>
+                                                  <AccordionItem leftIcon="link" title="Social Connect" subTitle='Social Connect & store is more exclusive option for quote' rightIcon="instagram">
+                                                      <Link style={styles.contactnumber} href={'https://www.instagram.com/wisdomenigma/'}> instagram@wisdomenigma </Link>
+                                                      <Link style={styles.contactnumber} href={'https://www.facebook.com/wisdomenigma'}> facebook@wisdomenigma </Link>
+                                                      <Link style={styles.contactnumber} href={'https://www.linkedin.com/company/wisdom-enigma/'}> linkedin@wisdomenigma </Link>
+                                                      <Link style={styles.contactnumber} href={'https://wemerchandise-61a94.web.app/'}> url@wisdomenigma </Link>
+                                                  </AccordionItem>
+                                                  <AccordionItem leftIcon="chat"  title="Interview Request" subTitle='Interview / Discussions are good to learn about ' rightIcon='at'>
+                                                        <Text style={styles.contactnumber}> wizdwarfs@gmail.com </Text>
+                                                  </AccordionItem>
+                                              </Accordion>: ''}
+                      </View>
+                    </BottomDrawer>: ''}
+                {paymentMethod? <BottomDrawer ref={bottomBDrawerRef} openOnMount>
+                      <View style={{position: 'absolute', width: 300, top: 30}}>
+                        <Text style={styles.paymentheader}> Active Payment Method </Text>
+                        <Card
+                              buttons={[
+                                
+                              ]}
+                              description={
+                                'Bitcoin release by satoshi or satoshi group in a paper under [A peer to peer electronic cash system] in 2009. This paper revoulatize many tycoons business & small firms. Perhaps, people widely adopt bitcoin in late 2015. Today many tycoons add bitcoin holdings in their portfilio because of store in value feature. Bitcoin 24/7 open market, store in value against inflation, limited supply. Venture capitalist David Sacks, who Trump tapped as his crypto and artificial intelligence czar, joined Trump in the Oval Office for the signing of the order. "The digital asset industry plays a crucial role in innovation and economic development in the United States, as well as our Nation’s international leadership" the order states.'
+                              }
+                              icon={'information-circle'}
+                              title={'Bitcoin'}
+                              theme={{
+                                themeColor: '#DB504A',
+                              }}
+                            />
+                      </View>
+                    </BottomDrawer>: '' }
+                {politicsNews? <Modal isVisible={politicsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                      <Link href={'/'} style={styles.backlink}> &#10226; </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                              <FlatList data={politicalArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                  // {text: 'Thoughts', onPress: () => {}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#DB504A',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                                
+                                              </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={EstateArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#50C878',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {PersonalityNews? <Modal isVisible={PersonalityNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={AuraArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#7DF9FF',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {BusinessNews? <Modal isVisible={BusinessNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={businessArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#40826D',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={fashionArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#C4B454',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {FoodNews? <Modal isVisible={FoodNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={foodArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#009E60',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {TravelNews? <Modal isVisible={TravelNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={travelArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#880808',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {SportsNews? <Modal isVisible={SportsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
+                                      <View style={{flex: 1, width: 300}}>
+                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                        <FlatList data={SportsArticles} renderItem={({item}) =>
+                                                  <Card
+                                                                buttons={[
+                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
+                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
+                                                                ]}
+                                                                description={
+                                                                  item.description
+                                                                }
+                                                                icon={'newspaper'}
+                                                                title={item.title}
+                                                                theme={{
+                                                                  themeColor: '#630330',
+                                                                }}
+                                        />                  
+                                            } keyExtractor={(item) => item.url}>
+                                              
+                                            </FlatList>
+                                      </PageScrollView>
+                                      </View> 
+                              </Modal>: ''}
+                {partners? <BottomDrawer ref={bottomPartnersDrawerRef} openOnMount>
+                      <View style={{position: 'absolute', width: 300, top: 30}}>
+                        <SegmentedControl label="" values={values} onChange={value => setValue(value)} style={{position: 'relative', left: 30}}
+                          />
+                          {value !== 'tab2' && (<View style={{flex: 1}}>
+                            <Text style={styles.damacbrand}> DAMAC </Text>
+                            <Text style={styles.oceanhousebrand}> Ocean House </Text>
+                            <Text style={styles.imibrand}> IMI-LUXURY-EXCELSIOR </Text>
+                            <Text style={styles.rbrand}> RAS-AL-KHAMAH </Text>
+                            </View>)}
+                            {value !== 'tab1' && (<View style={{flex: 1}}>
+                            <Text style={styles.damacbrand}> Nine Elm Versace </Text>
+                            <Text style={styles.oceanhousebrand}> JACBO & CO Inc </Text>
+                            <Text style={styles.imibrand}> Trump International  </Text>
+                            <Text style={styles.rbrand}> BINGATTI </Text>
+                            <Text style={styles.gbrand}> GRANT CARDONE </Text>
+                            </View>)}
+                      </View>
+                    </BottomDrawer>: '' }
+                {membership ? <Modal isVisible={membership} style={{backgroundColor: 'darkslategrey'}}>
+                                  <View style={styles.backnav}>
+                                    <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
+                                    {register === 'tab1'? <View style={styles.clubtabview}>
+                                      <View style={{top: -25}}>
+                                                <Switch text='Magic Link' isOn={isMagicLink} onChange={setIsMagicLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      </View>
+                                      { isMagicLink ? (<View>
+                                        <Text style={styles.clubformtextname} > Email Address * </Text>
+                                        <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 2}}></TextInput>
+                                      </View>
+                                      ) :''}
+                                      <View style={{top: 10}}>
+                                                <Switch text='Incognito mode' isOn={isSocialLink} onChange={setIsSocialLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                                { isSocialLink ? <View>
+                                                  <Text style={styles.annymoustextlabel} > Email Address * </Text>
+                                                  <TextInput placeholder='Email' mode='flat' value={incogEmail} onChangeText={setIncogEmail} inputMode={'email'} style={{top: 60}}></TextInput>
+                                                <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>  
+                                                { isBitcoin ? <BottomDrawer ref={bottomIncogsDrawerRef} openOnMount>
+                                                  <View>
+                                                      {appError.includes('Email Linked') ? <View>
+                                                        <IconButton icon={'incognito-circle'} iconColor={MD2Colors.green500} size={80} style={styles.incogmodestatusicon}></IconButton>
+                                                        <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
+                                                        <Text style={styles.incogmodestatustext2}> Incognito Shopping Mode  </Text>
+                                                        <Text style={styles.incogmodestatustext2}> Secure & Borderless transacton  </Text>
+                                                        <Text style={styles.incogmodestatustext2}> Private Identity  </Text>
+                                                        <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
+                                                      </View> : <View>
+                                                                <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>
+                                                                <Text style={styles.incogmodestatustext}> `{appError} 100` </Text>
+                                                        </View>}
+                                                  </View>
+                                                </BottomDrawer> : ''}
+                                                </View> : ''}
+                                      </View>
+                                      <View style={{top: 50}}>
+                                                <Switch text='Bitcoin wallet' isOn={isBitcoin} onChange={setIsBitcoin} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                      </View>
+                                      <View style={{top: 70}}>
+                                          <Switch text='Account Declaration signed' isOn={isDelegation} onChange={setIsDelegation} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                          {isDelegation && isBitcoin && isMagicLink? <View style={{top: -300}}>
+                                                <Card
+                                                        buttons={[
+                                                          {text: 'Access', onPress: () => {
+                                                              onHandle_EmailOTP();
+                                                          },},
+                                                        ]}
+                                                        description={
+                                                          'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
+                                                        }
+                                                        icon={'mail-open'}
+                                                        title={'Delegation Letter'}
+                                                        theme={{
+                                                          themeColor: '#DB504A',
+                                                        }}
+                                                      />
+                                                      {isOTP ? <View>
+                                                                  <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Check your Email. Add your token for your authentication' setVisible={setToastVisible}></Toast>
+                                                              </View> : '' }
+                                              </View> : ''}
+                                      </View>
                                     </View> : ''}
-                                    </View>
-                                  </View>: ''}
-                                  {tab === 'tab2'? <View style={styles.clubtabview}> </View>: ''}
-                                  {tab === 'tab3'? <View style={styles.clubtabcontrol}> </View>: ''}
-                            </View> : ''}
-              </Modal>: ''}
-    </View>
+                                    {register === 'tab2'? <View style={styles.clubtabview}>
+                                    <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                  <AccordionItem
+                                                      leftIcon="account"
+                                                      title="Membership Authentication"
+                                                      subTitle="Authenticate your credentials" rightIcon="account-circle">
+                                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                            <AccordionItem
+                                                                leftIcon="phone"
+                                                                title="Authentication via phone"
+                                                                subTitle="connect with number" rightIcon="cellphone">
+                                                                  <Text> Phone Number * </Text>
+                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phone} onChangeText={setPhone}></TextInput>
+                                                                  <Text> Token * </Text>
+                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
+                                                                  <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.green500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
+                                                                  {isSession? <View>
+                                                                                  <Toast visible={toastAuthVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Excellent! Your account have login.' setVisible={setToastVisible}></Toast>
+                                                                              </View> : ''}
+                                                            </AccordionItem></Accordion>
+                                                            {/* <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                            <AccordionItem
+                                                                leftIcon="whatsapp"
+                                                                title="Authentication via Whatsapp"
+                                                                subTitle="connect with whatsapp" rightIcon="cellphone">
+                                                                  <Text> Whatsapp Number * </Text>
+                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
+                                                                  <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
+                                                            </AccordionItem></Accordion> */}
+                                                  </AccordionItem>
+                                                            <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                            <AccordionItem
+                                                                leftIcon="email"
+                                                                title="Member Verification"
+                                                                subTitle="connect through email" rightIcon="cellphone">
+                                                                  <Text> Email Address * </Text>
+                                                                  <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
+                                                                  <Text> Token * </Text>
+                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
+                                                                  <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 90}} onPress={verification}></IconButton>
+                                                            </AccordionItem></Accordion>
+                                        </Accordion>
+                                    </View>: ''}
+                                    {register === 'tab3'? <View style={styles.clubtabview}>
+                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                <AccordionItem
+                                                      leftIcon="account-circle"
+                                                      title="Decentralize Wallet"
+                                                      subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                            <AccordionItem
+                                                                leftIcon="pen"
+                                                                title="Bitcoin wallet"
+                                                                subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
+                                                                  <View>
+                                                                  <Text> Bitcoin Address * </Text>
+                                                                  <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' style={{ top: 5}}></TextInput>
+                                                                  <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
+                                                                  </View>
+                                                                </AccordionItem>
+                                                            <AccordionItem
+                                                                    leftIcon="fingerprint"
+                                                                    title="Transactions"
+                                                                    subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                                                    <View style={{flex: 1}}>
+                                                                        <SegmentedButtons value={segmentedState} onValueChange={setSegmentedState} style={{top: 5}} buttons={[
+                                                                          {
+                                                                            value: 'fingerprint',
+                                                                            label: 'Wallet'
+                                                                          },
+                                                                          {
+
+                                                                            value: 'handshake',
+                                                                            label: 'Deal'
+                                                                          }]}></SegmentedButtons>
+                                                                        {segmentedState === 'fingerprint' ?
+                                                                          <View>
+                                                                            bottomWalletDrawerRef.current?.open
+                                                                            <BottomDrawer ref={bottomWalletDrawerRef} openOnMount>
+                                                                                <View>
+                                                                                  <Text style={{fontSize: 40, color: 'silver', top: 50, left: 80}}> 0.00000 </Text>
+                                                                                  <Text style={{top: 25, left: 240}}> BTC </Text>
+                                                                                  <View style={{flex: 1, top: 100, width: 300, left: 20}}>
+                                                                                      {!confirmed ? <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
+                                                                                                textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>: ''}
+                                                                                      {confirmed ? <View> <TextInput placeholder='sender bitcoin address' mode='outlined' inputMode={'text'}></TextInput> 
+                                                                                          <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
+                                                                                          <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
+                                                                                          </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
+                                                                                  </View>
+                                                                                </View>
+                                                                              </BottomDrawer>
+                                                                          </View> : ''}
+                                                                          {segmentedState === 'handshake'? <View>
+                                                                              bottomTXSDrawerRef.current?.open
+                                                                              <BottomDrawer ref={bottomTXSDrawerRef} openOnMount>
+                                                                                <View>
+                                                                                <Calendar
+                                                                                      date={todayDateString}
+                                                                                      markedDates={[selectedDay as string]}
+                                                                                      onDayPress={onDayPress}
+                                                                                      firstDayOfWeek={1}
+                                                                                    />
+                                                                                </View>
+                                                                              </BottomDrawer>
+                                                                          </View> : ''}
+                                                                    </View>
+                                                                    </AccordionItem>
+                                                              <AccordionItem
+                                                                    leftIcon="atm"
+                                                                    title="Bitcoin Digital Card"
+                                                                    subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
+                                                                      <Card buttons={[
+                                                                        {text: 'Request for Card '},
+                                                                      ]} 
+                                                                        description={'Register your Bitcoin Card'}
+                                                                        title=''
+                                                                        theme={{themeColor: '#DB504A'}}
+                                                                        icon={'logo-bitcoin'}
+                                                                      />
+                                                                    </AccordionItem>
+                                                      </Accordion>
+                                                      </AccordionItem>
+                                        </Accordion>
+                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
+                                                <AccordionItem
+                                                      leftIcon="send"
+                                                      title="My Networth"
+                                                      subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake"></AccordionItem>
+                                        </Accordion>
+                                    </View> : ''}
+                                  </View> 
+                              </Modal>: ''}
+                {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
+                          <View style={styles.backnav}>
+                                <BottomTabNavigation selectedIndex={0} highlightedIconColor='#FFF' values={[
+                                  {icon: 'ribbon', text: 'Join', onPress:() => { setIsJoined(true);
+                                  },}, 
+                                  {icon: 'search-circle', text: 'Search'},
+                                  {icon: 'rose', text: 'Events'},
+                                  {icon: 'layers', text: 'Extras'}
+                                  ]}></BottomTabNavigation>
+                          </View>
+                          {isJoined ? <View style={styles.clubtabcontrol}>
+                                            <SegmentedControl label='' values={tabs} onChange={(value) => setTab(value)}/>
+                                            {tab === 'tab1'? <View style={styles.clubtabview}>
+                                              <Text style={styles.clubformtextname}> Club name * </Text>
+                                              <TextInput placeholder='club name' inputMode={'text'} value={clubName} onChangeText={setClubName} style={{top: 2}}></TextInput>
+                                              <Text style={styles.clubformtextcity}> Club city * </Text>
+                                              <TextInput placeholder='club city' inputMode={'text'} value={clubCity} onChangeText={setClubCity} style={{top: 5}}></TextInput>
+                                              <Text style={styles.clubformtextcity}> Club country * </Text>
+                                              <TextInput placeholder='club country' inputMode={'text'} value={clubCountry} onChangeText={setClubCountry} style={{top: 6}}></TextInput>
+                                              <View style={{top: 10}}>
+                                                <Switch text='Club contact number' isOn={confirmedNumber} onChange={setConfirmedNumber} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                              </View>
+                                              {confirmedNumber ? <View>
+                                                <Text style={styles.clubformtextnumber}> Phone number * </Text>
+                                                <TextInput placeholder='club number' style={{top: 18}} inputMode={'tel'} value={clubPhone} onChangeText={setClubPhone}></TextInput>
+                                              </View>: ''}
+                                              <View style={{top: 25}}>
+                                                <Switch text='Club bitcoin address' isOn={confirmedBitcoin} onChange={setConfirmedBitcoin} backgrounColor='red' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                              </View>
+                                              <View style={{top: 50}}>
+                                                <Switch text='Club Declaration signed' backgrounColor='red' isOn={confirmedDelgation} onChange={setConfirmedDelgation} fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
+                                              {confirmedDelgation && confirmedBitcoin? <View style={{top: -300}}>
+                                                <Card
+                                                        buttons={[
+                                                          {text: 'Submit', onPress: () => {
+                                                            onHandle_create_club();
+                                                          },},
+                                                          {text: 'Cancel'}
+                                                        ]}
+                                                        description={
+                                                          'Following Delegation should be applied :- \n1. Club members should attend prenium clubs events & dinners.\n 2. Each members should have membership.\n 3. Each members should use club conversation.\n 4. Club members should pay for service according to their role.\n 5. In case member will not pay his/her member fees account will be disable for 6-90 days. '
+                                                        }
+                                                        icon={'mail-unread'}
+                                                        title={'Delegation Letter'}
+                                                        theme={{
+                                                          themeColor: '#DB504A',
+                                                        }}
+                                                      />
+                                              </View> : ''}
+                                              </View>
+                                            </View>: ''}
+                                            {tab === 'tab2'? <View style={styles.clubtabview}> </View>: ''}
+                                            {tab === 'tab3'? <View style={styles.clubtabcontrol}> </View>: ''}
+                                      </View> : ''}
+                        </Modal>: ''}
+      </View>
+    </SafeAreaView>
   );
 }
 
