@@ -1233,7 +1233,7 @@ rbrand:{
 backnav:{
   flex: 1, 
   position: 'relative', 
-  top: 30
+  top: 10,
 },
 clubtabcontrol:{
   position: 'relative', 
