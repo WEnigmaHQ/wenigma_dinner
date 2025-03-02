@@ -7,10 +7,10 @@ import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, 
 import BottomDrawer, { BottomDrawerMethods } from 'react-native-animated-bottom-drawer';
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { PageScrollView } from 'pagescrollview'
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
-import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput} from 'react-native-paper';
+import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput, Appbar} from 'react-native-paper';
 import { supabase } from './supabase';
 import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -538,6 +538,8 @@ export default function Tab() {
 
 
     };
+
+    const back = () => {router.replace('/')};
   
   return (
     <SafeAreaView>
@@ -608,7 +610,7 @@ export default function Tab() {
                     ]
                   },
                   {icon: 'diamond', text: 'Partners', onPress:() =>{bottomPartnersDrawerRef.current?.open; setPartners(!partners);}},
-                  {icon: 'wallet', text: 'Payment Method', onPress:() =>{
+                  {icon: 'wallet', text: 'Payment Method Description', onPress:() =>{
                       bottomBDrawerRef.current?.open;
                       setPaymentMethod(!paymentMethod);
                   }},
@@ -662,7 +664,7 @@ export default function Tab() {
                     </BottomDrawer>: '' }
                 {politicsNews? <Modal isVisible={politicsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                      <Link href={'/'} style={styles.backlink}> &#10226; </Link>
+                                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                               <FlatList data={politicalArticles} renderItem={({item}) =>
                                                   <Card
@@ -688,7 +690,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={EstateArticles} renderItem={({item}) =>
                                                   <Card
@@ -713,7 +715,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {PersonalityNews? <Modal isVisible={PersonalityNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={AuraArticles} renderItem={({item}) =>
                                                   <Card
@@ -738,9 +740,9 @@ export default function Tab() {
                               </Modal>: ''}
                 {BusinessNews? <Modal isVisible={BusinessNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={businessArticles} renderItem={({item}) =>
+                                          <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
+                                          <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
+                                          <FlatList data={businessArticles} renderItem={({item}) =>
                                                   <Card
                                                                 buttons={[
                                                                   {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
@@ -763,7 +765,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={fashionArticles} renderItem={({item}) =>
                                                   <Card
@@ -788,7 +790,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {FoodNews? <Modal isVisible={FoodNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={foodArticles} renderItem={({item}) =>
                                                   <Card
@@ -813,7 +815,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {TravelNews? <Modal isVisible={TravelNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={travelArticles} renderItem={({item}) =>
                                                   <Card
@@ -838,7 +840,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {SportsNews? <Modal isVisible={SportsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
-                                        <Link href={'/'} style={styles.backlink}> &#10226; Return </Link>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
                                       <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
                                         <FlatList data={SportsArticles} renderItem={({item}) =>
                                                   <Card
@@ -884,6 +886,7 @@ export default function Tab() {
                                   <View style={styles.backnav}>
                                     <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
                                     {register === 'tab1'? <View style={styles.clubtabview}>
+                                    <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
                                       <View style={{top: -25}}>
                                                 <Switch text='Magic Link' isOn={isMagicLink} onChange={setIsMagicLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
                                       </View>
@@ -943,6 +946,7 @@ export default function Tab() {
                                       </View>
                                     </View> : ''}
                                     {register === 'tab2'? <View style={styles.clubtabview}>
+                                    <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
                                     <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                   <AccordionItem
                                                       leftIcon="account"
@@ -986,6 +990,7 @@ export default function Tab() {
                                         </Accordion>
                                     </View>: ''}
                                     {register === 'tab3'? <View style={styles.clubtabview}>
+                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
                                         <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                                 <AccordionItem
                                                       leftIcon="account-circle"
@@ -1077,6 +1082,7 @@ export default function Tab() {
                               </Modal>: ''}
                 {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
                           <View style={styles.backnav}>
+                          <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -20, left: 280}}></Appbar.BackAction>
                                 <BottomTabNavigation selectedIndex={0} highlightedIconColor='#FFF' values={[
                                   {icon: 'ribbon', text: 'Join', onPress:() => { setIsJoined(true);
                                   },}, 
@@ -1236,7 +1242,7 @@ clubtabcontrol:{
 clubtabview:{
   position: 'absolute', 
   width: 320, 
-  top: 100
+  top: 50
 },
 clubformtextname: {
   color: 'white', 

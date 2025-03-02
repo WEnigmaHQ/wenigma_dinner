@@ -9,7 +9,6 @@ import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 
 
