@@ -14,6 +14,9 @@ import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput, Appbar} from 
 import { supabase } from './supabase';
 import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Care from './components/care';
+import DPayment from './components/dpayment';
+import Politics from './components/news/politics';
 
 
 
@@ -44,6 +47,11 @@ export default function Tab() {
   const [ segmentedState, setSegmentedState] = useState('');
 
 
+  // customer Service
+    
+  const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
+
+
   // Register account
 
   const [ email, setEmail ] = useState('');
@@ -60,6 +68,7 @@ export default function Tab() {
   const [ isOTP, setIsOTP ] = useState(false);
   const [ isSession, setIsSession ] = useState(false);
   const [ confirmed, setConfirmed ] = useState(false);
+  const [ bitcoinAddress, setBitcoinAddress ] = useState('');
 
 
 
@@ -159,17 +168,13 @@ export default function Tab() {
   }, [eventName]);  
 
 
-  // customer Service
-
-  const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
+  
 
   //  payment method
 
   const bottomBDrawerRef = useRef<BottomDrawerMethods>(null);
 
 
-
-  const [politicalArticles, setPoliticalArticles] = useState([]);
 
     // handle estate news
 
@@ -622,71 +627,12 @@ export default function Tab() {
                     setMembership(!membership);
                   },}
                 ]}></DrawerNavigation>
-                {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount>
-                      <View style={{flex: 1}}>
-                        {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="phone"
-                                                      title="Contact Us"
-                                                      subTitle="Send me a quote" rightIcon="whatsapp">
-                                                        <Text style={styles.contactbusinessname}> WISDOMENIGMA INC </Text>
-                                                        <Text style={styles.contactnumber}> (+92) 317 4287 461 </Text>
-                                                  </AccordionItem>
-                                                  <AccordionItem leftIcon="link" title="Social Connect" subTitle='Social Connect & store is more exclusive option for quote' rightIcon="instagram">
-                                                      <Link style={styles.contactnumber} href={'https://www.instagram.com/wisdomenigma/'}> instagram@wisdomenigma </Link>
-                                                      <Link style={styles.contactnumber} href={'https://www.facebook.com/wisdomenigma'}> facebook@wisdomenigma </Link>
-                                                      <Link style={styles.contactnumber} href={'https://www.linkedin.com/company/wisdom-enigma/'}> linkedin@wisdomenigma </Link>
-                                                      <Link style={styles.contactnumber} href={'https://wemerchandise-61a94.web.app/'}> url@wisdomenigma </Link>
-                                                  </AccordionItem>
-                                                  <AccordionItem leftIcon="chat"  title="Interview Request" subTitle='Interview / Discussions are good to learn about ' rightIcon='at'>
-                                                        <Text style={styles.contactnumber}> wizdwarfs@gmail.com </Text>
-                                                  </AccordionItem>
-                                              </Accordion>: ''}
-                      </View>
-                    </BottomDrawer>: ''}
+                {customerService ? <BottomDrawer ref={bottomDrawerRef} openOnMount><Care></Care></BottomDrawer> : ''}
                 {paymentMethod? <BottomDrawer ref={bottomBDrawerRef} openOnMount>
-                      <View style={{position: 'absolute', width: 300, top: 30}}>
-                        <Text style={styles.paymentheader}> Active Payment Method </Text>
-                        <Card
-                              buttons={[
-                                
-                              ]}
-                              description={
-                                'Bitcoin release by satoshi or satoshi group in a paper under [A peer to peer electronic cash system] in 2009. This paper revoulatize many tycoons business & small firms. Perhaps, people widely adopt bitcoin in late 2015. Today many tycoons add bitcoin holdings in their portfilio because of store in value feature. Bitcoin 24/7 open market, store in value against inflation, limited supply. Venture capitalist David Sacks, who Trump tapped as his crypto and artificial intelligence czar, joined Trump in the Oval Office for the signing of the order. "The digital asset industry plays a crucial role in innovation and economic development in the United States, as well as our Nation’s international leadership" the order states.'
-                              }
-                              icon={'information-circle'}
-                              title={'Bitcoin'}
-                              theme={{
-                                themeColor: '#DB504A',
-                              }}
-                            />
-                      </View>
+                     <DPayment></DPayment>
                     </BottomDrawer>: '' }
                 {politicsNews? <Modal isVisible={politicsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                              <FlatList data={politicalArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                  // {text: 'Thoughts', onPress: () => {}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#DB504A',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                                
-                                              </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Politics apiurl={API_POLITICAL_URL}></Politics>
                               </Modal>: ''}
                 {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>
@@ -1003,7 +949,7 @@ export default function Tab() {
                                                                 subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
                                                                   <View>
                                                                   <Text> Bitcoin Address * </Text>
-                                                                  <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' style={{ top: 5}}></TextInput>
+                                                                  <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' value={bitcoinAddress} onChangeText={setBitcoinAddress} style={{ top: 5}}></TextInput>
                                                                   <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
                                                                   </View>
                                                                 </AccordionItem>
