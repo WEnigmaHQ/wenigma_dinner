@@ -17,6 +17,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Care from '../care';
 import DPayment from '../dpayment';
 import Politics from '../politics';
+import Estate from '../estate';
+import Personality from '../personality';
+import Business from '../business';
 
 
 
@@ -174,16 +177,11 @@ export default function Tab() {
 
   const bottomBDrawerRef = useRef<BottomDrawerMethods>(null);
 
-
-   // handle aura news
-
-   const [AuraArticles, setAuraArticles] = useState([]);
    
    
    // handle business news
    const bottomBusinessDrawerRef = useRef<BottomDrawerMethods>(null);
 
-   const [businessArticles, setBusinessArticles] = useState([]);
 
    // handle fashion news
 
@@ -630,79 +628,13 @@ export default function Tab() {
                                       <Politics apiurl={API_POLITICAL_URL}></Politics>
                               </Modal>: ''}
                 {EstateNews? <Modal isVisible={EstateNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={EstateArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#50C878',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                     <Estate apiurl={API_ESTATE_URL}></Estate>
                               </Modal>: ''}
                 {PersonalityNews? <Modal isVisible={PersonalityNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={AuraArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#7DF9FF',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Personality apiurl={API_AURA_URL}></Personality>
                               </Modal>: ''}
                 {BusinessNews? <Modal isVisible={BusinessNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                          <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                          <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                          <FlatList data={businessArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#40826D',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Business apiurl={API_BUSINESS_URL}></Business>
                               </Modal>: ''}
                 {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
                                       <View style={{flex: 1, width: 300}}>

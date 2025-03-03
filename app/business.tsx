@@ -5,21 +5,22 @@ import { Appbar, Card, MD2Colors, Avatar, Text, Button } from "react-native-pape
 import axios from 'react-native-axios';
 import { router } from "expo-router";
 
-export default function Estate(apiurl: any) {
+export default function Business(apiurl: any) {
 
-    // handle estate news
+    // handle business articles
 
-  const [EstateArticles, setEsatteArticles] = useState([]);
+    const [businessArticles, setBusinessArticles] = useState([]);
+  
   const LeftContent = (props: any) => <Avatar.Icon {...props} icon='compass' />
 
      useEffect(() => {
             
-            const fetchEstateNews = async () => {
+            const fetchBusinessNews = async () => {
  
               try {
                     const response = await axios.get(apiurl);
                     const articles = response.data.articles || [];
-                    setEsatteArticles(articles);
+                    setBusinessArticles(articles);
     
                 } catch (error: any) {
                   console.error("Error report", error.response.data);
@@ -27,7 +28,7 @@ export default function Estate(apiurl: any) {
             };
         
         
-            fetchEstateNews();
+            fetchBusinessNews();
         
           }, [apiurl]);
     
@@ -48,9 +49,9 @@ export default function Estate(apiurl: any) {
                 <PageScrollView backgroundColor='#ebf3f3' style={{
   padding: 10,
 }}>
-                    {EstateArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {politicalArticles.length} results in 1 sec .... </Text> : <FlatList data={politicalArticles} renderItem={({item}) =>
+                    {businessArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {politicalArticles.length} results in 1 sec .... </Text> : <FlatList data={politicalArticles} renderItem={({item}) =>
                         <Card>
-                            <Card.Title title={item.title} subtitle={`${EstateArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
+                            <Card.Title title={item.title} subtitle={`${businessArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
                             </Card.Title>
                             <Card.Content>
                                     <Text variant={'headlineMedium'}> {item.author} </Text>

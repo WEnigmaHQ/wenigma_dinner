@@ -52,8 +52,8 @@ export default function Politics(apiurl: any) {
                             </Card.Title>
                             <Card.Content>
                                     <Text variant={'headlineMedium'}> {item.author} </Text>
-                                    <Text variant={'bodySmall'}> {item.content}></Text>
-                                    <Text variant={'bodySmall'}> {item.publishedAt}></Text>
+                                    <Text variant={'bodySmall'}> {item.content} </Text>
+                                    <Text variant={'bodySmall'}> {item.publishedAt} </Text>
                                 </Card.Content>
                                 <Card.Cover source={item.urlToImage}></Card.Cover>
                                 <Card.Actions>
