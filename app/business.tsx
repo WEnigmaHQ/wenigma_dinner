@@ -9,7 +9,7 @@ export default function Business(apiurl: any) {
 
     // handle business articles
 
-    const [businessArticles, setBusinessArticles] = useState([]);
+  const [ businessArticles, setBusinessArticles ] = useState([]);
   
   const LeftContent = (props: any) => <Avatar.Icon {...props} icon='compass' />
 
@@ -49,7 +49,7 @@ export default function Business(apiurl: any) {
                 <PageScrollView backgroundColor='#ebf3f3' style={{
   padding: 10,
 }}>
-                    {businessArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {politicalArticles.length} results in 1 sec .... </Text> : <FlatList data={politicalArticles} renderItem={({item}) =>
+                    {businessArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {businessArticles.length} results in 1 sec .... </Text> : <FlatList data={politicalArticles} renderItem={({item}) =>
                         <Card>
                             <Card.Title title={item.title} subtitle={`${businessArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
                             </Card.Title>

@@ -48,7 +48,7 @@ export default function Estate(apiurl: any) {
                 <PageScrollView backgroundColor='#ebf3f3' style={{
   padding: 10,
 }}>
-                    {EstateArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {politicalArticles.length} results in 1 sec .... </Text> : <FlatList data={politicalArticles} renderItem={({item}) =>
+                    {EstateArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {EstateArticles.length} results in 1 sec .... </Text> : <FlatList data={EstateArticles} renderItem={({item}) =>
                         <Card>
                             <Card.Title title={item.title} subtitle={`${EstateArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
                             </Card.Title>

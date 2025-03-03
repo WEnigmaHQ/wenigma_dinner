@@ -5,22 +5,22 @@ import { Appbar, Card, MD2Colors, Avatar, Text, Button } from "react-native-pape
 import axios from 'react-native-axios';
 import { router } from "expo-router";
 
-export default function Personality(apiurl: any) {
+export default function Travel(apiurl: any) {
 
-    // handle aura news
+    // handle travel news
 
-   const [AuraArticles, setAuraArticles] = useState([]);
+    const [travelArticles, setTravelArticles] = useState([]);
   
-  const LeftContent = (props: any) => <Avatar.Icon {...props} icon='compass' />
+    const LeftContent = (props: any) => <Avatar.Icon {...props} icon='compass' />
 
-     useEffect(() => {
+    useEffect(() => {
             
-            const fetchAuraNews = async () => {
+            const fetchTravelNews = async () => {
  
               try {
                     const response = await axios.get(apiurl);
                     const articles = response.data.articles || [];
-                    setAuraArticles(articles);
+                    setTravelArticles(articles);
     
                 } catch (error: any) {
                   console.error("Error report", error.response.data);
@@ -28,7 +28,7 @@ export default function Personality(apiurl: any) {
             };
         
         
-            fetchAuraNews();
+            fetchTravelNews();
         
           }, [apiurl]);
     
@@ -49,14 +49,14 @@ export default function Personality(apiurl: any) {
                 <PageScrollView backgroundColor='#ebf3f3' style={{
   padding: 10,
 }}>
-                    {AuraArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {AuraArticles.length} results in 1 sec .... </Text> : <FlatList data={AuraArticles} renderItem={({item}) =>
+                    {travelArticles.length<= 0 ? <Text variant={'headlineLarge'} style={{color: 'black', top: 300, left: 50}}> {travelArticles.length} results in 1 sec .... </Text> : <FlatList data={travelArticles} renderItem={({item}) =>
                         <Card>
-                            <Card.Title title={item.title} subtitle={`${AuraArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
+                            <Card.Title title={item.title} subtitle={`${travelArticles.length}` + 'results loaded in 1 sec ...'} left={LeftContent}>
                             </Card.Title>
                             <Card.Content>
                                     <Text variant={'headlineMedium'}> {item.author} </Text>
-                                    <Text variant={'bodySmall'}> {item.content} </Text>
-                                    <Text variant={'bodySmall'}> {item.publishedAt} </Text>
+                                    <Text variant={'bodySmall'}> {item.content}</Text>
+                                    <Text variant={'bodySmall'}> {item.publishedAt}</Text>
                                 </Card.Content>
                                 <Card.Cover source={item.urlToImage}></Card.Cover>
                                 <Card.Actions>

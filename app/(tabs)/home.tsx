@@ -20,6 +20,10 @@ import Politics from '../politics';
 import Estate from '../estate';
 import Personality from '../personality';
 import Business from '../business';
+import Fashion from '../fashion';
+import Food from '../food';
+import Travel from '../travel';
+import Sports from '../sports';
 
 
 
@@ -134,7 +138,7 @@ export default function Tab() {
       setTimeout(() => setPlusExclusiveDinner(false), 2000);
     }, []);
 
-  const addToCalendar = useCallback(() => {
+    const addToCalendar = useCallback(() => {
 
     const eventConfig: AddCalendarEvent.CreateOptions = {
         title:eventName !== '' ? eventName: '',
@@ -183,22 +187,6 @@ export default function Tab() {
    const bottomBusinessDrawerRef = useRef<BottomDrawerMethods>(null);
 
 
-   // handle fashion news
-
-   const [fashionArticles, setFashionArticles] = useState([]);
-
-   // handle food news
-
-   const [foodArticles, setFoodArticles] = useState([]);
-
-   // handle travel news
-
-   const [travelArticles, setTravelArticles] = useState([]);
-
-   // handle travel news
-
-    const [SportsArticles, setSportsArticles] = useState([]);
-
 
     const apiurl : string = 'a9b3560f6c9b4a648f622f03be8cc735';
 
@@ -212,112 +200,6 @@ export default function Tab() {
     const API_TRAVEL_URL = `https://newsapi.org/v2/top-headlines?q=best+international+places+experience&apiKey=${apiurl}`;
     const API_SPORTS_URL = `https://newsapi.org/v2/top-headlines?q=sports+match+fitness&apiKey=${apiurl}`;
 
-  
-
-
-  // useEffect(() => {
-    
-  //   const fetchPolticalNews = async () => {
-
-  //       try {
-  //         const response = await axios.get(API_POLITICAL_URL);
-  //         setPoliticalArticles(response.data.articles);
-  //       } catch (error) {
-  //         console.error("Error =", error);
-  //       }
-  //   };
-
-  //   const fetchEstateNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_ESTATE_URL);
-  //       setEsatteArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchAuraNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_AURA_URL);
-  //       setAuraArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchBusinessNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_BUSINESS_URL);
-  //       setBusinessArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchFashionNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_FASHION_URL);
-  //       setFashionArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchFoodNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_FOOD_URL);
-  //       setFoodArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchTravelNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_TRAVEL_URL);
-  //       setTravelArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   const fetchSportsNews = async () => {
-
-  //     try {
-  //       const response = await axios.get(API_SPORTS_URL);
-  //       setSportsArticles(response.data.articles);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-
-  //   fetchPolticalNews();
-  //   fetchEstateNews();
-  //   fetchAuraNews();
-  //   fetchBusinessNews();
-  //   fetchFashionNews();
-  //   fetchFoodNews();
-  //   fetchTravelNews();
-  //   fetchSportsNews();
-
-  // }, []);
-
-  // const shareArticle = async (title: string, url:any) => {
-  //   try {
-  //     await Share.share({
-  //       message: `${title}\n${url}`,
-  //     });
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
 
   // handle partners 
    const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);
@@ -637,104 +519,16 @@ export default function Tab() {
                                       <Business apiurl={API_BUSINESS_URL}></Business>
                               </Modal>: ''}
                 {FashionNews? <Modal isVisible={FashionNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={fashionArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#C4B454',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Fashion apiurl={API_FASHION_URL}></Fashion>
                               </Modal>: ''}
                 {FoodNews? <Modal isVisible={FoodNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={foodArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#009E60',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Food apiurl={API_FOOD_URL}></Food>
                               </Modal>: ''}
                 {TravelNews? <Modal isVisible={TravelNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={travelArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#880808',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Travel apiurl={API_TRAVEL_URL}></Travel>
                               </Modal>: ''}
                 {SportsNews? <Modal isVisible={SportsNews} animationOutTiming={1000} animationIn={'lightSpeedIn'}>
-                                      <View style={{flex: 1, width: 300}}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: 0, left: 260}}></Appbar.BackAction>
-                                      <PageScrollView backgroundColor='#ebf3f3' style={styles.style}>
-                                        <FlatList data={SportsArticles} renderItem={({item}) =>
-                                                  <Card
-                                                                buttons={[
-                                                                  {text: 'Read', onPress: () => {Linking.openURL(item.url)}},
-                                                                  {text: 'Share', onPress: () => {shareArticle(item.title, item.url)}},
-                                                                ]}
-                                                                description={
-                                                                  item.description
-                                                                }
-                                                                icon={'newspaper'}
-                                                                title={item.title}
-                                                                theme={{
-                                                                  themeColor: '#630330',
-                                                                }}
-                                        />                  
-                                            } keyExtractor={(item) => item.url}>
-                                              
-                                            </FlatList>
-                                      </PageScrollView>
-                                      </View> 
+                                      <Sports apiurl={API_SPORTS_URL}></Sports>
                               </Modal>: ''}
                 {partners? <BottomDrawer ref={bottomPartnersDrawerRef} openOnMount>
                       <View style={{position: 'absolute', width: 300, top: 30}}>
