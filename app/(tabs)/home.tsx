@@ -14,9 +14,9 @@ import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput, Appbar} from 
 import { supabase } from './supabase';
 import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Care from './components/care';
-import DPayment from './components/dpayment';
-import Politics from './components/news/politics';
+import Care from '../care';
+import DPayment from '../dpayment';
+import Politics from '../politics';
 
 
 
@@ -175,11 +175,6 @@ export default function Tab() {
   const bottomBDrawerRef = useRef<BottomDrawerMethods>(null);
 
 
-
-    // handle estate news
-
-  const [EstateArticles, setEsatteArticles] = useState([]);
-
    // handle aura news
 
    const [AuraArticles, setAuraArticles] = useState([]);
@@ -210,121 +205,121 @@ export default function Tab() {
     const apiurl : string = 'a9b3560f6c9b4a648f622f03be8cc735';
 
 
-    const API_POLITICAL_URL = `https://newsapi.org/v2/everything?q=politics&apiKey=${apiurl}`;
-    const API_ESTATE_URL = `https://newsapi.org/v2/everything?q=realestate&apiKey=${apiurl}`;
-    const API_AURA_URL = `https://newsapi.org/v2/everything?q=charismatic+leadership+billion&apiKey=${apiurl}`;
-    const API_BUSINESS_URL = `https://newsapi.org/v2/everything?q=business&apiKey=${apiurl}`;
-    const API_FASHION_URL = `https://newsapi.org/v2/everything?q=luxury+brand+fashion+million&apiKey=${apiurl}`;
-    const API_FOOD_URL = `https://newsapi.org/v2/everything?q=best+international+foods+recipe&apiKey=${apiurl}`;
-    const API_TRAVEL_URL = `https://newsapi.org/v2/everything?q=best+international+places+experience&apiKey=${apiurl}`;
-    const API_SPORTS_URL = `https://newsapi.org/v2/everything?q=sports+match+fitness&apiKey=${apiurl}`;
+    const API_POLITICAL_URL = `https://newsapi.org/v2/top-headlines?q=politics&apiKey=${apiurl}`;
+    const API_ESTATE_URL = `https://newsapi.org/v2/top-headlines?q=realestate&apiKey=${apiurl}`;
+    const API_AURA_URL = `https://newsapi.org/v2/top-headlines?q=charismatic+leadership+billion&apiKey=${apiurl}`;
+    const API_BUSINESS_URL = `https://newsapi.org/v2/top-headlines?q=business&apiKey=${apiurl}`;
+    const API_FASHION_URL = `https://newsapi.org/v2/top-headlines?q=luxury+brand+fashion+million&apiKey=${apiurl}`;
+    const API_FOOD_URL = `https://newsapi.org/v2/top-headlines?q=best+international+foods+recipe&apiKey=${apiurl}`;
+    const API_TRAVEL_URL = `https://newsapi.org/v2/top-headlines?q=best+international+places+experience&apiKey=${apiurl}`;
+    const API_SPORTS_URL = `https://newsapi.org/v2/top-headlines?q=sports+match+fitness&apiKey=${apiurl}`;
 
   
 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const fetchPolticalNews = async () => {
+  //   const fetchPolticalNews = async () => {
 
-        try {
-          const response = await axios.get(API_POLITICAL_URL);
-          setPoliticalArticles(response.data.articles);
-        } catch (error) {
-          console.error("Error =", error);
-        }
-    };
+  //       try {
+  //         const response = await axios.get(API_POLITICAL_URL);
+  //         setPoliticalArticles(response.data.articles);
+  //       } catch (error) {
+  //         console.error("Error =", error);
+  //       }
+  //   };
 
-    const fetchEstateNews = async () => {
+  //   const fetchEstateNews = async () => {
 
-      try {
-        const response = await axios.get(API_ESTATE_URL);
-        setEsatteArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_ESTATE_URL);
+  //       setEsatteArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchAuraNews = async () => {
+  //   const fetchAuraNews = async () => {
 
-      try {
-        const response = await axios.get(API_AURA_URL);
-        setAuraArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_AURA_URL);
+  //       setAuraArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchBusinessNews = async () => {
+  //   const fetchBusinessNews = async () => {
 
-      try {
-        const response = await axios.get(API_BUSINESS_URL);
-        setBusinessArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_BUSINESS_URL);
+  //       setBusinessArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchFashionNews = async () => {
+  //   const fetchFashionNews = async () => {
 
-      try {
-        const response = await axios.get(API_FASHION_URL);
-        setFashionArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_FASHION_URL);
+  //       setFashionArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchFoodNews = async () => {
+  //   const fetchFoodNews = async () => {
 
-      try {
-        const response = await axios.get(API_FOOD_URL);
-        setFoodArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_FOOD_URL);
+  //       setFoodArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchTravelNews = async () => {
+  //   const fetchTravelNews = async () => {
 
-      try {
-        const response = await axios.get(API_TRAVEL_URL);
-        setTravelArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_TRAVEL_URL);
+  //       setTravelArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    const fetchSportsNews = async () => {
+  //   const fetchSportsNews = async () => {
 
-      try {
-        const response = await axios.get(API_SPORTS_URL);
-        setSportsArticles(response.data.articles);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(API_SPORTS_URL);
+  //       setSportsArticles(response.data.articles);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
 
-    fetchPolticalNews();
-    fetchEstateNews();
-    fetchAuraNews();
-    fetchBusinessNews();
-    fetchFashionNews();
-    fetchFoodNews();
-    fetchTravelNews();
-    fetchSportsNews();
+  //   fetchPolticalNews();
+  //   fetchEstateNews();
+  //   fetchAuraNews();
+  //   fetchBusinessNews();
+  //   fetchFashionNews();
+  //   fetchFoodNews();
+  //   fetchTravelNews();
+  //   fetchSportsNews();
 
-  }, []);
+  // }, []);
 
-  const shareArticle = async (title: string, url:any) => {
-    try {
-      await Share.share({
-        message: `${title}\n${url}`,
-      });
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  // const shareArticle = async (title: string, url:any) => {
+  //   try {
+  //     await Share.share({
+  //       message: `${title}\n${url}`,
+  //     });
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   // handle partners 
    const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);

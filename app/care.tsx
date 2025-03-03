@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
-import { Link, router } from 'expo-router';
-import {useRef} from "react";
+import { Link } from 'expo-router';
 
 
 export default function Care() {
