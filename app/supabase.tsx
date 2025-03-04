@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import React from 'react';
 
 
 const supabaseurl : string = 'https://wkzcdctmgbovszthwmps.supabase.co';

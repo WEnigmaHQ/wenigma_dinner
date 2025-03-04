@@ -11,7 +11,7 @@ import { Link, router } from 'expo-router';
 import Modal  from 'react-native-modal';
 import axios from 'react-native-axios';
 import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput, Appbar} from 'react-native-paper';
-import { supabase } from './supabase';
+import { supabase } from '../supabase';
 import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Care from '../care';
@@ -24,6 +24,8 @@ import Fashion from '../fashion';
 import Food from '../food';
 import Travel from '../travel';
 import Sports from '../sports';
+import Partners from '../partners';
+import Membership from '../membership';
 
 
 
@@ -48,7 +50,6 @@ export default function Tab() {
   const [ TravelNews, setTravelNews ] = useState(false);
   const [ SportsNews, setSportslNews ] = useState(false);
   const [ partners, setPartners ] = useState(false);
-  const [ value, setValue ] = useState('active');
   const [ clubs, setClubs ] = useState(false);
   const [ membership, setMembership] = useState(false);
   const [ segmentedState, setSegmentedState] = useState('');
@@ -64,12 +65,6 @@ export default function Tab() {
   const [ email, setEmail ] = useState('');
   const [ appError, setAppError ] = useState('Connection refused');
   const [ incogEmail, setIncogEmail ] = useState('');
-  const [ isBitcoin, setIsBitcoin ] = useState(false);
-  const [ isDelegation, setIsDelegation ] = useState(false);
-  const [ isMagicLink, setIsMagicLink ] = useState(false);
-  const [ isSocialLink, setIsSocialLink ] = useState(false);
-  const [ toastVisible, setToastVisible ] = useState(false);
-  const [ toastAuthVisible, setToastAuthVisible ] = useState(false);
   const [ phone, setPhone ] = useState('');
   const [ token, setToken ] = useState('');
   const [ isOTP, setIsOTP ] = useState(false);
@@ -138,9 +133,9 @@ export default function Tab() {
       setTimeout(() => setPlusExclusiveDinner(false), 2000);
     }, []);
 
-    const addToCalendar = useCallback(() => {
+  const addToCalendar = useCallback(() => {
 
-    const eventConfig: AddCalendarEvent.CreateOptions = {
+  const eventConfig: AddCalendarEvent.CreateOptions = {
         title:eventName !== '' ? eventName: '',
         startDate: eventDate,
         endDate: eventDate,
@@ -205,9 +200,7 @@ export default function Tab() {
    const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);
 
 
-  // bottom drawer for incogito mode.
-
-  const bottomIncogsDrawerRef = useRef<BottomDrawerMethods>(null);
+  
 
   //  bottom drawer for bitcoin wallet
 
@@ -217,14 +210,7 @@ export default function Tab() {
 
   const bottomTXSDrawerRef = useRef<BottomDrawerMethods>(null);
   
-  //  [active or open]
-  const values = [
-    {key: 'Active', value: 'tab1'},
-    {key: 'Open', value: 'tab2'},
-  ];
-
-
-    // handle clubs
+     // handle partners
     const [tab, setTab ] = useState('tab1');
 
     const tabs = [
@@ -253,13 +239,7 @@ export default function Tab() {
                       Declaration: confirmedDelgation, Isbitcoin: confirmedBitcoin, Role: 'ADMIN' }).select(); 
          console.log("Error:", error); }
     }
-
-    const [register, setRegister] = useState('tab1');
-    const account = [
-      {key: 'Register Membership', value: 'tab1'},
-      {key: 'Authentication', value: 'tab2'},
-      {key: 'My Antiquity', value: 'tab3'}
-    ];
+    
 
 
     const create_session = async () =>{
@@ -327,63 +307,7 @@ export default function Tab() {
 
     };
 
-    const onHandle_sceret = async () => {
-
-      const {data, error} = await supabase.auth.signInAnonymously();
-      console.log("user ID : ", data.session?.user.id);
-
-
-      if (error){
-        console.error('Error in sign as anonymous user', error.message);
-        return;
-      }
-
-
-      if (data.session?.user.id !== ''){ 
-
-        if (!incogEmail){
-            console.error('Error email is null ', incogEmail);
-            return;
-        }
-
-
-        try{
-        
-                const {data:{user: userCheck}, error} = (await supabase.auth.getUser());
-
-                if (!userCheck && error){
-                    console.error('Error user cannot exist', error.message);
-                    setAppError(error.message);
-                    return;
-                }
-
-                const {data: {user}} = await supabase.auth.updateUser ({email: incogEmail});
-
-                if (error){
-                  console.error('Error email cannot linked', error.message);
-                  setAppError(error.message);
-                  return;
-                }
-
-                console.log('Wonderful user email linked', user);
-                const session = create_session();
-                setAppError('Email Linked'); 
-
-            if (session) {
-              console.log('Session created successfully:', session); 
-            } else {
-                  console.error('No session found for anonymous user.. ');
-                  setAppError('No session ');
-                  return;
-            }
-
-          }catch(error){
-             console.log('error', error);
-          }
-    }
-      else{ setAppError('Email already register'); }
-
-    };
+    
 
     const onHandle_phone_authentication = async() => {
 
@@ -531,221 +455,10 @@ export default function Tab() {
                                       <Sports apiurl={API_SPORTS_URL}></Sports>
                               </Modal>: ''}
                 {partners? <BottomDrawer ref={bottomPartnersDrawerRef} openOnMount>
-                      <View style={{position: 'absolute', width: 300, top: 30}}>
-                        <SegmentedControl label="" values={values} onChange={value => setValue(value)} style={{position: 'relative', left: 30}}
-                          />
-                          {value !== 'tab2' && (<View style={{flex: 1}}>
-                            <Text style={styles.damacbrand}> DAMAC </Text>
-                            <Text style={styles.oceanhousebrand}> Ocean House </Text>
-                            <Text style={styles.imibrand}> IMI-LUXURY-EXCELSIOR </Text>
-                            <Text style={styles.rbrand}> RAS-AL-KHAMAH </Text>
-                            </View>)}
-                            {value !== 'tab1' && (<View style={{flex: 1}}>
-                            <Text style={styles.damacbrand}> Nine Elm Versace </Text>
-                            <Text style={styles.oceanhousebrand}> JACBO & CO Inc </Text>
-                            <Text style={styles.imibrand}> Trump International  </Text>
-                            <Text style={styles.rbrand}> BINGATTI </Text>
-                            <Text style={styles.gbrand}> GRANT CARDONE </Text>
-                            </View>)}
-                      </View>
+                      <Partners></Partners>
                     </BottomDrawer>: '' }
                 {membership ? <Modal isVisible={membership} style={{backgroundColor: 'darkslategrey'}}>
-                                  <View style={styles.backnav}>
-                                    <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
-                                    {register === 'tab1'? <View style={styles.clubtabview}>
-                                    <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
-                                      <View style={{top: -25}}>
-                                                <Switch text='Magic Link' isOn={isMagicLink} onChange={setIsMagicLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                      </View>
-                                      { isMagicLink ? (<View>
-                                        <Text style={styles.clubformtextname} > Email Address * </Text>
-                                        <TextInput placeholder='Email' mode='flat' value={email} onChangeText={setEmail} inputMode={'email'} style={{top: 2}}></TextInput>
-                                      </View>
-                                      ) :''}
-                                      <View style={{top: 10}}>
-                                                <Switch text='Incognito mode' isOn={isSocialLink} onChange={setIsSocialLink} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                                { isSocialLink ? <View>
-                                                  <Text style={styles.annymoustextlabel} > Email Address * </Text>
-                                                  <TextInput placeholder='Email' mode='flat' value={incogEmail} onChangeText={setIncogEmail} inputMode={'email'} style={{top: 60}}></TextInput>
-                                                <IconButton icon={'cellphone-link'} iconColor={MD2Colors.grey500} style={styles.annymoustextbutton} onPress={onHandle_sceret}></IconButton>  
-                                                { isBitcoin ? <BottomDrawer ref={bottomIncogsDrawerRef} openOnMount>
-                                                  <View>
-                                                      {appError.includes('Email Linked') ? <View>
-                                                        <IconButton icon={'incognito-circle'} iconColor={MD2Colors.green500} size={80} style={styles.incogmodestatusicon}></IconButton>
-                                                        <Text style={styles.incogmodestatustext}> `{appError} complete` </Text>
-                                                        <Text style={styles.incogmodestatustext2}> Incognito Shopping Mode  </Text>
-                                                        <Text style={styles.incogmodestatustext2}> Secure & Borderless transacton  </Text>
-                                                        <Text style={styles.incogmodestatustext2}> Private Identity  </Text>
-                                                        <Text style={styles.incogmodestatustext2}> Bitcoins accepted  </Text>
-                                                      </View> : <View>
-                                                                <IconButton icon={'incognito-circle-off'} iconColor={MD2Colors.red500} size={80} style={styles.incogmodestatusicon}></IconButton>
-                                                                <Text style={styles.incogmodestatustext}> `{appError} 100` </Text>
-                                                        </View>}
-                                                  </View>
-                                                </BottomDrawer> : ''}
-                                                </View> : ''}
-                                      </View>
-                                      <View style={{top: 50}}>
-                                                <Switch text='Bitcoin wallet' isOn={isBitcoin} onChange={setIsBitcoin} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                      </View>
-                                      <View style={{top: 70}}>
-                                          <Switch text='Account Declaration signed' isOn={isDelegation} onChange={setIsDelegation} backgrounColor='green' fullWidth justifyContent='space-between' borderColor='white' border textStyle={styles.clubswitchtextfield}></Switch>
-                                          {isDelegation && isBitcoin && isMagicLink? <View style={{top: -300}}>
-                                                <Card
-                                                        buttons={[
-                                                          {text: 'Access', onPress: () => {
-                                                              onHandle_EmailOTP();
-                                                          },},
-                                                        ]}
-                                                        description={
-                                                          'Following Delegation should be applied :- \n1. All Members should have email address or phone number for access\n 2. Every member should have bitcoin wallet. \n 3. Each member should secure bitcoin wallet keys or use hardware base device.\n 4. Each member will authenicate through your devices, social account \n 5. In case member will not have bitcoin wallet address either use Lighting network or mobile bitcoin wallet. '
-                                                        }
-                                                        icon={'mail-open'}
-                                                        title={'Delegation Letter'}
-                                                        theme={{
-                                                          themeColor: '#DB504A',
-                                                        }}
-                                                      />
-                                                      {isOTP ? <View>
-                                                                  <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Check your Email. Add your token for your authentication' setVisible={setToastVisible}></Toast>
-                                                              </View> : '' }
-                                              </View> : ''}
-                                      </View>
-                                    </View> : ''}
-                                    {register === 'tab2'? <View style={styles.clubtabview}>
-                                    <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
-                                    <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="account"
-                                                      title="Membership Authentication"
-                                                      subTitle="Authenticate your credentials" rightIcon="account-circle">
-                                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="phone"
-                                                                title="Authentication via phone"
-                                                                subTitle="connect with number" rightIcon="cellphone">
-                                                                  <Text> Phone Number * </Text>
-                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phone} onChangeText={setPhone}></TextInput>
-                                                                  <Text> Token * </Text>
-                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                                  <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.green500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
-                                                                  {isSession? <View>
-                                                                                  <Toast visible={toastAuthVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Excellent! Your account have login.' setVisible={setToastVisible}></Toast>
-                                                                              </View> : ''}
-                                                            </AccordionItem></Accordion>
-                                                            {/* <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="whatsapp"
-                                                                title="Authentication via Whatsapp"
-                                                                subTitle="connect with whatsapp" rightIcon="cellphone">
-                                                                  <Text> Whatsapp Number * </Text>
-                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
-                                                                  <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
-                                                            </AccordionItem></Accordion> */}
-                                                  </AccordionItem>
-                                                            <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="email"
-                                                                title="Member Verification"
-                                                                subTitle="connect through email" rightIcon="cellphone">
-                                                                  <Text> Email Address * </Text>
-                                                                  <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
-                                                                  <Text> Token * </Text>
-                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                                  <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 90}} onPress={verification}></IconButton>
-                                                            </AccordionItem></Accordion>
-                                        </Accordion>
-                                    </View>: ''}
-                                    {register === 'tab3'? <View style={styles.clubtabview}>
-                                      <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
-                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                <AccordionItem
-                                                      leftIcon="account-circle"
-                                                      title="Decentralize Wallet"
-                                                      subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="pen"
-                                                                title="Bitcoin wallet"
-                                                                subTitle="Create decentralize mobile wallet" rightIcon="bitcoin">
-                                                                  <View>
-                                                                  <Text> Bitcoin Address * </Text>
-                                                                  <TextInput placeholder='bitcoin address' mode='flat' inputMode='text' value={bitcoinAddress} onChangeText={setBitcoinAddress} style={{ top: 5}}></TextInput>
-                                                                  <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} style={{top : 30, left: 50}}></IconButton>
-                                                                  </View>
-                                                                </AccordionItem>
-                                                            <AccordionItem
-                                                                    leftIcon="fingerprint"
-                                                                    title="Transactions"
-                                                                    subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                                    <View style={{flex: 1}}>
-                                                                        <SegmentedButtons value={segmentedState} onValueChange={setSegmentedState} style={{top: 5}} buttons={[
-                                                                          {
-                                                                            value: 'fingerprint',
-                                                                            label: 'Wallet'
-                                                                          },
-                                                                          {
-
-                                                                            value: 'handshake',
-                                                                            label: 'Deal'
-                                                                          }]}></SegmentedButtons>
-                                                                        {segmentedState === 'fingerprint' ?
-                                                                          <View>
-                                                                            bottomWalletDrawerRef.current?.open
-                                                                            <BottomDrawer ref={bottomWalletDrawerRef} openOnMount>
-                                                                                <View>
-                                                                                  <Text style={{fontSize: 40, color: 'silver', top: 50, left: 80}}> 0.00000 </Text>
-                                                                                  <Text style={{top: 25, left: 240}}> BTC </Text>
-                                                                                  <View style={{flex: 1, top: 100, width: 300, left: 20}}>
-                                                                                      {!confirmed ? <SlideAction icon={'wallet'} textPosition='center' iconOnCompleted={'logo-bitcoin'} text='send money to your peers' 
-                                                                                                textOnCompleted='completed' onCompleted={() => setConfirmed(true)}></SlideAction>: ''}
-                                                                                      {confirmed ? <View> <TextInput placeholder='sender bitcoin address' mode='outlined' inputMode={'text'}></TextInput> 
-                                                                                          <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
-                                                                                          <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
-                                                                                          </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
-                                                                                  </View>
-                                                                                </View>
-                                                                              </BottomDrawer>
-                                                                          </View> : ''}
-                                                                          {segmentedState === 'handshake'? <View>
-                                                                              bottomTXSDrawerRef.current?.open
-                                                                              <BottomDrawer ref={bottomTXSDrawerRef} openOnMount>
-                                                                                <View>
-                                                                                <Calendar
-                                                                                      date={todayDateString}
-                                                                                      markedDates={[selectedDay as string]}
-                                                                                      onDayPress={onDayPress}
-                                                                                      firstDayOfWeek={1}
-                                                                                    />
-                                                                                </View>
-                                                                              </BottomDrawer>
-                                                                          </View> : ''}
-                                                                    </View>
-                                                                    </AccordionItem>
-                                                              <AccordionItem
-                                                                    leftIcon="atm"
-                                                                    title="Bitcoin Digital Card"
-                                                                    subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                                                      <Card buttons={[
-                                                                        {text: 'Request for Card '},
-                                                                      ]} 
-                                                                        description={'Register your Bitcoin Card'}
-                                                                        title=''
-                                                                        theme={{themeColor: '#DB504A'}}
-                                                                        icon={'logo-bitcoin'}
-                                                                      />
-                                                                    </AccordionItem>
-                                                      </Accordion>
-                                                      </AccordionItem>
-                                        </Accordion>
-                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                <AccordionItem
-                                                      leftIcon="send"
-                                                      title="My Networth"
-                                                      subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake"></AccordionItem>
-                                        </Accordion>
-                                    </View> : ''}
-                                  </View> 
+                                  <Membership></Membership>
                               </Modal>: ''}
                 {clubs? <Modal isVisible={clubs} style={{backgroundColor: 'darkslategrey'}}>
                           <View style={styles.backnav}>
@@ -809,13 +522,13 @@ export default function Tab() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'black'
   },
-  contentContainerStyle: {
+contentContainerStyle: {
     paddingTop: 15,
     paddingBottom: 20,
     
