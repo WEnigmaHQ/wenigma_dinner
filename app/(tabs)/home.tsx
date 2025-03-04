@@ -59,16 +59,6 @@ export default function Tab() {
     
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
 
-
-  // Register account
-
-  const [ email, setEmail ] = useState('');
-  const [ appError, setAppError ] = useState('Connection refused');
-  const [ incogEmail, setIncogEmail ] = useState('');
-  const [ phone, setPhone ] = useState('');
-  const [ token, setToken ] = useState('');
-  const [ isOTP, setIsOTP ] = useState(false);
-  const [ isSession, setIsSession ] = useState(false);
   const [ confirmed, setConfirmed ] = useState(false);
   const [ bitcoinAddress, setBitcoinAddress ] = useState('');
 
@@ -239,109 +229,9 @@ export default function Tab() {
                       Declaration: confirmedDelgation, Isbitcoin: confirmedBitcoin, Role: 'ADMIN' }).select(); 
          console.log("Error:", error); }
     }
-    
+  
 
-
-    const create_session = async () =>{
-
-      const sessionData = await supabase.auth.getSession();
-      return sessionData.data.session;
-    };
-
-    const verification = async () =>{
-          
-      if (!email ||email.length <= 0){
-            console.error('Error email should be null or empty ');
-            return;
-      }
-
-      console.log("Your Email :", email);
-
-      console.log('Token:', token);
-
-      const {data, error} = await supabase.auth.verifyOtp({email, token, type: 'email'})
-          
-          if (error){
-            
-                console.error('Error verification in with OTP:',error.message);
-            return;
-          }
-              
-          const {data: {user}} = await supabase.auth.getUser();
-
-          if (error){
-                  console.error('Error user is not authenicate ', error);
-                  return;
-          }
-
-          setToastAuthVisible(true);
-
-          console.log('User successfully', user?.id)
-          const session = await create_session();
-
-              if (session) {
-                      console.log('Session created successfully:', session.user.email); 
-                      setIsSession(true);
-              } else {
-                      console.error('No session found after OTP verification.');
-                      return;
-              }
-    };
-
-    const onHandle_EmailOTP = async() =>{
-
-      const {data, error} = await supabase.auth.signInWithOtp(
-        { email: email, options: { shouldCreateUser: true, },});
-        
-      console.log('sign in with OTP:', data);
-        
-      if (error !== null){
-        console.error('Error signing in with OTP:', error.message);
-        setIsOTP(false);
-        return;
-      }
-
-      setIsOTP(true);
-
-      setToastVisible(true);
-
-    };
-
-    
-
-    const onHandle_phone_authentication = async() => {
-
-      const {data: {user}, error} = await supabase.auth.getUser();
-
-      if (error){
-        console.error('Error while retrieve ', error.message);
-        return;
-      }
-
-      console.log('User successfully :', user?.id);
-
-      if (phone.length <= 0){
-        console.error("Phone number should not be empty", phone)
-        return;
-      }
-
-      console.log('Your phone number : ', phone);
-
-      {
-          const {data: {user: userUpdate}, error} = await supabase.auth.updateUser({
-              phone:  phone
-          });
-
-          if (error){
-            console.error('Error while update user credentials', error.message);
-            return;
-          }
-
-          console.log(" Your phone = ", userUpdate); 
-    }
-
-
-    };
+  
 
     const back = () => {router.replace('/')};
   

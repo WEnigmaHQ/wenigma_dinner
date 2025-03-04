@@ -2,12 +2,14 @@ import { useState } from "react";
 import { View } from "react-native";
 import { SegmentedControl } from "rn-inkpad";
 import Register from "./register";
+import Authentication from "./authentication";
 
 export default function Membership() {
 
     // Declaration register
     const [register, setRegister] = useState('tab1');
-
+    
+    
     // segmented tabs 
     const account = [
         {key: 'Register Membership', value: 'tab1'},
@@ -22,54 +24,7 @@ export default function Membership() {
           }}>
             <SegmentedControl label='' values={account} onChange={(value) => setRegister(value)}/>
                     {register === 'tab1'? <Register></Register> : ''}
-                    {register === 'tab2'? <View style={{
-            position: 'absolute', 
-            width: 320, 
-            top: 50
-          }}>
-                                    <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -90, left: 280}}></Appbar.BackAction>
-                                    <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                  <AccordionItem
-                                                      leftIcon="account"
-                                                      title="Membership Authentication"
-                                                      subTitle="Authenticate your credentials" rightIcon="account-circle">
-                                                        <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="phone"
-                                                                title="Authentication via phone"
-                                                                subTitle="connect with number" rightIcon="cellphone">
-                                                                  <Text> Phone Number * </Text>
-                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel' value={phone} onChangeText={setPhone}></TextInput>
-                                                                  <Text> Token * </Text>
-                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                                  <IconButton icon={'cellphone-sound'} iconColor={MD2Colors.green500} style={styles.accountauth} onPress={onHandle_phone_authentication}></IconButton>
-                                                                  {isSession? <View>
-                                                                                  <Toast visible={toastAuthVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Excellent! Your account have login.' setVisible={setToastVisible}></Toast>
-                                                                              </View> : ''}
-                                                            </AccordionItem></Accordion>
-                                                            {/* <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="whatsapp"
-                                                                title="Authentication via Whatsapp"
-                                                                subTitle="connect with whatsapp" rightIcon="cellphone">
-                                                                  <Text> Whatsapp Number * </Text>
-                                                                  <TextInput placeholder='+111 111 1110' mode='flat' inputMode='tel'></TextInput>
-                                                                  <IconButton icon={'whatsapp'} iconColor={MD2Colors.green500} style={{top: 30, left: 60}}></IconButton>
-                                                            </AccordionItem></Accordion> */}
-                                                  </AccordionItem>
-                                                            <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                                            <AccordionItem
-                                                                leftIcon="email"
-                                                                title="Member Verification"
-                                                                subTitle="connect through email" rightIcon="cellphone">
-                                                                  <Text> Email Address * </Text>
-                                                                  <TextInput placeholder='abc@company.com' mode='flat' inputMode='email' value={email} onChangeText={setEmail}></TextInput>
-                                                                  <Text> Token * </Text>
-                                                                  <TextInput placeholder='token' mode='flat' inputMode='text' value={token} onChangeText={setToken}></TextInput>
-                                                                  <IconButton icon={'account-circle'} iconColor={MD2Colors.green500} style={{top: 30, left: 90}} onPress={verification}></IconButton>
-                                                            </AccordionItem></Accordion>
-                                        </Accordion>
-                                         </View>: ''}
+                    {register === 'tab2'? <Authentication></Authentication> : ''}
                     {register === 'tab3'? <View style={{
             position: 'absolute', 
             width: 320, 

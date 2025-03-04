@@ -26,10 +26,6 @@ export default function Register() {
 
     const bottomIncogsDrawerRef = useRef<BottomDrawerMethods>(null);
     const bottomDelegateDrawerRef = useRef<BottomDrawerMethods>(null);
-    // const [ toastAuthVisible, setToastAuthVisible ] = useState(false);
-
-    // back screen functionality
-    const back = () => {router.replace('/')};
 
     const onHandle_EmailOTP = async() =>{
 
