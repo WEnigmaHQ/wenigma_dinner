@@ -124,12 +124,6 @@ export default function Antiquity() {
                                                                 </View> : ''}
                                                                     </View>
                                 </AccordionItem>
-                                <AccordionItem
-                                            leftIcon="atm"
-                                            title="Bitcoin Digital Card"
-                                            subTitle="Decentralize mobile wallet" rightIcon="bitcoin">
-                                            <IconButton icon={'card'} iconColor={MD2Colors.green500} style={{top : 5, left: 50}}></IconButton>
-                                </AccordionItem>
                             </Accordion>
                     </AccordionItem>
                 </View>
@@ -147,7 +141,15 @@ export default function Antiquity() {
         <AccordionItem
                     leftIcon="send"
                     title="My Networth"
-                    subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake"></AccordionItem>
+                    subTitle="Decentralize mobile wallet hold assets [cash-in] & liabilities [cash-out] " rightIcon="handshake">
+        </AccordionItem>
+        <AccordionItem
+                        leftIcon="atm"
+                        title="Bitcoin Digital Card"
+                        subTitle="Decentralize mobile wallet" rightIcon="star">
+                        <IconButton icon={'card'} iconColor={MD2Colors.green500} style={{top : 5, left: 50}}></IconButton>
+                        <Text> Request for personal bitcoin card </Text>
+        </AccordionItem>
             </Accordion>
         </View>
     );

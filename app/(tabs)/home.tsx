@@ -387,87 +387,9 @@ container: {
     alignItems: 'center',
     backgroundColor: 'black'
   },
-contentContainerStyle: {
-    paddingTop: 15,
-    paddingBottom: 20,
-    
-},
-titleStyle: {
-    fontSize: 16,
-    fontWeight: 700,
-},
-itemcontainer:{
-  padding: 20,
-},
-contactbusinessname: {
-  position: 'relative',
-  left: 20
-},
-contactnumber: {
-  position: 'relative',
-  left: 20,
-  top: 10
-},
-
-paymentheader: {
-  position: 'relative',
-  left: 20,
-  fontSize: 25
-}, 
 style: {
   padding: 10,
 },
-itemView: {
-  width: '100%',
-  margin: 5,
-  padding: 40,
-},
-itemText: {
-  textAlign: 'center',
-  fontSize: 20,
-  fontWeight: 'bold'
-},
-backlink: {
-  color: 'white', 
-  position: 'relative', 
-  left: 300, 
-  fontSize: 25
-},
-damacbrand:{
-  position: 'relative', 
-  left: 20,
-  fontSize: 50,
-  color: 'darkslategrey',
-  top: 20
-}, 
-oceanhousebrand:{
-  position: 'relative', 
-  left: 160,
-  fontSize: 20,
-  color: 'orange',
-  top: 20
-},
-imibrand:{
-  position: 'relative', 
-  left: 60,
-  fontSize: 20,
-  color: 'green',
-  top: 40
-},
-gbrand:{
-  position: 'relative', 
-  left: 100,
-  fontSize: 20,
-  color: 'red',
-  top: 70
-},
-rbrand:{
-  position: 'relative', 
-  left: 30,
-  fontSize: 20,
-  color: 'purple',
-  top: 60
-}, 
 
 backnav:{
   flex: 1, 
@@ -499,33 +421,4 @@ clubswitchtextfield:{
   top: 3,
   color: 'white'
 },
-annymoustextlabel:{
-  position: 'relative', 
-  top: 50, 
-  color: 'yellow', 
-  left: 60
-},
-annymoustextbutton:{
-  position: 'relative', 
-  top: 5, 
-  left: 270
-}, 
-incogmodestatusicon:{
-  top: 20,
-  left: 120
-},
-incogmodestatustext:{
-  top: 20,
-  left: 100,
-  color: 'green'
-},
-incogmodestatustext2:{
-  top: 40,
-  left: 80,
-  color: 'black'
-},
-accountauth:{
-  top: 30, 
-  left: 60
-}
 });

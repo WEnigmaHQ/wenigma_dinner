@@ -167,13 +167,14 @@ export default function Register() {
                                       {isDelegation && isBitcoin && isMagicLink ? bottomDelegateDrawerRef.current?.open : bottomDelegateDrawerRef.current?.close}
                                       <BottomDrawer ref={bottomDelegateDrawerRef} openOnMount>
                                                 <Text style={{top: 2, left: 30, fontWeight: 'bold', fontSize: 15}}> Following Delegation should be applied :- </Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 1. All Members should have email address or phone number for his/ her account. </Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 2. Every member should have bitcoin wallet. </Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 3. Every member should secure his/her bitcoin wallet keys.</Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 4. Every member should use bitcoin as payment. </Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 5. All members either create prenium clubs , or join clubs, invite prenuim dinners. </Text>
-                                                <Text style={{top: 30, left: 50, fontSize: 15, width: 250}}> 6. Prenium clubs provide various services such collabration between highly influential executives directly in a secure environment. </Text>
-                                                <IconButton icon={'timer'} iconColor={MD2Colors.green700} style={{top: 25, left: 300}} onPress={onHandle_EmailOTP}></IconButton>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 1. All Members should have email address or phone number for his/ her account. </Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 2. Every member should have bitcoin wallet. </Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 3. Every member should secure his/her bitcoin wallet keys.</Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 4. Every member should use bitcoin as payment. </Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 5. All members either create prenium clubs , or join clubs, invite prenuim dinners. </Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width: 250}}> 6. Prenium clubs provide various services such collabration between highly influential executives directly in a secure environment. </Text>
+                                                <Text style={{top: 5, left: 50, fontSize: 15, width:250}}>  7. Your account protect from sybill & fake account. </Text>
+                                                <IconButton icon={'timer'} iconColor={MD2Colors.green700} style={{top: -10, left: 280}} onPress={onHandle_EmailOTP}></IconButton>
                                                 {isOTP ? <View>
                                                             <Toast visible={toastVisible} backgroundColor='#FF7F50' icon='information-circle-outline' position='top' fontSize={8} text='Check your Email. Add your token for your authentication' setVisible={setToastVisible}></Toast>
                                                          </View> : ''}
