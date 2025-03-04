@@ -111,6 +111,8 @@ export default function Register() {
       return sessionData.data.session;
     };
 
+    const back = () => {router.replace('/')};
+
     return(
         <View style={{
             position: 'absolute', 

@@ -1,18 +1,15 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Platform, FlatList, Linking, Share} from 'react-native';
+import { View, Text, StyleSheet, Platform} from 'react-native';
 import { useEffect, useCallback, useRef } from 'react';
 import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import { PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch, Toast, SlideAction, FloatingActionButton} from 'rn-inkpad';
+import { DrawerNavigation, Card, SegmentedControl, BottomTabNavigation, Switch} from 'rn-inkpad';
 import BottomDrawer, { BottomDrawerMethods } from 'react-native-animated-bottom-drawer';
-import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
-import { PageScrollView } from 'pagescrollview'
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import Modal  from 'react-native-modal';
-import axios from 'react-native-axios';
-import { Chip, IconButton, MD2Colors, SegmentedButtons, TextInput, Appbar} from 'react-native-paper';
+import { MD2Colors, TextInput, Appbar} from 'react-native-paper';
 import { supabase } from '../supabase';
-import { Calendar, toLocaleDateString } from "@fowusu/calendar-kit";
+import { toLocaleDateString } from "@fowusu/calendar-kit";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Care from '../care';
 import DPayment from '../dpayment';
@@ -52,28 +49,11 @@ export default function Tab() {
   const [ partners, setPartners ] = useState(false);
   const [ clubs, setClubs ] = useState(false);
   const [ membership, setMembership] = useState(false);
-  const [ segmentedState, setSegmentedState] = useState('');
 
 
   // customer Service
     
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
-
-  const [ confirmed, setConfirmed ] = useState(false);
-  const [ bitcoinAddress, setBitcoinAddress ] = useState('');
-
-
-
-  const today = new Date();
-
-  const todayDateString = toLocaleDateString(today);
-
-  const [selectedDay, setSelectedDay] = useState<string>();
-
-  const onDayPress = useCallback((dateString: string) => {
-    setSelectedDay(dateString);
-  }, []);
-
 
 
 
@@ -188,17 +168,6 @@ export default function Tab() {
 
   // handle partners 
    const bottomPartnersDrawerRef = useRef<BottomDrawerMethods>(null);
-
-
-  
-
-  //  bottom drawer for bitcoin wallet
-
-  const bottomWalletDrawerRef = useRef<BottomDrawerMethods>(null);
-
-  //  bottom drawer for transactions
-
-  const bottomTXSDrawerRef = useRef<BottomDrawerMethods>(null);
   
      // handle partners
     const [tab, setTab ] = useState('tab1');
