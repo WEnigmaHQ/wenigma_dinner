@@ -13,11 +13,12 @@ export default function Antiquity() {
 
     const [ bitcoinAddress, setBitcoinAddress ] = useState('');
     const [ confirmed, setConfirmed ] = useState(false);
+    
     //  bottom drawer for bitcoin wallet
 
     const bottomWalletDrawerRef = useRef<BottomDrawerMethods>(null);
 
-  //  bottom drawer for transactions
+    //  bottom drawer for transactions
 
     const bottomTXSDrawerRef = useRef<BottomDrawerMethods>(null);
 
@@ -26,6 +27,7 @@ export default function Antiquity() {
 
     // event handlers
     const back = () => {router.replace('/')};
+    
     const today = new Date();
 
     const todayDateString = toLocaleDateString(today);
