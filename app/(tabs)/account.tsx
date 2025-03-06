@@ -10,6 +10,11 @@ import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-dr
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Authenicate from '../authenticate';
+import DigitalBTC from '../digitalbtc';
+import Notification from '../notification';
+import MyProfile from '../myprofile';
+import Message from '../message';
+import Advance from '../advance';
 
 
 
@@ -31,232 +36,42 @@ export default function Tab() {
   const [eyeBell, setEyeBell] = useState(false);
   const [eyeFingerprint, setEyeFingerprint] = useState(false);
   const [eyeMessage, setEyeMessage] = useState(false);
-  const [ deviceAuth , setDeviceAuth] =  useState(false);
-  const [ deviceFaceRec, setDeviceFaceRec] = useState(false);
 
-  // Form States
-  const [bitcoinAddress, setBitcoinAddress] = useState('');
-  const [errors, setErrors] = useState({});
-  const [isFormValid, setIsFormValid] = useState(false);
-
-
-  // popover for security key
-  const [ showKeyPopover, setKeyShowPopover] = useState(false);
-
-
-  // popover for faceID
-
-  const [ showFacePopover, setFaceShowPopover] = useState(false);
-  const [ isFaceDetect, setFaceDetect] = useState(false);
-
-  //  popover for TouchID
-
-  const [showTouchPopover, setTouchShowPopover] = useState(false);
-  const [ isTouchDetect, setTouchDetect] = useState(false);
-
-
-  // Security or pin
-
-  useEffect(() => {
-    setTimeout(() => setKeyShowPopover(false), 2000);
-  }, []);
-
-
-  //  Face scanner
-
-  useEffect(() => {
-    setTimeout(() => setFaceShowPopover(false), 1000);
-    const FaceAuth = async() => {
-        try {
-          const hasHardware = await LocalAuth.hasHardwareAsync();
-          setFaceDetect(hasHardware);
-        } catch (error) {
-          console.error("Error checking hardware support:", error);
-          setFaceDetect(false); // Fallback in case of error
-        }
-    }
-
-    FaceAuth();
-  }, []);
-
-
-  //  Fingerprints scanner
-
-  useEffect(() => {
-    setTimeout(() => setTouchShowPopover(false), 1000);
-    const TouchAuth = async() => {
-      try {
-        const hasHardware = await LocalAuth.hasHardwareAsync();
-        setTouchDetect(hasHardware);
-      } catch (error) {
-        console.error("Error checking hardware support:", error);
-        setTouchDetect(false); // Fallback in case of error
-      }
-    }
-
-    TouchAuth();
-  }, []);
-
-
-  // device Authenicate by user through face
-  
-
-
-  useEffect(() => {
-    setTimeout(() => setDeviceFaceRec(false), 2000);
-
-  }, []);
-  
-
-  // Message Data
-  const [speed, setSpeed] = useState(0);
-
-  useEffect(() =>{
-
-    // Trigger Form Submission Event
-    submitForm();
-
-  },[bitcoinAddress]);
-
-  const submitForm = ()=>{
-
-    let errors = [];
-
-    if (bitcoinAddress.length < 26 && bitcoinAddress.length > 36){errors.push('your bitcoin address is not secure');}
-    setErrors(errors);
-    setIsFormValid(Object.keys(errors).length === 0);
-  }
-
-  const handleForm = () => { isFormValid ? alert('Congrats , Your bitcoin address added in our record') : alert('Poor! , Check your credentials before submission ') }
-  const back = () => {router.replace('/')}
 
   return (
         <SafeAreaView>
             <View style={styles.container}>
                   <IconButton icon={'cogs'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
-                  <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeAccount(!eyeAccount)}} style={styles.eyefacebookbutton}></IconButton>
-                  <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
+                  <Text style={{color: 'white', top: 65, marginLeft: -180}}> General Setting </Text>
+                  <IconButton icon={'account-cog'} iconColor={MD2Colors.amber500} size={50} onPress={() =>{setEyeAccount(!eyeAccount)}} style={styles.eyefacebookbutton}></IconButton>
+                  <Text style={{color: 'white', top: 235, marginLeft: 200}}> Profile </Text>
+                  <IconButton icon={'bitcoin'} iconColor={MD2Colors.green500} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
+                  <Text style={{color: 'white', top: -5, marginLeft: 200}}> Payment </Text>
                   <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
+                  <Text style={{color: 'white', top: 40, marginLeft: -200}}> Notification </Text>
                   <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
+                  <Text style={{color: 'white', top: -320, marginLeft: 200}}> Authentication </Text>
                   <IconButton icon={'message-cog'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
+                  <Text style={{color: 'white', top: -290, marginLeft: -200}}> Chat </Text>
                   {eyeCamera ? <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
                                     <Authenicate></Authenicate>
                   </Modal>: ''}
                   {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
-                    <View>
-                      <Text style={styles.drawerbitcoinhandler}> Register your Bitcoin Address </Text>
-                      <Text style={styles.drawertextfield1}> Bitcoin Address * </Text>
-                      <TextInput placeholder=' Your bitcoin Address ' value={bitcoinAddress} 
-                      onChangeText={setBitcoinAddress} style={styles.drawertextinput1}></TextInput>
-                      <TouchableOpacity style={styles.drawerbitcoinbtn} disabled={!isFormValid} onPress={handleForm}>
-                          <IconButton icon={'bitcoin'} iconColor={MD2Colors.amber500}></IconButton>
-                        </TouchableOpacity>
-                    </View>
+                                <DigitalBTC></DigitalBTC>
                   </BottomDrawer> : ''}
                   {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
                       animationOutTiming={1000} animationIn={'lightSpeedIn'} 
                       style={styles.modalfingerprint}>
-                    <View>
-                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -200}}></Appbar.BackAction>
-                        <Text style={styles.modalfingerprintheader}> Authenicate Level </Text>
-                        <Popover isVisible={showKeyPopover} onRequestClose={() => setKeyShowPopover(false)} from={(
-                          <TouchableOpacity onPress={() => setKeyShowPopover(false)}>
-                            <IconButton icon={'key'} iconColor={MD2Colors.green500} style={styles.modalfingerprintsecurekey}></IconButton>
-                            {LocalAuth.SecurityLevel.SECRET ? <Text style={styles.modalfingerprintsecurekeymessage}> Pin or pattern detected </Text> : <Text style={styles.modalfingerprintsecurekeymessage}> No Pin or pattern detected </Text> }
-                          </TouchableOpacity>
-                        )}></Popover>
-                        <Popover isVisible={showFacePopover} onRequestClose={() => setFaceShowPopover(false)} from={(
-                          <TouchableOpacity onPress={() => setFaceShowPopover(false)}>
-                            <IconButton icon={'face-recognition'} iconColor={isFaceDetect ? MD3Colors.neutral50: MD3Colors.error50} style={styles.modalfingerprintfaceicon}></IconButton>
-                            {LocalAuth.AuthenticationType.FACIAL_RECOGNITION && isFaceDetect ? <Text style={styles.modalfingerprintfacemessage}> Excellent Face Sensor detected  </Text> : <Text style={styles.modalfingerprintfaceerror}> Unbelievable ! NO Face Sensor detected </Text> }
-                          </TouchableOpacity>
-                        )}></Popover>
-                        <Popover isVisible={showTouchPopover} onRequestClose={() => setTouchShowPopover(false)} from={(
-                          <TouchableOpacity onPress={() => setTouchShowPopover(false)}>
-                            <IconButton icon={'fingerprint'} iconColor={isTouchDetect? MD3Colors.neutralVariant50: MD3Colors.error50} style={styles.modalfingerprinttouchicon}></IconButton>
-                            {LocalAuth.AuthenticationType.FINGERPRINT  && isTouchDetect ? <Text style={styles.modalfingerprinttouchmessage}> Excellent Touch Sensor detected  </Text> : <Text style={styles.modalfingerprinttouchmessage}> Unbelievable ! NO Touch Sensor detected </Text> }
-                          </TouchableOpacity>
-                        )}></Popover>
-                        {isFaceDetect || isTouchDetect ? <Text style={styles.modalstatus}> Strong Authentication </Text> : <Text style={styles.modalstatuserror}> Weak Authentication </Text>}
-                    </View>
+                        <Advance></Advance>
                   </Modal>:''}
                   {eyeBell ? <Modal isVisible={eyeBell} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
-                            <View style={styles.viewstyle}>
-                              <Text style={styles.modalnotifyheader}> Divulgence  </Text>
-                              {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={styles.modalnotifyclosebtn} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>:''}
-                              <Text style={styles.modalnotifytext1}> Grant Divulgence consent </Text>
-                              {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                    <AccordionItem
-                                        leftIcon="account-circle"
-                                        title="Exclusive Dinners"
-                                        subTitle="Private Dinners invite exclusive members to promote business & other public affairs ">
-                                          <IconButton icon={'fingerprint'} style={styles.modalnotifyhandshake}></IconButton>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="handshake" title="Private Capital Clubs" subTitle='Private Capital Clubs make hand to negioatte on business deals & transactions'>
-                                    <IconButton icon={'face-recognition'} style={styles.modalnotifyhandshake}></IconButton>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="compass"  title="News" subTitle='Authenticate news are prime source of decision making paticularly if deals between Moguls.'>
-                                    </AccordionItem>
-                                </Accordion>: ''}
-                                <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -550, left: 280}}></Appbar.BackAction>
-                            </View>
+                            <Notification></Notification>
                         </Modal> :''}
                   {eyeAccount ? <Modal isVisible={eyeAccount} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
-                                <View style={styles.viewstyle}>
-                                {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                    <AccordionItem
-                                        leftIcon="account-circle"
-                                        rightIcon="pencil"
-                                        title="My Profile"
-                                        subTitle="Inspire people, with your actions">
-                                          <Text style={styles.editnamelabel}> Edit Name * </Text>
-                                          <TextInput style={styles.editnamefield} inputMode='text' placeholder='Edit name' value=''></TextInput>
-                                          <Text style={styles.editbiolabel}> Edit Persona * </Text>
-                                          <TextInput style={styles.editbiofield} inputMode='text' placeholder='Bio' value=''></TextInput>
-                                          <Text style={styles.editwebsitelabel}> Business Name * </Text>
-                                          <TextInput style={styles.editwebsitefield} inputMode='text' placeholder='Edit business' value=''></TextInput>
-                                          <Text style={styles.editwebsiteurllabel}> Business Website * </Text>
-                                          <TextInput style={styles.editwebsiteurlfield} inputMode='url' placeholder='url' value=''></TextInput>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="facebook" rightIcon="instagram" title="Social Connect" subTitle='Connect your social account'>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="radar" rightIcon="link" title="Invite Partners" subTitle='Community embrose success'>
-                                    </AccordionItem>
-                                </Accordion>: ''}
-                                <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -500, left: 280}}></Appbar.BackAction>
-                                </View> 
+                                <MyProfile></MyProfile>
                             </Modal> : ''}
                   {eyeMessage ? <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
-                                <View style={styles.viewstyle}>
-                                {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
-                                    <AccordionItem
-                                        leftIcon="pen"
-                                        rightIcon="cogs"
-                                        title=" Message Usage "
-                                        subTitle="Communication with mindlike people are most enjoyable">
-                                          <IconButton icon={'comment'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
-                                          <IconButton icon={'chat'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="satellite" rightIcon="message" title="Boardcast Message Usage" subTitle=' Boardcast public message '>
-                                                <IconButton icon={'message'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
-                                                <IconButton icon={'phone'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
-                                                <IconButton icon={'video'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
-                                                <IconButton icon={'link'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
-                                                <IconButton icon={'image'} style={styles.messageuse} iconColor={MD2Colors.brown500}></IconButton>
-                                    </AccordionItem>
-                                    <AccordionItem leftIcon="compass" rightIcon="radar" title="News Usage" subTitle='Information is not regarding domain or events around you but your preference of knowledge'>
-                                        <IconButton icon={'chess-queen'} style={styles.messageuse} iconColor={MD2Colors.blue500}></IconButton>
-                                        <IconButton icon={'home'} style={styles.messageuse} iconColor={MD2Colors.purple500}></IconButton>
-                                        <IconButton icon={'account'} style={styles.messageuse} iconColor={MD2Colors.orange500}></IconButton>
-                                        <IconButton icon={'bitcoin'} style={styles.messageuse} iconColor={MD2Colors.green500}></IconButton>
-                                        <IconButton icon={'food'} style={styles.messageuse} iconColor={MD2Colors.amber500}></IconButton>
-                                        <IconButton icon={'purse'} style={styles.messageuse} iconColor={MD2Colors.cyan500}></IconButton>
-                                        <IconButton icon={'cricket'} style={styles.messageuse} iconColor={MD2Colors.blueGrey500}></IconButton>
-                                        <IconButton icon={'gavel'} style={styles.messageuse} iconColor={MD2Colors.brown500}></IconButton>
-                                    </AccordionItem>
-                                </Accordion>: ''}
-                                <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -500, left: 280}}></Appbar.BackAction>
-                                </View> 
+                                <Message></Message>
                             </Modal>: '' }
             </View>
         </SafeAreaView>
@@ -291,27 +106,27 @@ const styles = StyleSheet.create({
   }, 
   eyefacebookbutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
-    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 240: Platform.OS === 'web'? 75 : 75, 
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 245: Platform.OS === 'web'? 75 : 75, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -150,
   },
   eyebellkbutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
-    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 80: Platform.OS === 'web'? -80 : -80, 
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 50: Platform.OS === 'web'? -80 : -80, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
   },
   eyebitcoinbutton:{ 
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
-    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 30: Platform.OS === 'web'? 100 : 100, 
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? 10: Platform.OS === 'web'? 100 : 100, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -400: -400,
   },
   eyefingerprintbutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
-    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -245: Platform.OS === 'web'? -52 : -52, 
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -310: Platform.OS === 'web'? -52 : -52, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? 100: Platform.OS === 'web'? -150: -200,
   },
   eyemessagebutton:{
     position: Platform.OS === 'android' || Platform.OS === 'ios'? 'relative': 'relative',    
-    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -200: Platform.OS === 'web'? -125 : -125, 
+    top: Platform.OS === 'ios' || Platform.OS === 'android' ? -270: Platform.OS === 'web'? -125 : -125, 
     left:Platform.OS == 'ios' || Platform.OS === 'android'? -100: Platform.OS === 'web'? 70: 70,
   },
   linkhome:{
