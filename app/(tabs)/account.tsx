@@ -9,6 +9,7 @@ import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BottomDrawer, {BottomDrawerMethods} from 'react-native-animated-bottom-drawer';
 import {Accordion, AccordionItem} from '@mustapha-ghlissi/react-native-accordion';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Authenicate from '../authenticate';
 
 
 
@@ -18,6 +19,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Tab() {
   
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
+  const [ deviceAuthTPromise, setDeviceAuthTPromise] = useState(false);
+  const [ deviceAuthPromise, setDeviceAuthPromise] = useState(false);
+
 
 
   // Modal Events triggers
@@ -27,6 +31,8 @@ export default function Tab() {
   const [eyeBell, setEyeBell] = useState(false);
   const [eyeFingerprint, setEyeFingerprint] = useState(false);
   const [eyeMessage, setEyeMessage] = useState(false);
+  const [ deviceAuth , setDeviceAuth] =  useState(false);
+  const [ deviceFaceRec, setDeviceFaceRec] = useState(false);
 
   // Form States
   const [bitcoinAddress, setBitcoinAddress] = useState('');
@@ -47,17 +53,6 @@ export default function Tab() {
 
   const [showTouchPopover, setTouchShowPopover] = useState(false);
   const [ isTouchDetect, setTouchDetect] = useState(false);
-
-
-  // device have signature or not
-
-  const [ deviceAuth , setDeviceAuth] =  useState(false);
-  const [ deviceAuthPromise, setDeviceAuthPromise] = useState(false);
-  const [ deviceAuthTPromise, setDeviceAuthTPromise] = useState(false);
-  
-  
-  
-  const [ deviceFaceRec, setDeviceFaceRec] = useState(false);
 
 
   // Security or pin
@@ -104,42 +99,7 @@ export default function Tab() {
 
 
   // device Authenicate by user through face
-  useEffect(() => {
-    setTimeout(() => setDeviceAuth(false), 2000);
-
-    const isFaceID = async() => {
-      
-      try {
-        const device = await LocalAuth.supportedAuthenticationTypesAsync();
-        console.log('device:', device);
-
-
-        const RNBiometrics = new ReactNativeBiometrics();
-
-        const { available, biometryType } = await RNBiometrics.isSensorAvailable();
-        
-        if ((device.length > 0 && device.includes(1)) || (available && biometryType === BiometryTypes.FaceID) ) {
-
-          const deviceAuthLock = await LocalAuth.isEnrolledAsync();
-          setDeviceAuthPromise(deviceAuthLock);
-        }
-
-        if ((device.length > 0 && device.includes(2)) || (available && biometryType === BiometryTypes.TouchID) ) {
-
-          const deviceAuthLock = await LocalAuth.isEnrolledAsync();
-          setDeviceAuthTPromise(deviceAuthLock);
-        }
-        
-      } catch (error) {
-        console.error("Error checking hardware support:", error);
-        setDeviceAuthPromise(false); // Fallback in case of error
-        setDeviceAuthTPromise(false);
-      }
-    }
-
-    isFaceID();
-
-  }, []);
+  
 
 
   useEffect(() => {
@@ -173,35 +133,16 @@ export default function Tab() {
   return (
         <SafeAreaView>
             <View style={styles.container}>
-                  <IconButton icon={'movie-cog'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
+                  <IconButton icon={'cogs'} iconColor={MD3Colors.secondary60} size={50} onPress={() =>{setEyeCamera(!eyeCamera)}} style={styles.eyecamerabutton}></IconButton>
                   <IconButton icon={'wifi-cog'} iconColor={MD3Colors.primary50} size={50} onPress={() =>{setEyeAccount(!eyeAccount)}} style={styles.eyefacebookbutton}></IconButton>
                   <IconButton icon={'bitcoin'} iconColor={MD3Colors.neutral80} size={50} onPress={() =>{bottomDrawerRef.current?.open; setEyeBitcoin(!eyeBitcoin)}} style={styles.eyebitcoinbutton}></IconButton>
                   <IconButton icon={'bell'} iconColor={MD3Colors.error30} size={50} onPress={() =>{setEyeBell(!eyeBell);}} style={styles.eyebellkbutton}></IconButton>
                   <IconButton icon={'fingerprint'} iconColor={MD3Colors.primary70} size={50} onPress={() =>{setEyeFingerprint(!eyeFingerprint);}} style={styles.eyefingerprintbutton}></IconButton>
                   <IconButton icon={'message-cog'} iconColor={MD3Colors.tertiary80} size={50} onPress={() =>{setEyeMessage(!eyeMessage);}} style={styles.eyemessagebutton}></IconButton>
-                {Platform.OS === 'android' || Platform.OS === 'ios' ? <Link href={'/home'} style={styles.linkhome}> Return Home 🏠 </Link>: <Text></Text>}
-                {eyeCamera ? <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
-                  <View style={{flex: 1}}>
-                      {Platform.OS === 'ios' || Platform.OS === 'android'? <View>
-                        <Appbar.BackAction iconColor={MD2Colors.white} onPress={back}></Appbar.BackAction>
-                      </View> :''}
-                      <Text style={{color: 'white', position: 'absolute',top: Platform.OS === 'android' || Platform.OS === 'ios' ? 100: 20, left: Platform.OS === 'android' || Platform.OS === 'ios' ? -220: 200, fontSize: Platform.OS === 'web'? 24 : 14}}> Authenicate Yourself </Text>
-                      <Popover isVisible={deviceAuth} onRequestClose={() => setDeviceAuth(false)} from={(
-                          <TouchableOpacity onPress={() => setDeviceAuth(false)}>
-                            <IconButton icon={deviceAuthPromise && deviceAuthTPromise? 'account-lock-open': 'account-lock'} iconColor={deviceAuthPromise && deviceAuthTPromise ? MD3Colors.secondary60: MD3Colors.error50} style={styles.accountlock}></IconButton>
-                            {deviceAuthPromise && deviceAuthTPromise ? <Text style={styles.textmessage1}> Excellent </Text>: <Text style={styles.textmesage2}> Icognitio Mode </Text>}
-                          </TouchableOpacity>
-                        )}></Popover>
-                      <Popover isVisible={deviceFaceRec} onRequestClose={() => setDeviceAuth(false)} from={(
-                          <TouchableOpacity onPress={() => setDeviceAuth(false)}>
-                            <IconButton icon={deviceAuthPromise ? 'face-recognition': 'incognito-circle'} iconColor={deviceAuthPromise ? MD3Colors.secondary60: MD3Colors.error50} style={styles.cogsicon}></IconButton>
-                            {deviceAuthPromise ? <Text style={styles.cogiconmessage}> FaceID </Text>: <Text style={styles.cogiconerrormessage}> Sign in </Text>}
-                            {deviceAuthPromise ? '' : ''}
-                          </TouchableOpacity>
-                        )}></Popover>
-                    </View>  
+                  {eyeCamera ? <Modal isVisible={eyeCamera} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={{width: 300, position: 'relative', left: 300}}>
+                                    <Authenicate></Authenicate>
                   </Modal>: ''}
-                {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
+                  {eyeBitcoin? <BottomDrawer ref={bottomDrawerRef}  openOnMount>
                     <View>
                       <Text style={styles.drawerbitcoinhandler}> Register your Bitcoin Address </Text>
                       <Text style={styles.drawertextfield1}> Bitcoin Address * </Text>
@@ -212,7 +153,7 @@ export default function Tab() {
                         </TouchableOpacity>
                     </View>
                   </BottomDrawer> : ''}
-                {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
+                  {eyeFingerprint ? <Modal isVisible={eyeFingerprint} 
                       animationOutTiming={1000} animationIn={'lightSpeedIn'} 
                       style={styles.modalfingerprint}>
                     <View>
@@ -239,7 +180,7 @@ export default function Tab() {
                         {isFaceDetect || isTouchDetect ? <Text style={styles.modalstatus}> Strong Authentication </Text> : <Text style={styles.modalstatuserror}> Weak Authentication </Text>}
                     </View>
                   </Modal>:''}
-                {eyeBell ? <Modal isVisible={eyeBell} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                  {eyeBell ? <Modal isVisible={eyeBell} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
                             <View style={styles.viewstyle}>
                               <Text style={styles.modalnotifyheader}> Divulgence  </Text>
                               {Platform.OS === 'web' ? <IconButton icon={'close'} iconColor={MD3Colors.secondary90} style={styles.modalnotifyclosebtn} onPress={() => {setEyeFingerprint(!eyeFingerprint)}}></IconButton>:''}
@@ -260,7 +201,7 @@ export default function Tab() {
                                 <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -550, left: 280}}></Appbar.BackAction>
                             </View>
                         </Modal> :''}
-                {eyeAccount ? <Modal isVisible={eyeAccount} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                  {eyeAccount ? <Modal isVisible={eyeAccount} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
                                 <View style={styles.viewstyle}>
                                 {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                     <AccordionItem
@@ -285,7 +226,7 @@ export default function Tab() {
                                 <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -500, left: 280}}></Appbar.BackAction>
                                 </View> 
                             </Modal> : ''}
-                          {eyeMessage ? <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
+                  {eyeMessage ? <Modal isVisible={eyeMessage} animationOutTiming={1000} animationIn={'lightSpeedIn'} style={styles.modalfingerprint}>
                                 <View style={styles.viewstyle}>
                                 {Platform.OS === 'ios' || Platform.OS === 'android' ? <Accordion compact titleStyle={styles.titleStyle} contentContainerStyle={styles.contentContainerStyle} itemContainerStyle={styles.itemcontainer}>
                                     <AccordionItem
