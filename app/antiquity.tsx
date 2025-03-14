@@ -7,6 +7,7 @@ import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accord
 import { FloatingActionButton } from "rn-inkpad";
 import { router } from "expo-router";
 
+
 export default function Antiquity() {
 
     // Declaration section
@@ -38,6 +39,7 @@ export default function Antiquity() {
       setSelectedDay(dateString);
     }, []);
 
+    
 
     return (
         <View style={{
@@ -46,15 +48,7 @@ export default function Antiquity() {
             top: 150
           }}>
         <Appbar.BackAction iconColor={MD2Colors.white} onPress={back} style={{top: -190, left: 280}}></Appbar.BackAction>
-            <Accordion compact titleStyle={{
-    fontSize: 16,
-    fontWeight: 700,
-}} contentContainerStyle={{
-    padding: 20,
-    
-}} itemContainerStyle={{
-  padding: 20,
-}}>
+            <Accordion compact titleStyle={{fontSize: 16, fontWeight: 700}} contentContainerStyle={{padding: 20}} itemContainerStyle={{padding: 20}}>
                 <View style={{top: 20}}>
                     <AccordionItem
                         leftIcon="account-circle"
@@ -107,6 +101,7 @@ export default function Antiquity() {
                                                                                     <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
                                                                                     <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
                                                                                     </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
+                                                                                    
                                                                                   </View>
                                                                                 </View>
                                                                               </BottomDrawer>
