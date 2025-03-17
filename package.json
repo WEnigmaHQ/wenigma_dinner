@@ -15,7 +15,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.2",
+    "@apollo/client": "^3.13.4",
     "@expo/vector-icons": "^14.0.2",
     "@fowusu/calendar-kit": "^1.1.1",
     "@mustapha-ghlissi/react-native-accordion": "^1.1.0",
@@ -41,7 +41,6 @@
     "expo-symbols": "~0.2.1",
     "expo-system-ui": "~4.0.7",
     "expo-web-browser": "~14.0.2",
-    "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
     "pagescrollview": "^2.2.0",
     "react": "18.3.1",

@@ -6,6 +6,7 @@ import { Appbar, MD2Colors, IconButton, SegmentedButtons, Card } from "react-nat
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { FloatingActionButton } from "rn-inkpad";
 import { router } from "expo-router";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 
 export default function Antiquity() {
@@ -38,6 +39,13 @@ export default function Antiquity() {
     const onDayPress = useCallback((dateString: string) => {
       setSelectedDay(dateString);
     }, []);
+
+
+    // apollo provider handler
+    const client : any = new ApolloClient({
+        uri: 'http://wkzcdctmgbovszthwmps.supabase.co/graphql/v1',
+        cache: new InMemoryCache(),
+    });
 
     
 
@@ -101,7 +109,6 @@ export default function Antiquity() {
                                                                                     <View style={{flex: 1, top: 200}}> <FloatingActionButton icon={'qr-code'} backgroundColor="#FFFFFF" iconColor='#008000' align={'bottom-right'}></FloatingActionButton></View>
                                                                                     <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>
                                                                                     </View> : <View style={{flex: 1, top: 150}}> <FloatingActionButton icon={'heart-circle'} backgroundColor="#FFFFFF" iconColor='#FF0000' align={'bottom-right'}></FloatingActionButton></View>}
-                                                                                    
                                                                                   </View>
                                                                                 </View>
                                                                               </BottomDrawer>
