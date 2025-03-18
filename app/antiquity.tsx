@@ -6,7 +6,8 @@ import { Appbar, MD2Colors, IconButton, SegmentedButtons, Card } from "react-nat
 import {  Accordion, AccordionItem } from '@mustapha-ghlissi/react-native-accordion';
 import { FloatingActionButton } from "rn-inkpad";
 import { router } from "expo-router";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import btmempool from "./db/queries/btmempool";
+import { useQuery } from "@apollo/client";
 
 
 export default function Antiquity() {
@@ -41,15 +42,14 @@ export default function Antiquity() {
     }, []);
 
 
-    // apollo provider handler
-    const client : any = new ApolloClient({
-        uri: 'http://wkzcdctmgbovszthwmps.supabase.co/graphql/v1',
-        cache: new InMemoryCache(),
-    });
+    // const {data, loading, error} = useQuery(btmempool.GET_BTX_TRANSACTION_CLOSE_BALANCE);
+
+    // console.log("Data:", data, loading, error);
+
 
     
 
-    return (
+    return (        
         <View style={{
             position: 'absolute', 
             width: 320, 
@@ -155,6 +155,6 @@ export default function Antiquity() {
                         <Text> Request for personal bitcoin card </Text>
         </AccordionItem>
             </Accordion>
-        </View>
+         </View>
     );
 }

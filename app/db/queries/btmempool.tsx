@@ -23,7 +23,7 @@ const GET_BTX_TO_MEMPOOL : any = gql`
 `;
 
 
-// GET_BTX_FROM_AND_AMOUNT_MEMPOOL allow user to retreive sender wallet addresses.
+// GET_BTX_FROM_AND_AMOUNT_MEMPOOL allow user to retreiver wallet addresses.
 // --------------------------------------------------------------------------
 //  In a response following data fields return [nodeID, hash, from, amount, user_token]
 // ---------------------------------------------------------------------------
@@ -46,7 +46,7 @@ const GET_BTX_FROM_AND_AMOUNT_MEMPOOL : any = gql`
 `;
 
 
-// GET_BTX_COINBASE_MEMPOOL return whether transaction send from coin base or not 
+// GET_BTX_COINBASE_MEMPOOL return whether sender transaction should be coinbase or not 
 // ------------------------------------------------------------------------------------------
 //  In a response following data fields return [nodeID, hash, to, from, coinbase, user_token]
 // ------------------------------------------------------------------------------------------
