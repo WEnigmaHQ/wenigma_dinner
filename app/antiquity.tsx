@@ -42,9 +42,9 @@ export default function Antiquity() {
     }, []);
 
 
-    // const {data, loading, error} = useQuery(btmempool.GET_BTX_TRANSACTION_CLOSE_BALANCE);
+    const {data, loading, error} = useQuery(btmempool.GET_BTX_TRANSACTION_CLOSE_BALANCE);
 
-    // console.log("Data:", data, loading, error);
+    console.log("Data:", data, loading, error);
 
 
     
